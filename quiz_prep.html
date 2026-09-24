@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Networks Quiz Prep</title>
+<style>
+  @page { size: letter; margin: 0.6in; }
+  :root { color-scheme: light; }
+  body { background:#fff; color:#000; font-family: "Times New Roman", Times, serif; font-size: 11.5pt; line-height: 1.35; max-width: 7.3in; margin: 0 auto; padding: 16px; }
+  h1 { text-align:center; font-size: 18pt; margin: 0 0 2px; letter-spacing: 1px; }
+  .sub { text-align:center; margin-bottom: 8px; }
+  .hdr { display:flex; justify-content:space-between; border-top:2px solid #000; border-bottom:2px solid #000; padding:4px 0; margin-bottom:14px; font-size:10.5pt; }
+  h2 { font-size: 13pt; border-bottom: 1px solid #000; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: .5px; }
+  h3 { font-size: 11.5pt; margin: 10px 0 4px; }
+  table { border-collapse: collapse; margin: 6px 0; font-size: 10.5pt; }
+  th, td { border: 1px solid #000; padding: 2px 7px; text-align: center; }
+  th { background: #fff; font-weight: bold; }
+  .q { margin: 10px 0; page-break-inside: avoid; }
+  .q b.n { display:inline-block; min-width: 34px; }
+  .pts { float:right; font-size:10pt; }
+  .space { height: 60px; border-bottom: 1px dotted #000; margin-bottom: 4px; }
+  pre { font-family: "Courier New", monospace; font-size: 10pt; border: 1px solid #000; padding: 6px; margin: 6px 0; white-space: pre; overflow-x:auto; }
+  .box { border: 1.5px solid #000; padding: 6px 10px; margin: 8px 0; page-break-inside: avoid; }
+  ul { margin: 4px 0 4px 20px; padding: 0; }
+  li { margin: 2px 0; }
+  .brk { page-break-before: always; }
+  .ans { margin: 8px 0; page-break-inside: avoid; }
+  .ans b.n { display:inline-block; min-width: 34px; }
+  .mc { margin-left: 34px; }
+</style>
+</head>
+<body>
+
+<h1>COMPUTER NETWORKS — QUIZ PREPARATION</h1>
+<div class="sub">Chapter 1: Introduction · Layering · Protocols &amp; Standards · Internet History · Line Coding · Error Detection</div>
+<div class="hdr"><span>Name: ______________________________</span><span>Date: ____________</span><span>Score: ______ / 100</span></div>
+
+<h2>Part I — Important Topics (Review Sheet)</h2>
+
+<h3>1. Layered models</h3>
+<table>
+<tr><th>TCP/IP layer</th><th>PDU</th><th>Addressing</th><th>Example protocols</th><th>Job</th></tr>
+<tr><td>5 Application</td><td>Message</td><td>— (names)</td><td>HTTP, SMTP, DNS, FTP</td><td>Services to the user</td></tr>
+<tr><td>4 Transport</td><td>Segment / datagram</td><td>Port</td><td>TCP, UDP</td><td>Process-to-process delivery</td></tr>
+<tr><td>3 Network</td><td>Datagram / packet</td><td>IP (logical)</td><td>IP, ICMP</td><td>Host-to-host routing</td></tr>
+<tr><td>2 Data link</td><td>Frame</td><td>MAC (physical)</td><td>Ethernet, Wi-Fi</td><td>Hop-to-hop (node to node)</td></tr>
+<tr><td>1 Physical</td><td>Bits</td><td>—</td><td>Cables, signals</td><td>Bits onto the medium</td></tr>
+</table>
+<ul>
+<li><b>OSI (7):</b> Application, Presentation, Session, Transport, Network, Data link, Physical. TCP/IP merges the top three into Application. (Mnemonic: "All People Seem To Need Data Processing".)</li>
+<li><b>Encapsulation:</b> each layer adds its header (link layer also a trailer) to the PDU from above. <b>Decapsulation</b> at the receiver, bottom-up.</li>
+<li><b>Peer-to-peer logical communication:</b> layer n talks to layer n on the other side; physically data goes down, across, up.</li>
+<li><b>Devices:</b> hub/repeater = L1; switch = L2 (links); router = L3 (up to network layer); hosts = all 5 layers.</li>
+<li><b>Overhead ratio</b> = header bytes / total bytes sent (or header/data — <u>state which</u>).</li>
+</ul>
+
+<h3>2. Protocols &amp; standards</h3>
+<ul>
+<li><b>Protocol</b> = set of rules; key elements: <b>Syntax</b> (format), <b>Semantics</b> (meaning), <b>Timing</b> (when &amp; how fast).</li>
+<li><b>De facto</b> (by practice) vs <b>de jure</b> (by official body).</li>
+<li><b>Bodies:</b> ISO, ITU-T, ANSI, IEEE (802.x LANs), EIA; Internet: <b>IETF</b> (writes RFCs), IAB, ISOC, IRTF.</li>
+<li><b>RFC maturity:</b> Proposed → Draft → Internet Standard (plus Historic, Experimental, Informational).</li>
+</ul>
+
+<h3>3. Networks — basics</h3>
+<ul>
+<li><b>Data communication criteria:</b> Delivery, Accuracy, Timeliness, Jitter. <b>Components:</b> message, sender, receiver, medium, protocol.</li>
+<li><b>Data flow:</b> simplex (one way), half-duplex (both, one at a time), full-duplex (both simultaneously).</li>
+<li><b>Network criteria:</b> performance (throughput, delay), reliability, security.</li>
+<li><b>Connection:</b> point-to-point vs multipoint. <b>Topologies:</b> mesh (n(n−1)/2 links, n−1 ports each), star, bus, ring.</li>
+<li><b>LAN / WAN / MAN</b>; internetwork = network of networks; <b>Internet</b> = hierarchy of ISPs (tier 1 backbone, regional, local).</li>
+<li><b>Switching:</b> circuit-switched (reserved resources, telephone) vs packet-switched (store &amp; forward, Internet).</li>
+</ul>
+
+<h3>4. Internet history (key dates)</h3>
+<table>
+<tr><th>Year</th><th>Event</th></tr>
+<tr><td>1961–64</td><td>Kleinrock / Baran: packet switching theory</td></tr>
+<tr><td>1969</td><td>ARPANET — first 4 nodes (UCLA, SRI, UCSB, Utah)</td></tr>
+<tr><td>1972</td><td>Email; NCP protocol</td></tr>
+<tr><td>1973–74</td><td>Cerf &amp; Kahn: TCP (internetworking)</td></tr>
+<tr><td>1983</td><td>ARPANET switches to TCP/IP; DNS</td></tr>
+<tr><td>1986</td><td>NSFNET</td></tr>
+<tr><td>1990–91</td><td>Berners-Lee: World Wide Web (HTTP, HTML)</td></tr>
+<tr><td>1995+</td><td>Commercialization, ISPs</td></tr>
+</table>
+
+<h3>5. Line coding</h3>
+<ul>
+<li><b>Unipolar NRZ:</b> 1 = +V, 0 = 0 V, whole bit time. Has DC component; no self-clocking.</li>
+<li><b>Polar NRZ-L:</b> level = bit. <b>NRZ-I:</b> 1 = invert, 0 = no change.</li>
+<li><b>Manchester:</b> transition in the <u>middle</u> of every bit (self-clocking, no DC, 2× bandwidth). IEEE 802.3: 0 = high→low, 1 = low→high (G.E. Thomas is the reverse — <u>state convention</u>).</li>
+<li><b>Differential Manchester:</b> always mid-bit transition; 0 = transition at start, 1 = no transition at start.</li>
+</ul>
+
+<h3>6. Error detection</h3>
+<ul>
+<li><b>Single parity:</b> detects any <u>odd</u> number of bit errors; misses <u>all even</u> numbers. Even parity: total 1s even; odd parity: total 1s odd.</li>
+<li><b>2-D parity:</b> row + column parity; detects all 1-, 2-, 3-bit errors, can <u>correct</u> single-bit errors; misses some 4-bit (rectangle) errors.</li>
+<li><b>Checksum (1's complement):</b> add words, wrap carries back in, complement → checksum. Receiver: sum everything incl. checksum, complement → 0 means OK.</li>
+<li><b>Number of k-bit errors in n-bit word:</b> C(n,k).</li>
+</ul>
+
+<div class="brk"></div>
+<h2>Part II — Practice Quiz</h2>
+
+<div class="q"><b class="n">1.</b> Represent the bit string <b>10110010</b> as (a) unipolar NRZ and (b) Manchester (IEEE 802.3). <span class="pts">[10]</span><div class="space"></div></div>
+
+<div class="q"><b class="n">2.</b> Represent <b>01101001</b> as unipolar NRZ and Manchester. <span class="pts">[10]</span><div class="space"></div></div>
+
+<div class="q"><b class="n">3.</b> Show the 2-D parity of <b>00010101, 10110011, 01000001</b> using <b>odd</b> parity. <span class="pts">[10]</span><div class="space"></div></div>
+
+<div class="q"><b class="n">4.</b> Show the 2-D parity of <b>11001010, 01110001, 10100110</b> using <b>even</b> parity. <span class="pts">[10]</span><div class="space"></div></div>
+
+<div class="q"><b class="n">5.</b> Compute the 8-bit one's-complement checksum for the codes of Question 3. Verify it at the receiver. <span class="pts">[10]</span><div class="space"></div></div>
+
+<div class="q"><b class="n">6.</b> Compute the 8-bit checksum for <b>11001100, 10101010, 11110000</b>. <span class="pts">[10]</span><div class="space"></div></div>
+
+<div class="q"><b class="n">7.</b> For the string <b>1001P</b>, where P is the <b>odd</b> parity bit, which two-bit errors are not detected? List all resulting strings. <span class="pts">[10]</span><div class="space"></div></div>
+
+<div class="q"><b class="n">8.</b> For <b>1101P</b> with <b>even</b> parity: how many 1-, 2-, and 3-bit errors are possible, and which are detected? <span class="pts">[5]</span><div class="space"></div></div>
+
+<div class="q"><b class="n">9.</b> In the TCP/IP model, every layer that encapsulates adds a 20B header. Give the overhead ratio for sending (a) 1B and (b) 100B of application data. <span class="pts">[5]</span><div class="space"></div></div>
+
+<div class="q"><b class="n">10.</b> Map the TCP/IP layers onto an autonomous walking robot (or a postal-letter analogy). <span class="pts">[5]</span><div class="space"></div></div>
+
+<div class="q"><b class="n">11.</b> Multiple choice. <span class="pts">[5]</span>
+<div class="mc">(a) The PDU at the data link layer is a: &nbsp; i) segment &nbsp; ii) packet &nbsp; iii) frame &nbsp; iv) message<br>
+(b) Which organization publishes RFCs? &nbsp; i) IEEE &nbsp; ii) IETF &nbsp; iii) ITU-T &nbsp; iv) ANSI<br>
+(c) Port numbers are used at the: &nbsp; i) network &nbsp; ii) transport &nbsp; iii) link &nbsp; iv) physical layer<br>
+(d) A router operates up to layer: &nbsp; i) 1 &nbsp; ii) 2 &nbsp; iii) 3 &nbsp; iv) 5<br>
+(e) Which line code always has a mid-bit transition? &nbsp; i) NRZ-L &nbsp; ii) NRZ-I &nbsp; iii) Unipolar NRZ &nbsp; iv) Manchester</div></div>
+
+<div class="q"><b class="n">12.</b> Short answer: (a) three elements of a protocol; (b) de facto vs de jure; (c) links in a fully connected mesh of 6 devices; (d) circuit vs packet switching. <span class="pts">[10]</span><div class="space"></div></div>
+
+<div class="brk"></div>
+<h2>Part III — Answer Key</h2>
+
+<div class="ans"><b class="n">1.</b> 10110010
+<pre>
+bit :   1    0    1    1    0    0    1    0
+NRZ :  +V   0   +V   +V   0    0   +V   0
+Manch: L H  H L  L H  L H  H L  H L  L H  H L   (first half / second half)
+
+NRZ   ____      __________           ____
+     |    |    |          |         |    |
+  ___|    |____|          |_________|    |____
+</pre></div>
+
+<div class="ans"><b class="n">2.</b> 01101001
+<pre>
+bit :   0    1    1    0    1    0    0    1
+NRZ :   0   +V   +V   0   +V   0    0   +V
+Manch: H L  L H  L H  H L  L H  H L  H L  L H
+</pre>
+Note: in Manchester there is an extra transition at the bit boundary between two equal bits.</div>
+
+<div class="ans"><b class="n">3.</b> Odd parity:
+<table>
+<tr><th></th><th>Data</th><th># of 1s</th><th>P</th></tr>
+<tr><td>R1</td><td>0 0 0 1 0 1 0 1</td><td>3</td><td>0</td></tr>
+<tr><td>R2</td><td>1 0 1 1 0 0 1 1</td><td>5</td><td>0</td></tr>
+<tr><td>R3</td><td>0 1 0 0 0 0 0 1</td><td>2</td><td>1</td></tr>
+<tr><td>Col P</td><td>0 0 0 1 1 0 0 0</td><td></td><td>1*</td></tr>
+</table>
+*Corner: parity of the column-parity row (2 ones) → 1; parity of the row-parity column (1 one) → 0. With odd parity they disagree because the number of rows (3) and columns (8) differ in parity — <b>state the convention you used</b>.</div>
+
+<div class="ans"><b class="n">4.</b> Even parity:
+<table>
+<tr><th></th><th>Data</th><th># of 1s</th><th>P</th></tr>
+<tr><td>R1</td><td>1 1 0 0 1 0 1 0</td><td>4</td><td>0</td></tr>
+<tr><td>R2</td><td>0 1 1 1 0 0 0 1</td><td>4</td><td>0</td></tr>
+<tr><td>R3</td><td>1 0 1 0 0 1 1 0</td><td>4</td><td>0</td></tr>
+<tr><td>Col P</td><td>0 0 0 1 1 1 0 1</td><td></td><td>0</td></tr>
+</table>
+(Even parity: the corner always agrees both ways.)</div>
+
+<div class="ans"><b class="n">5.</b>
+<pre>
+  00010101  (21)
++ 10110011  (179)
++ 01000001  (65)
+= 1 00001001 (265)  -> wrap carry: 00001001 + 1 = 00001010
+Complement -> CHECKSUM = 11110101  (245)
+Receiver: 21+179+65+245 = 510 -> 11111110 + 1 (wrap) = 11111111 -> complement = 00000000  OK
+</pre></div>
+
+<div class="ans"><b class="n">6.</b>
+<pre>
+  11001100 (204) + 10101010 (170) = 1 01110110 -> wrap -> 01110111 (119)
+  01110111 (119) + 11110000 (240) = 1 01100111 -> wrap -> 01101000 (104)
+Complement -> CHECKSUM = 10010111  (151)
+Check: 104 + 151 = 255 = 11111111 -> complement 0  OK
+</pre></div>
+
+<div class="ans"><b class="n">7.</b> 1001 has two 1s → P = 1 → codeword <b>10011</b>. A single parity bit misses <u>every</u> 2-bit error: C(5,2) = <b>10</b> undetected strings:<br>
+<b>01011, 00111, 00001, 00010, 11111, 11001, 11010, 10101, 10110, 10000</b> (flipping positions 1-2, 1-3, 1-4, 1-5, 2-3, 2-4, 2-5, 3-4, 3-5, 4-5). All have an odd number of 1s, so all pass.</div>
+
+<div class="ans"><b class="n">8.</b> 1101 has three 1s → P = 1 → codeword 11011. 1-bit: C(5,1)=5, all detected. 2-bit: C(5,2)=10, <u>none</u> detected. 3-bit: C(5,3)=10, all detected.</div>
+
+<div class="ans"><b class="n">9.</b> Headers added by transport, network, link = 3 × 20 = 60B (physical adds none).<br>
+(a) 1B: overhead = 60 / (60+1) = <b>60/61 ≈ 0.984</b> (or 60:1 relative to data).<br>
+(b) 100B: overhead = 60 / 160 = <b>0.375</b> (or 60:100 = 0.6 relative to data).<br>
+If the application layer also adds 20B: 80/81 ≈ 0.988 and 80/180 ≈ 0.444. <b>State your assumption.</b></div>
+
+<div class="ans"><b class="n">10.</b> Example robot mapping:
+<table>
+<tr><th>Layer</th><th>Robot walking</th></tr>
+<tr><td>Application</td><td>Goal / intent: "walk to the door" (path planning)</td></tr>
+<tr><td>Transport</td><td>Gait control: breaks the goal into steps, sequencing, checks each step completed (feedback / reliability)</td></tr>
+<tr><td>Network</td><td>Balance &amp; routing of movement: chooses which leg/joint path, foot placement, coordination</td></tr>
+<tr><td>Data link</td><td>Joint-level controllers: commands to each motor, error checking of sensor/actuator messages</td></tr>
+<tr><td>Physical</td><td>Motors, wires, signals, sensors, actual leg movement on the ground</td></tr>
+</table></div>
+
+<div class="ans"><b class="n">11.</b> (a) iii frame &nbsp; (b) ii IETF &nbsp; (c) ii transport &nbsp; (d) iii 3 &nbsp; (e) iv Manchester</div>
+
+<div class="ans"><b class="n">12.</b> (a) Syntax, semantics, timing. (b) De facto = adopted through widespread use; de jure = legislated by an official recognized body. (c) n(n−1)/2 = 6·5/2 = <b>15</b> links. (d) Circuit: dedicated path reserved for the whole call (phone); packet: data split into packets, store-and-forward, resources shared on demand (Internet).</div>
+
+<div class="box"><b>Last-minute checklist:</b> state Manchester convention · wrap carries in checksum then complement · parity misses even # of errors · C(n,k) for counting errors · overhead as a ratio with your assumption stated · PDU names: message → segment → datagram → frame → bits.</div>
+
+</body>
+</html>
