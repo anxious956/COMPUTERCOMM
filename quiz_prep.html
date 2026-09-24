@@ -224,7 +224,7 @@
 <svg class="wave" data-bits="10110010" data-type="nrz"></svg>
 <svg class="wave" data-bits="10110010" data-type="nrzi"></svg>
 <svg class="wave" data-bits="10110010" data-type="manch"></svg>
-NRZI: flip on every 1, stay on 0 → levels H H L H H H L L.</div>
+NRZI: line starts <b>low</b>; flip on every 1, stay on 0. The first bit is 1, so the line jumps low→high right at the start → levels H H L H H H L L. (If it started high, every level would be inverted: L L H L L L H H — same transitions, same data.)</div>
 
 <div class="ans"><b class="n">2.</b> <b>Baseline wander</b> (long runs of 0s/1s shift the receiver's average) and <b>clock recovery</b> (no transitions → sender/receiver lose sync). NRZI makes a transition for every 1 → fixes runs of 1s, but <b>runs of 0s still have no transitions</b>. Manchester has a transition in every bit → fixes both, but doubles the baud rate. (4B/5B + NRZI fixes runs of 0s.)</div>
 
@@ -321,7 +321,7 @@ HW asks for two versions: yours first, then an LLM's response.</div>
 <script>
 document.querySelectorAll('svg.wave').forEach(function(svg){
   var bits=svg.dataset.bits, t=svg.dataset.type;
-  var L=100, W=60, T=26, H=30, n=bits.length, w=L+n*W+10, h=T+H+18;
+  var L=110, W=60, T=26, H=30, n=bits.length, w=L+n*W+10, h=T+H+18;
   var hi=T, lo=T+H, o='', pts=[];
   var name={nrz:'NRZ',nrzi:'NRZI',manch:'Manchester'}[t];
   svg.setAttribute('viewBox','0 0 '+w+' '+h); svg.setAttribute('width',w); svg.setAttribute('height',h);
@@ -338,6 +338,7 @@ document.querySelectorAll('svg.wave').forEach(function(svg){
     else if(t==='nrzi'){ if(b==='1') lvl=(lvl===hi?lo:hi); pts.push([x,lvl],[x+W,lvl]); }
     else {var y=b==='1'?hi:lo; pts.push([x,y],[x+W,y]);}
   }
+  if(t==='nrzi'){o+='<polyline fill="none" stroke="#000" stroke-width="2.2" stroke-dasharray="4,2" points="'+(L-28)+','+lo+' '+L+','+lo+'"/>';o+='<text x="'+(L-28)+'" y="'+(lo+14)+'" font-size="9">start</text>';pts.unshift([L,lo]);}
   o+='<polyline fill="none" stroke="#000" stroke-width="2.2" points="'+pts.map(function(p){return p.join(',')}).join(' ')+'"/>';
   svg.innerHTML=o;
 });
