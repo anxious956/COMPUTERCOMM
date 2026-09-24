@@ -93,23 +93,24 @@ A single parity bit misses <b>every</b> even number of bit errors → all 2-bit 
 
 <div class="q"><div class="qt"><b class="n">7.</b> How many 2-bit errors can be undetected by checksum in 5-bit words?</div>
 <div class="ans">
-<b>Setup</b> (assumption: one 5-bit data word + its 5-bit checksum = 10 bits sent). Example word:
-<pre>data      = 10110   (22)
-checksum  = 01001   ( 9)   ← complement of the data
-sum       = 11111   (31)   → complement = 00000 → receiver says OK</pre>
-<b>Key observation:</b> the checksum is the complement, so in <u>every</u> bit position one word has a 0 and the other has a 1.<br>
-If the <b>same position</b> flips in both words, the 0 becomes 1 and the 1 becomes 0 → the sum is still 11111 → <b>undetected</b>.
+<b>Assumption:</b> one 5-bit data word + its 5-bit checksum are sent (10 bits).<br><br>
+<b>Step 1 – Example.</b>
+<pre>data      D = 10110
+checksum  C = 01001   (complement of D)
+D + C       = 11111   → complement = 00000 → no error</pre>
+<b>Step 2 – Why some errors are missed.</b> C is the complement of D, so in each bit position one of them is 0 and the other is 1.
+If the <u>same position</u> is flipped in both, the 0 becomes 1 and the 1 becomes 0 → D + C is still 11111 → the receiver sees no error.<br><br>
+<b>Step 3 – All undetected 2-bit errors.</b>
 <table>
-<tr><th>Flipped position (in both words)</th><th>Data received</th><th>Checksum received</th><th>Sum</th><th>Result</th></tr>
-<tr><td>1</td><td><b>0</b>0110 (6)</td><td><b>1</b>1001 (25)</td><td>31 = 11111</td><td>undetected</td></tr>
-<tr><td>2</td><td>1<b>1</b>110 (30)</td><td>0<b>0</b>001 (1)</td><td>31 = 11111</td><td>undetected</td></tr>
-<tr><td>3</td><td>10<b>0</b>10 (18)</td><td>01<b>1</b>01 (13)</td><td>31 = 11111</td><td>undetected</td></tr>
-<tr><td>4</td><td>101<b>0</b>0 (20)</td><td>010<b>1</b>1 (11)</td><td>31 = 11111</td><td>undetected</td></tr>
-<tr><td>5</td><td>1011<b>1</b> (23)</td><td>0100<b>0</b> (8)</td><td>31 = 11111</td><td>undetected</td></tr>
+<tr><th>Position flipped in D and C</th><th>D received</th><th>C received</th><th>D + C</th></tr>
+<tr><td>1</td><td>00110</td><td>11001</td><td>11111</td></tr>
+<tr><td>2</td><td>11110</td><td>00001</td><td>11111</td></tr>
+<tr><td>3</td><td>10010</td><td>01101</td><td>11111</td></tr>
+<tr><td>4</td><td>10100</td><td>01011</td><td>11111</td></tr>
+<tr><td>5</td><td>10111</td><td>01000</td><td>11111</td></tr>
 </table>
-<b>Any other 2-bit error is detected.</b> Example: flip positions 1 and 2 of the data only → <b>01</b>110 (14) + 01001 (9) = 23 = 10111 → complement 01000 ≠ 0 → error caught.
-<div class="box" style="margin-top:6px"><b>Answer: 5 undetectable 2-bit errors</b> (one per bit position) out of C(10,2) = 45 possible 2-bit errors. The other 40 are detected.</div>
-<span class="note">General rule (more words): a 2-bit error escapes a checksum when two words flip the <u>same bit position</u> in <u>opposite directions</u> (one 0→1, the other 1→0) — the sum does not change.</span>
+Every other 2-bit error changes the sum and is detected (e.g. flipping bits 1 and 2 of D: 01110 + 01001 = 10111 ≠ 11111).<br><br>
+<div class="box"><b>Answer: 5</b> undetectable 2-bit errors (one per bit position) out of C(10,2) = 45 possible 2-bit errors.</div>
 </div></div>
 
 <div class="q"><div class="qt"><b class="n">8.</b> What is the CRC field content of the string in Q2 if C(x) = 1000101?</div>
