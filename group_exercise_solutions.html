@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Group Exercise Solutions</title>
+<style>
+@page { size: letter; margin: 0.55in; }
+:root { color-scheme: light; }
+body { background:#fff; color:#000; font-family:"Times New Roman",Times,serif; font-size:11.5pt; line-height:1.38; max-width:7.4in; margin:0 auto; padding:16px; }
+h1 { text-align:center; font-size:18pt; margin:0 0 2px; letter-spacing:1px; }
+.sub { text-align:center; font-size:10.5pt; margin-bottom:8px; }
+.hdr { border-top:2px solid #000; border-bottom:2px solid #000; padding:4px 0; margin-bottom:14px; font-size:10.5pt; text-align:center; }
+.q { margin:16px 0 4px; page-break-inside:avoid; }
+.q b.n { display:inline-block; min-width:30px; }
+.qt { font-weight:bold; border-bottom:1px solid #000; padding-bottom:3px; margin-bottom:6px; }
+.ans { margin-left:30px; }
+pre { font-family:"Courier New",monospace; font-size:9.6pt; border:1px solid #000; padding:6px 8px; margin:6px 0; white-space:pre-wrap; line-height:1.3; }
+table { border-collapse:collapse; margin:6px 0; font-size:10.5pt; }
+th,td { border:1px solid #000; padding:2px 8px; text-align:center; }
+.box { border:1.5px solid #000; padding:5px 10px; margin:8px 0; }
+.note { font-size:10.5pt; font-style:italic; }
+</style></head><body>
+<h1>GROUP EXERCISE — SOLUTIONS</h1>
+<div class="sub">ECE422 Computer Communications &amp; Networking · Shannon · Checksum · CRC · Parity · Coding</div>
+<div class="hdr">Fields in Q2 are hexadecimal: a2 : 06 : 23 → 10100010 : 00000110 : 00100011</div>
+
+<div class="q"><div class="qt"><b class="n">1.</b> A radio link at 40 KHz can transmit a signal at 100 mW and the channel has 10 mW of noise. What is the capacity of the channel?</div>
+<div class="ans">
+S/N = 100 mW / 10 mW = <b>10</b> &nbsp;(= 10·log<sub>10</sub>10 = 10 dB)<br>
+C = B · log<sub>2</sub>(1 + S/N) = 40,000 · log<sub>2</sub>(11)<br>
+log<sub>2</sub>(11) = log<sub>10</sub>(11) / log<sub>10</sub>(2) = 1.0414 / 0.3010 ≈ 3.46<br>
+<b>C ≈ 40,000 × 3.46 ≈ 138.4 kbps</b>
+</div></div>
+
+<div class="q"><div class="qt"><b class="n">2.</b> Show the 8-bit checksum that will be transmitted to protect the fields a2:06:23.</div>
+<div class="ans">
+<pre>  a2 = 1010 0010   (162)
++ 06 = 0000 0110   (  6)
++ 23 = 0010 0011   ( 35)
+-------------------------
+  cb = 1100 1011   (203)   no carry out of 8 bits → nothing to wrap
+Complement:  0011 0100  = 0x34   ← CHECKSUM
+
+Receiver: cb + 34 = 1111 1111 → complement = 0000 0000 → OK</pre>
+<b>Checksum = 0011 0100 (0x34)</b>. Transmitted: a2 : 06 : 23 : 34
+</div></div>
+
+<div class="q"><div class="qt"><b class="n">3.</b> Show 3 possible field values that would generate the same checksum as in 2).</div>
+<div class="ans">
+The checksum depends only on the ones-complement <b>sum</b> (= cb). Any fields adding to cb give checksum 34:
+<table><tr><th>#</th><th>Fields</th><th>Why</th></tr>
+<tr><td>1</td><td>23 : 06 : a2</td><td>same values, different order (addition is commutative)</td></tr>
+<tr><td>2</td><td>a3 : 05 : 23</td><td>+1 in one field, −1 in another</td></tr>
+<tr><td>3</td><td>cb : 00 : 00</td><td>cb + 0 + 0 = cb</td></tr>
+</table>
+<span class="note">Lesson: a checksum cannot detect reordered fields or errors that cancel out.</span>
+</div></div>
+
+<div class="q"><div class="qt"><b class="n">4.</b> What is the CRC field content in Q2 if C(x) = 1101?</div>
+<div class="ans">
+C(x) = 1101 = x<sup>3</sup> + x<sup>2</sup> + 1 → degree r = 3 → append <b>000</b>.<br>
+Dividend: 10100010 00000110 00100011 <b>000</b>. Window method: 4-bit window; if it starts with 1 → XOR with 1101; drop the first bit; bring down the next bit.
+<pre>1010 ⊕ 1101 = 0111  → 111, bring 0 → 1110
+1110 ⊕ 1101 = 0011  → 011, bring 0 → 0110
+0110  starts with 0 → no XOR  → 110, bring 1 → 1101
+1101 ⊕ 1101 = 0000  → 000, bring 0 → 0000
+0000  starts with 0 → no XOR  → 000, bring 0 → 0000
+0000  starts with 0 → no XOR  → 000, bring 0 → 0000
+0000  starts with 0 → no XOR  → 000, bring 0 → 0000
+0000  starts with 0 → no XOR  → 000, bring 0 → 0000
+0000  starts with 0 → no XOR  → 000, bring 0 → 0000
+0000  starts with 0 → no XOR  → 000, bring 1 → 0001
+0001  starts with 0 → no XOR  → 001, bring 1 → 0011
+0011  starts with 0 → no XOR  → 011, bring 0 → 0110
+0110  starts with 0 → no XOR  → 110, bring 0 → 1100
+1100 ⊕ 1101 = 0001  → 001, bring 0 → 0010
+0010  starts with 0 → no XOR  → 010, bring 1 → 0101
+0101  starts with 0 → no XOR  → 101, bring 0 → 1010
+1010 ⊕ 1101 = 0111  → 111, bring 0 → 1110
+1110 ⊕ 1101 = 0011  → 011, bring 0 → 0110
+0110  starts with 0 → no XOR  → 110, bring 1 → 1101
+1101 ⊕ 1101 = 0000  → 000, bring 1 → 0001
+0001  starts with 0 → no XOR  → 001, bring 0 → 0010
+0010  starts with 0 → no XOR  → 010, bring 0 → 0100
+0100  starts with 0 → no XOR  → 100, bring 0 → 1000
+1000 ⊕ 1101 = 0101  → remainder = 101</pre>
+<b>CRC field = 101</b> → transmitted: 101000100000011000100011 <b>101</b> (dividing it by 1101 leaves 000 ✓)
+</div></div>
+
+<div class="q"><div class="qt"><b class="n">5.</b> If we use parity check for a 5-bit word, how many 2-bit errors may be undetectable?</div>
+<div class="ans">
+A single parity bit misses <b>every</b> even number of bit errors → all 2-bit errors are undetectable. Count = number of ways to pick 2 bits:<br>
+• 5-bit word <u>including</u> the parity bit (like 1001P): <b>C(5,2) = 5·4/2 = 10</b><br>
+• 5 data bits + 1 parity bit (6 bits): C(6,2) = 6·5/2 = 15 &nbsp;<span class="note">(state your assumption)</span>
+</div></div>
+
+<div class="q"><div class="qt"><b class="n">6.</b> If we use 1 bit for error detection of 5-bit words, which of 1-bit parity (assuming up to 2-bit errors) or CRC would have fewer non-detectable errors?</div>
+<div class="ans">
+A 1-bit CRC needs a generator of degree 1. The only useful one is <b>C(x) = x + 1 (11)</b> (C(x) = x has one term and misses errors).<br>
+Dividing by x + 1 gives exactly the <b>even parity</b> bit → the two schemes are identical.<br>
+<table><tr><th>Errors (6 bits: 5 data + 1 check)</th><th>1-bit parity</th><th>CRC, C(x)=x+1</th></tr>
+<tr><td>1-bit: C(6,1) = 6</td><td>all detected</td><td>all detected</td></tr>
+<tr><td>2-bit: C(6,2) = 15</td><td>15 undetected</td><td>15 undetected</td></tr></table>
+<b>Answer: neither — same number of non-detectable errors (15).</b> CRC only does better with more check bits.
+</div></div>
+
+<div class="q"><div class="qt"><b class="n">7.</b> How many 2-bit errors can be undetected by checksum in 5-bit words?</div>
+<div class="ans">
+Assume one 5-bit data word + a 5-bit checksum (10 bits). The checksum is the complement of the word, so in every bit position the two bits are <b>opposite</b> (one 0, one 1):
+<pre>data     : d4 d3 d2 d1 d0
+checksum : ~d4 ~d3 ~d2 ~d1 ~d0      data + checksum = 11111</pre>
+Flipping the <b>same position</b> in both words → one goes 0→1, the other 1→0 → the sum is unchanged → <b>undetected</b>.<br>
+One such error per bit position → <b>5 undetectable 2-bit errors</b> (out of C(10,2) = 45).<br>
+Flips at different positions change the sum (±2<sup>a</sup> ± 2<sup>b</sup> ≠ 0 mod 31), so they are detected.<br>
+<span class="note">General rule: a 2-bit error escapes a checksum when two words flip the same bit position in opposite directions.</span>
+</div></div>
+
+<div class="q"><div class="qt"><b class="n">8.</b> What is the CRC field content of the string in Q2 if C(x) = 1000101?</div>
+<div class="ans">
+C(x) = 1000101 = x<sup>6</sup> + x<sup>2</sup> + 1 → degree r = 6 → append <b>000000</b>. 7-bit window:
+<pre>1010001 ⊕ 1000101 = 0010100  → 010100, bring 0 → 0101000
+0101000  starts with 0 → no XOR  → 101000, bring 0 → 1010000
+1010000 ⊕ 1000101 = 0010101  → 010101, bring 0 → 0101010
+0101010  starts with 0 → no XOR  → 101010, bring 0 → 1010100
+1010100 ⊕ 1000101 = 0010001  → 010001, bring 0 → 0100010
+0100010  starts with 0 → no XOR  → 100010, bring 0 → 1000100
+1000100 ⊕ 1000101 = 0000001  → 000001, bring 1 → 0000011
+0000011  starts with 0 → no XOR  → 000011, bring 1 → 0000111
+0000111  starts with 0 → no XOR  → 000111, bring 0 → 0001110
+0001110  starts with 0 → no XOR  → 001110, bring 0 → 0011100
+0011100  starts with 0 → no XOR  → 011100, bring 0 → 0111000
+0111000  starts with 0 → no XOR  → 111000, bring 1 → 1110001
+1110001 ⊕ 1000101 = 0110100  → 110100, bring 0 → 1101000
+1101000 ⊕ 1000101 = 0101101  → 101101, bring 0 → 1011010
+1011010 ⊕ 1000101 = 0011111  → 011111, bring 0 → 0111110
+0111110  starts with 0 → no XOR  → 111110, bring 1 → 1111101
+1111101 ⊕ 1000101 = 0111000  → 111000, bring 1 → 1110001
+1110001 ⊕ 1000101 = 0110100  → 110100, bring 0 → 1101000
+1101000 ⊕ 1000101 = 0101101  → 101101, bring 0 → 1011010
+1011010 ⊕ 1000101 = 0011111  → 011111, bring 0 → 0111110
+0111110  starts with 0 → no XOR  → 111110, bring 0 → 1111100
+1111100 ⊕ 1000101 = 0111001  → 111001, bring 0 → 1110010
+1110010 ⊕ 1000101 = 0110111  → 110111, bring 0 → 1101110
+1101110 ⊕ 1000101 = 0101011  → remainder = 101011</pre>
+<b>CRC field = 101011</b> → transmitted: 101000100000011000100011 <b>101011</b> (remainder check = 000000 ✓)
+</div></div>
+
+<div class="q"><div class="qt"><b class="n">9.</b> (Optional) Design a coding scheme to transmit 4-bit words (16 combinations) where a string of words cannot contain more than 4 consecutive 1s or 0s.</div>
+<div class="ans">
+Idea (like 4B/5B): map each 4-bit word to a <b>5-bit code</b> that does <b>not start</b> and does <b>not end</b> with three equal bits.<br>
+Then at the boundary between two codes at most 2 + 2 = <b>4</b> equal bits can line up, and inside a code the longest run is 3.<br>
+18 of the 32 five-bit codes satisfy the rule (32 − 8 − 8 + 2); choose 16:
+<table>
+<tr><th>Data</th><th>Code</th><th>Data</th><th>Code</th><th>Data</th><th>Code</th><th>Data</th><th>Code</th></tr>
+<tr><td>0000</td><td>00100</td><td>0100</td><td>01010</td><td>1000</td><td>01110</td><td>1100</td><td>10100</td></tr>
+<tr><td>0001</td><td>00101</td><td>0101</td><td>01011</td><td>1001</td><td>10001</td><td>1101</td><td>10101</td></tr>
+<tr><td>0010</td><td>00110</td><td>0110</td><td>01100</td><td>1010</td><td>10010</td><td>1110</td><td>10110</td></tr>
+<tr><td>0011</td><td>01001</td><td>0111</td><td>01101</td><td>1011</td><td>10011</td><td>1111</td><td>11001</td></tr>
+</table>
+Checked: every pair of codes back-to-back has a longest run of 4. Efficiency = 4/5 = <b>80%</b>. The 2 unused codes (11010, 11011) can serve as control codes.
+</div></div>
+
+<div class="box"><b>Key rules:</b> dB → S/N: divide by 10, take 10 to that power · checksum: add, wrap carry, complement · CRC: append r zeros (r = degree = bits of C(x) − 1), XOR-divide, remainder = CRC · parity misses all even-bit errors, count with C(n,k).</div>
+</body></html>
