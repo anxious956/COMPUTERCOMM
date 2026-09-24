@@ -84,6 +84,11 @@ A single parity bit misses <b>every</b> even number of bit errors → all 2-bit 
 <tr><td>2-bit errors: C(6,2) = 15</td><td>15 undetected</td><td>15 undetected</td></tr>
 <tr><th>Result</th><th colspan="2">Same — CRC with x + 1 is the same as even parity</th></tr>
 </table>
+<b>Why:</b><br>
+1. With only 1 check bit, the CRC generator must have degree 1 → the only useful choice is <b>C(x) = x + 1 = 11</b> (C(x) = x has a single term and would miss errors).<br>
+2. Dividing by 11 (mod 2) leaves remainder 1 when the data has an odd number of 1s and 0 when it has an even number → the CRC bit <b>is exactly the even parity bit</b>. Example: data 10110 (three 1s) → 10110<b>0</b> ÷ 11 → remainder <b>1</b> = even parity bit.<br>
+3. So both schemes catch every odd number of errors and miss every even number: all 2-bit errors (C(6,2) = 15) go undetected in both.<br>
+<b>Answer: neither has fewer non-detectable errors — they are equal (15).</b> CRC is only stronger when it uses more check bits (e.g., 3-bit CRC with 1101).
 </div></div>
 
 <div class="q"><div class="qt"><b class="n">7.</b> How many 2-bit errors can be undetected by checksum in 5-bit words?</div>
