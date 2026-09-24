@@ -26,6 +26,7 @@
   .brk { page-break-before: always; }
   .ans { margin: 8px 0; page-break-inside: avoid; }
   .ans b.n { display:inline-block; min-width: 34px; }
+  svg.wave { display:block; margin:6px 0; max-width:100%; height:auto; }
   .mc { margin-left: 34px; }
 </style>
 </head>
@@ -136,24 +137,14 @@
 <div class="brk"></div>
 <h2>Part III — Answer Key</h2>
 
-<div class="ans"><b class="n">1.</b> 10110010
-<pre>
-bit :   1    0    1    1    0    0    1    0
-NRZ :  +V   0   +V   +V   0    0   +V   0
-Manch: L H  H L  L H  L H  H L  H L  L H  H L   (first half / second half)
+<div class="ans"><b class="n">1.</b> 10110010 — Unipolar NRZ (1 = +V, 0 = 0 V) and Manchester (IEEE 802.3: 0 = high→low, 1 = low→high)
+<svg class="wave" data-bits="10110010" data-type="nrz"></svg>
+<svg class="wave" data-bits="10110010" data-type="manch"></svg></div>
 
-NRZ   ____      __________           ____
-     |    |    |          |         |    |
-  ___|    |____|          |_________|    |____
-</pre></div>
-
-<div class="ans"><b class="n">2.</b> 01101001
-<pre>
-bit :   0    1    1    0    1    0    0    1
-NRZ :   0   +V   +V   0   +V   0    0   +V
-Manch: H L  L H  L H  H L  L H  H L  H L  L H
-</pre>
-Note: in Manchester there is an extra transition at the bit boundary between two equal bits.</div>
+<div class="ans"><b class="n">2.</b> 01101001 — Unipolar NRZ and Manchester (IEEE 802.3)
+<svg class="wave" data-bits="01101001" data-type="nrz"></svg>
+<svg class="wave" data-bits="01101001" data-type="manch"></svg>
+Note: Manchester always has a mid-bit transition; there is an extra transition at the boundary between two equal bits.</div>
 
 <div class="ans"><b class="n">3.</b> Odd parity:
 <table>
@@ -219,5 +210,28 @@ If the application layer also adds 20B: 80/81 ≈ 0.988 and 80/180 ≈ 0.444. <b
 
 <div class="box"><b>Last-minute checklist:</b> state Manchester convention · wrap carries in checksum then complement · parity misses even # of errors · C(n,k) for counting errors · overhead as a ratio with your assumption stated · PDU names: message → segment → datagram → frame → bits.</div>
 
+<script>
+document.querySelectorAll('svg.wave').forEach(function(svg){
+  var bits=svg.dataset.bits, man=svg.dataset.type==='manch';
+  var L=95, W=62, T=26, H=30, n=bits.length, w=L+n*W+10, h=T+H+22;
+  var hi=T, lo=T+H, o='';
+  svg.setAttribute('viewBox','0 0 '+w+' '+h); svg.setAttribute('width',w); svg.setAttribute('height',h);
+  o+='<text x="4" y="'+(T+H/2+4)+'" font-size="12" font-weight="bold">'+(man?'Manchester':'Unipolar NRZ')+'</text>';
+  o+='<text x="'+(L-6)+'" y="'+(hi+4)+'" font-size="10" text-anchor="end">'+(man?'+V':'+V')+'</text>';
+  o+='<text x="'+(L-6)+'" y="'+(lo+4)+'" font-size="10" text-anchor="end">'+(man?'−V':'0')+'</text>';
+  for(var i=0;i<=n;i++){var x=L+i*W;o+='<line x1="'+x+'" y1="'+(T-8)+'" x2="'+x+'" y2="'+(lo+6)+'" stroke="#000" stroke-width="0.6" stroke-dasharray="2,3"/>';}
+  o+='<line x1="'+L+'" y1="'+lo+'" x2="'+(L+n*W)+'" y2="'+lo+'" stroke="#999" stroke-width="0.5"/>';
+  var pts=[];
+  for(var i=0;i<n;i++){var b=bits[i],x=L+i*W;
+    o+='<text x="'+(x+W/2)+'" y="'+(T-12)+'" font-size="13" font-weight="bold" text-anchor="middle">'+b+'</text>';
+    if(man){var a=b==='1'?lo:hi, c=b==='1'?hi:lo;
+      pts.push([x,a],[x+W/2,a],[x+W/2,c],[x+W,c]);
+      o+='<line x1="'+(x+W/2)+'" y1="'+(T-4)+'" x2="'+(x+W/2)+'" y2="'+(lo+4)+'" stroke="#000" stroke-width="0.4" stroke-dasharray="1,2"/>';}
+    else{var y=b==='1'?hi:lo; pts.push([x,y],[x+W,y]);}
+  }
+  o+='<polyline fill="none" stroke="#000" stroke-width="2.2" points="'+pts.map(function(p){return p.join(',')}).join(' ')+'"/>';
+  svg.innerHTML=o;
+});
+</script>
 </body>
 </html>
