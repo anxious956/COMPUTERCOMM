@@ -78,12 +78,12 @@ A single parity bit misses <b>every</b> even number of bit errors → all 2-bit 
 
 <div class="q"><div class="qt"><b class="n">6.</b> If we use 1 bit for error detection of 5-bit words, which of 1-bit parity (assuming up to 2-bit errors) or CRC would have fewer non-detectable errors?</div>
 <div class="ans">
-A 1-bit CRC needs a generator of degree 1. The only useful one is <b>C(x) = x + 1 (11)</b> (C(x) = x has one term and misses errors).<br>
-Dividing by x + 1 gives exactly the <b>even parity</b> bit → the two schemes are identical.<br>
-<table><tr><th>Errors (6 bits: 5 data + 1 check)</th><th>1-bit parity</th><th>CRC, C(x)=x+1</th></tr>
-<tr><td>1-bit: C(6,1) = 6</td><td>all detected</td><td>all detected</td></tr>
-<tr><td>2-bit: C(6,2) = 15</td><td>15 undetected</td><td>15 undetected</td></tr></table>
-<b>Answer: neither — same number of non-detectable errors (15).</b> CRC only does better with more check bits.
+<table>
+<tr><th>6 bits (5 data + 1 check)</th><th>1-bit parity</th><th>1-bit CRC, C(x) = x + 1</th></tr>
+<tr><td>1-bit errors: C(6,1) = 6</td><td>all detected</td><td>all detected</td></tr>
+<tr><td>2-bit errors: C(6,2) = 15</td><td>15 undetected</td><td>15 undetected</td></tr>
+<tr><th>Result</th><th colspan="2">Same — CRC with x + 1 is the same as even parity</th></tr>
+</table>
 </div></div>
 
 <div class="q"><div class="qt"><b class="n">7.</b> How many 2-bit errors can be undetected by checksum in 5-bit words?</div>
