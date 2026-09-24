@@ -165,42 +165,36 @@
 <h2>Part II — Practice Quiz</h2>
 
 <div class="sec">A. Encoding &amp; Links</div>
-<div class="q"><b class="n">1.</b> Represent <b>01101001</b> as unipolar NRZ and Manchester coding. <span class="pts">[HW]</span><div class="space big"></div></div>
-<div class="q"><b class="n">2.</b> Represent <b>10110010</b> as NRZ, NRZI (assume the line starts low) and Manchester. <div class="space big"></div></div>
-<div class="q"><b class="n">3.</b> What are the two problems of NRZ? How do NRZI and Manchester address them, and which problem does NRZI still have? <div class="space"></div></div>
-<div class="q"><b class="n">4.</b> A link sends 10 Mbps of data using Manchester encoding. What is its baud rate? What is the efficiency? <div class="space"></div></div>
-<div class="q"><b class="n">5.</b> Using the 4B/5B table from the slides, encode <b>0000 0010 1111</b>. What is the efficiency of 4B/5B? What rule do the 5-bit codes follow? <div class="space"></div></div>
-<div class="q"><b class="n">6.</b> Shannon: find the capacity for (a) B = 3000 Hz, SNR = 30 dB; (b) B = 4000 Hz, SNR = 20 dB. <div class="space"></div></div>
-<div class="q"><b class="n">7.</b> Find the wavelength of (a) a 3300 Hz signal on copper, (b) a 2.4 GHz signal in free space. <div class="space"></div></div>
+<div class="q"><b class="n">1.</b> Represent <b>10110010</b> as NRZ, NRZI (assume the line starts low) and Manchester. <div class="space big"></div></div>
+<div class="q"><b class="n">2.</b> What are the two problems of NRZ? How do NRZI and Manchester address them, and which problem does NRZI still have? <div class="space"></div></div>
+<div class="q"><b class="n">3.</b> A link sends 10 Mbps of data using Manchester encoding. What is its baud rate? What is the efficiency? <div class="space"></div></div>
+<div class="q"><b class="n">4.</b> Using the 4B/5B table from the slides, encode <b>0000 0010 1111</b>. What is the efficiency of 4B/5B? What rule do the 5-bit codes follow? <div class="space"></div></div>
+<div class="q"><b class="n">5.</b> Shannon: find the capacity for (a) B = 3000 Hz, SNR = 30 dB; (b) B = 4000 Hz, SNR = 20 dB. <div class="space"></div></div>
+<div class="q"><b class="n">6.</b> Find the wavelength of (a) a 3300 Hz signal on copper, (b) a 2.4 GHz signal in free space. <div class="space"></div></div>
 
 <div class="sec">B. Single (1-D) Parity</div>
-<div class="q"><b class="n">8.</b> Add the 8th parity bit to each 7-bit code using (i) even and (ii) odd parity: <b>1011001, 1110000, 0000000</b>. <div class="space"></div></div>
-<div class="q"><b class="n">9.</b> Using <b>odd</b> parity, the receiver gets <b>11010110</b> and <b>10011100</b>. Which one is in error? Could the other one still contain errors? <div class="space"></div></div>
-<div class="q"><b class="n">10.</b> Which two-bit errors would not be detected for string <b>1001P</b>, if P is the <b>odd</b> parity bit? Indicate all the strings that contain those errors. <span class="pts">[HW]</span><div class="space big"></div></div>
-<div class="q"><b class="n">11.</b> For <b>1101P</b> with <b>even</b> parity: how many 1-, 2-, 3- and 4-bit errors are possible, and which are detected? <div class="space"></div></div>
+<div class="q"><b class="n">7.</b> Add the 8th parity bit to each 7-bit code using (i) even and (ii) odd parity: <b>1011001, 1110000, 0000000</b>. <div class="space"></div></div>
+<div class="q"><b class="n">8.</b> Using <b>odd</b> parity, the receiver gets <b>11010110</b> and <b>10011100</b>. Which one is in error? Could the other one still contain errors? <div class="space"></div></div>
 
 <div class="sec">C. Two-Dimensional Parity</div>
-<div class="q"><b class="n">12.</b> Show the bi-dimensional parity of the codes <b>00010101, 10110011, 01000001</b> using odd parity. <span class="pts">[HW]</span><div class="space big"></div></div>
-<div class="q"><b class="n">13.</b> Show the bi-dimensional parity of <b>11001010, 01110001, 10100110</b> using <b>even</b> parity. <div class="space big"></div></div>
-<div class="q"><b class="n">14.</b> The block below uses <b>even</b> 2-D parity (last column = row parity, last row = column parity). One bit was flipped. Find and correct it.
+<div class="q"><b class="n">9.</b> The block below uses <b>even</b> 2-D parity (last column = row parity, last row = column parity). One bit was flipped. Find and correct it.
 <pre>1 0 1 1 | 1
 0 1 0 0 | 0
 1 1 0 0 | 0
 -------------
 0 0 0 1 | 1</pre><div class="space"></div></div>
-<div class="q"><b class="n">15.</b> 2-D parity catches all 1-, 2-, 3-bit errors. Show a 4-bit error it cannot catch. <div class="space"></div></div>
+<div class="q"><b class="n">10.</b> 2-D parity catches all 1-, 2-, 3-bit errors. Show a 4-bit error it cannot catch. <div class="space"></div></div>
 
 <div class="sec">D. Checksum</div>
-<div class="q"><b class="n">16.</b> In 4-bit ones-complement arithmetic, compute −6 + (−2) (same style as the slide's −5 + −3). <div class="space"></div></div>
-<div class="q"><b class="n">17.</b> Indicate the checksum field used for the transmission of the codes in Q12. <span class="pts">[HW]</span><div class="space"></div></div>
-<div class="q"><b class="n">18.</b> Compute the 16-bit Internet checksum of the words <b>1010 0011 1100 0101</b> and <b>0110 1101 1001 1010</b>. <div class="space"></div></div>
+<div class="q"><b class="n">11.</b> In 4-bit ones-complement arithmetic, compute −6 + (−2) (same style as the slide's −5 + −3). <div class="space"></div></div>
+<div class="q"><b class="n">12.</b> Compute the 16-bit Internet checksum of the words <b>1010 0011 1100 0101</b> and <b>0110 1101 1001 1010</b>. <div class="space"></div></div>
 
 <div class="sec">E. CRC</div>
-<div class="q"><b class="n">19.</b> Write the polynomial and degree for <b>110001</b> and <b>1011011</b>. <div class="space"></div></div>
-<div class="q"><b class="n">20.</b> Message <b>1101</b>, generator C(x) = x<sup>3</sup> + x + 1. Find the CRC and the transmitted frame. <div class="space big"></div></div>
-<div class="q"><b class="n">21.</b> Message <b>10011010</b>, generator C(x) = x<sup>3</sup> + x<sup>2</sup> + 1. Find the transmitted frame. <div class="space big"></div></div>
-<div class="q"><b class="n">22.</b> With C(x) = x<sup>3</sup> + x + 1, the receiver gets <b>1101011</b>. Is there an error? <div class="space"></div></div>
-<div class="q"><b class="n">23.</b> True / False:
+<div class="q"><b class="n">13.</b> Write the polynomial and degree for <b>110001</b> and <b>1011011</b>. <div class="space"></div></div>
+<div class="q"><b class="n">14.</b> Message <b>1101</b>, generator C(x) = x<sup>3</sup> + x + 1. Find the CRC and the transmitted frame. <div class="space big"></div></div>
+<div class="q"><b class="n">15.</b> Message <b>10011010</b>, generator C(x) = x<sup>3</sup> + x<sup>2</sup> + 1. Find the transmitted frame. <div class="space big"></div></div>
+<div class="q"><b class="n">16.</b> With C(x) = x<sup>3</sup> + x + 1, the receiver gets <b>1101011</b>. Is there an error? <div class="space"></div></div>
+<div class="q"><b class="n">17.</b> True / False:
 <div class="mc">(a) Sender and receiver must both know M(x).<br>
 (b) All single-bit errors are detected if the x<sup>k</sup> and x<sup>0</sup> terms of C(x) are nonzero.<br>
 (c) Any odd number of errors is detected if C(x) contains the factor (x+1).<br>
@@ -208,9 +202,9 @@
 (e) If C(x) has degree r, the CRC has r bits.</div></div>
 
 <div class="sec">F. Layers, Protocols, History</div>
-<div class="q"><b class="n">24.</b> Assuming the TCP/IP layered model, if every layer encapsulates the PDU from the layer above and each header is 20B, indicate the overhead (as a ratio) for sending a) 1B and b) 100B of application data. <span class="pts">[HW]</span><div class="space"></div></div>
-<div class="q"><b class="n">25.</b> Indicate what would represent the layers of the TCP/IP model for an autonomous robot that imitates human walking. <span class="pts">[HW]</span><div class="space"></div></div>
-<div class="q"><b class="n">26.</b> Multiple choice.
+<div class="q"><b class="n">18.</b> Assuming the TCP/IP layered model, if every layer encapsulates the PDU from the layer above and each header is 20B, indicate the overhead (as a ratio) for sending a) 1B and b) 100B of application data. <span class="pts">[HW]</span><div class="space"></div></div>
+<div class="q"><b class="n">19.</b> Indicate what would represent the layers of the TCP/IP model for an autonomous robot that imitates human walking. <span class="pts">[HW]</span><div class="space"></div></div>
+<div class="q"><b class="n">20.</b> Multiple choice.
 <div class="mc">(a) Number of layers in the TCP/IP suite (per slides): i) 4 ii) 5 iii) 7<br>
 (b) Routers implement: i) all layers ii) the bottom two layers iii) only the link layer<br>
 (c) An Internet Draft has a lifetime of: i) 1 month ii) 6 months iii) 1 year<br>
@@ -219,35 +213,31 @@
 (f) TCP/IP was invented in: i) 1969 ii) 1973 iii) 1991<br>
 (g) The WWW was released by: i) CERN ii) ARPA iii) IETF<br>
 (h) Manchester encodes a 1 as: i) low→high ii) high→low iii) no transition</div></div>
-<div class="q"><b class="n">27.</b> Short answer: (a) protocol vs standard; (b) connection-oriented vs connectionless; (c) three reasons for layering; (d) service and functions of the data link layer; (e) BISYNC: SYN, SOH, STX, ETX, DLE. <div class="space big"></div></div>
+<div class="q"><b class="n">21.</b> Short answer: (a) protocol vs standard; (b) connection-oriented vs connectionless; (c) three reasons for layering; (d) service and functions of the data link layer; (e) BISYNC: SYN, SOH, STX, ETX, DLE. <div class="space big"></div></div>
 
 <div class="brk"></div>
 <h2>Part III — Answer Key</h2>
 
 <div class="box"><b>Manchester convention used here = the slides' convention: 0 = low→high, 1 = high→low.</b> (IEEE 802.3 is the opposite — always state which one you use.)</div>
 
-<div class="ans"><b class="n">1.</b> 01101001
-<svg class="wave" data-bits="01101001" data-type="nrz"></svg>
-<svg class="wave" data-bits="01101001" data-type="manch"></svg></div>
-
-<div class="ans"><b class="n">2.</b> 10110010
+<div class="ans"><b class="n">1.</b> 10110010
 <svg class="wave" data-bits="10110010" data-type="nrz"></svg>
 <svg class="wave" data-bits="10110010" data-type="nrzi"></svg>
 <svg class="wave" data-bits="10110010" data-type="manch"></svg>
 NRZI: flip on every 1, stay on 0 → levels H H L H H H L L.</div>
 
-<div class="ans"><b class="n">3.</b> <b>Baseline wander</b> (long runs of 0s/1s shift the receiver's average) and <b>clock recovery</b> (no transitions → sender/receiver lose sync). NRZI makes a transition for every 1 → fixes runs of 1s, but <b>runs of 0s still have no transitions</b>. Manchester has a transition in every bit → fixes both, but doubles the baud rate. (4B/5B + NRZI fixes runs of 0s.)</div>
+<div class="ans"><b class="n">2.</b> <b>Baseline wander</b> (long runs of 0s/1s shift the receiver's average) and <b>clock recovery</b> (no transitions → sender/receiver lose sync). NRZI makes a transition for every 1 → fixes runs of 1s, but <b>runs of 0s still have no transitions</b>. Manchester has a transition in every bit → fixes both, but doubles the baud rate. (4B/5B + NRZI fixes runs of 0s.)</div>
 
-<div class="ans"><b class="n">4.</b> Two signal changes per bit → <b>20 Mbaud</b>. Bit rate = half the baud rate → efficiency <b>50%</b>.</div>
+<div class="ans"><b class="n">3.</b> Two signal changes per bit → <b>20 Mbaud</b>. Bit rate = half the baud rate → efficiency <b>50%</b>.</div>
 
-<div class="ans"><b class="n">5.</b> 0000 → 11110, 0010 → 10100, 1111 → 11101 → <b>11110 10100 11101</b>. Efficiency 4/5 = <b>80%</b>. Each code has at most one leading 0 and at most two trailing 0s, so the line never sees more than three 0s in a row.</div>
+<div class="ans"><b class="n">4.</b> 0000 → 11110, 0010 → 10100, 1111 → 11101 → <b>11110 10100 11101</b>. Efficiency 4/5 = <b>80%</b>. Each code has at most one leading 0 and at most two trailing 0s, so the line never sees more than three 0s in a row.</div>
 
-<div class="ans"><b class="n">6.</b> (a) 30 dB → S/N = 10<sup>3</sup> = 1000 → C = 3000 · log<sub>2</sub>(1001) ≈ 3000 × 9.97 ≈ <b>30 kbps</b>.<br>
+<div class="ans"><b class="n">5.</b> (a) 30 dB → S/N = 10<sup>3</sup> = 1000 → C = 3000 · log<sub>2</sub>(1001) ≈ 3000 × 9.97 ≈ <b>30 kbps</b>.<br>
 (b) 20 dB → S/N = 100 → C = 4000 · log<sub>2</sub>(101) ≈ 4000 × 6.66 ≈ <b>26.6 kbps</b>.</div>
 
-<div class="ans"><b class="n">7.</b> (a) λ = (2/3 · 3×10<sup>8</sup>) / 3300 = 2×10<sup>8</sup>/3300 ≈ <b>60.6 km</b>. (b) λ = 3×10<sup>8</sup> / 2.4×10<sup>9</sup> = <b>0.125 m</b> (12.5 cm).</div>
+<div class="ans"><b class="n">6.</b> (a) λ = (2/3 · 3×10<sup>8</sup>) / 3300 = 2×10<sup>8</sup>/3300 ≈ <b>60.6 km</b>. (b) λ = 3×10<sup>8</sup> / 2.4×10<sup>9</sup> = <b>0.125 m</b> (12.5 cm).</div>
 
-<div class="ans"><b class="n">8.</b>
+<div class="ans"><b class="n">7.</b>
 <table>
 <tr><th>7-bit code</th><th># of 1s</th><th>Even parity → byte</th><th>Odd parity → byte</th></tr>
 <tr><td>1011001</td><td>4</td><td>P=0 → 10110010</td><td>P=1 → 10110011</td></tr>
@@ -255,62 +245,25 @@ NRZI: flip on every 1, stay on 0 → levels H H L H H H L L.</div>
 <tr><td>0000000</td><td>0</td><td>P=0 → 00000000</td><td>P=1 → 00000001</td></tr>
 </table></div>
 
-<div class="ans"><b class="n">9.</b> 11010110 has 5 ones (odd) → passes. 10011100 has 4 ones (even) → <b>error</b>. The first one can still be wrong: an even number of flipped bits (2, 4, …) is invisible to parity.</div>
+<div class="ans"><b class="n">8.</b> 11010110 has 5 ones (odd) → passes. 10011100 has 4 ones (even) → <b>error</b>. The first one can still be wrong: an even number of flipped bits (2, 4, …) is invisible to parity.</div>
 
-<div class="ans"><b class="n">10.</b> 1001 has two 1s → P = 1 → codeword <b>10011</b>. A single parity bit misses <u>every</u> 2-bit error → C(5,2) = <b>10</b> undetected errors:
-<table>
-<tr><th>Flipped</th><td>1,2</td><td>1,3</td><td>1,4</td><td>1,5</td><td>2,3</td><td>2,4</td><td>2,5</td><td>3,4</td><td>3,5</td><td>4,5</td></tr>
-<tr><th>String</th><td>01011</td><td>00111</td><td>00001</td><td>00010</td><td>11111</td><td>11001</td><td>11010</td><td>10101</td><td>10110</td><td>10000</td></tr>
-</table>
-All have an odd number of 1s, so all pass the odd-parity check.</div>
-
-<div class="ans"><b class="n">11.</b> 1101 has three 1s → P = 1 → codeword 11011 (four 1s). 1-bit: C(5,1) = 5, <b>all detected</b>. 2-bit: C(5,2) = 10, <b>none detected</b>. 3-bit: C(5,3) = 10, <b>all detected</b>. 4-bit: C(5,4) = 5, <b>none detected</b>. Rule: odd number of flips → detected; even → missed.</div>
-
-<div class="ans"><b class="n">12.</b> Odd parity:
-<table>
-<tr><th></th><th>Data</th><th># of 1s</th><th>P</th></tr>
-<tr><td>R1</td><td>0 0 0 1 0 1 0 1</td><td>3</td><td>0</td></tr>
-<tr><td>R2</td><td>1 0 1 1 0 0 1 1</td><td>5</td><td>0</td></tr>
-<tr><td>R3</td><td>0 1 0 0 0 0 0 1</td><td>2</td><td>1</td></tr>
-<tr><td>Col P</td><td>0 0 0 1 1 0 0 0</td><td></td><td>1*</td></tr>
-</table>
-*Corner: odd parity of the Col P row (two 1s) → 1; odd parity of the P column (one 1) → 0. They disagree with odd parity because there are 3 rows and 8 columns — state the convention you used.</div>
-
-<div class="ans"><b class="n">13.</b> Even parity:
-<table>
-<tr><th></th><th>Data</th><th># of 1s</th><th>P</th></tr>
-<tr><td>R1</td><td>1 1 0 0 1 0 1 0</td><td>4</td><td>0</td></tr>
-<tr><td>R2</td><td>0 1 1 1 0 0 0 1</td><td>4</td><td>0</td></tr>
-<tr><td>R3</td><td>1 0 1 0 0 1 1 0</td><td>4</td><td>0</td></tr>
-<tr><td>Col P</td><td>0 0 0 1 1 1 0 1</td><td></td><td>0</td></tr>
-</table></div>
-
-<div class="ans"><b class="n">14.</b> Check each row: R1 1011|1 → four 1s ✓; <b>R2 0100|0 → one 1 ✗</b>; R3 1100|0 → two 1s ✓. Check each column: c1 1,0,1|0 ✓; c2 0,1,1|0 ✓; <b>c3 1,0,0|0 → one 1 ✗</b>; c4 1,0,0|1 ✓.<br>
+<div class="ans"><b class="n">9.</b> Check each row: R1 1011|1 → four 1s ✓; <b>R2 0100|0 → one 1 ✗</b>; R3 1100|0 → two 1s ✓. Check each column: c1 1,0,1|0 ✓; c2 0,1,1|0 ✓; <b>c3 1,0,0|0 → one 1 ✗</b>; c4 1,0,0|1 ✓.<br>
 Error at <b>row 2, column 3</b> → correct R2 to <b>0110</b>. 2-D parity can <u>correct</u> a single-bit error.</div>
 
-<div class="ans"><b class="n">15.</b> Flip 4 bits on the corners of a rectangle, e.g. (R1,c1), (R1,c2), (R2,c1), (R2,c2). Each affected row and each affected column has <b>two</b> flips → every parity still checks → undetected.</div>
+<div class="ans"><b class="n">10.</b> Flip 4 bits on the corners of a rectangle, e.g. (R1,c1), (R1,c2), (R2,c1), (R2,c2). Each affected row and each affected column has <b>two</b> flips → every parity still checks → undetected.</div>
 
-<div class="ans"><b class="n">16.</b> +6 = 0110 → −6 = 1001; +2 = 0010 → −2 = 1101.<br>
+<div class="ans"><b class="n">11.</b> +6 = 0110 → −6 = 1001; +2 = 0010 → −2 = 1101.<br>
 1001 + 1101 = 1 0110 → carry out, add it back: 0110 + 1 = <b>0111</b> = ones complement of 1000 = <b>−8</b> ✓.</div>
 
-<div class="ans"><b class="n">17.</b>
-<pre>  00010101   (21)
-+ 10110011   (179)
-+ 01000001   (65)
-= 1 00001001 (265)  → wrap carry: 00001001 + 1 = 00001010
-Complement → CHECKSUM = 11110101  (245)
-Receiver: 00001010 + 11110101 = 11111111 → complement = 00000000 → OK</pre>
-(8-bit words, as in the HW. The real Internet checksum uses 16-bit words.)</div>
-
-<div class="ans"><b class="n">18.</b>
+<div class="ans"><b class="n">12.</b>
 <pre>  1010 0011 1100 0101   (A3C5)
 + 0110 1101 1001 1010   (6D9A)
 = 1 0001 0001 0101 1111 → wrap carry: 0001 0001 0101 1111 + 1 = 0001 0001 0110 0000
 Complement → CHECKSUM = 1110 1110 1001 1111   (EE9F)</pre></div>
 
-<div class="ans"><b class="n">19.</b> 110001 = x<sup>5</sup> + x<sup>4</sup> + 1, degree 5. 1011011 = x<sup>6</sup> + x<sup>4</sup> + x<sup>3</sup> + x + 1, degree 6.</div>
+<div class="ans"><b class="n">13.</b> 110001 = x<sup>5</sup> + x<sup>4</sup> + 1, degree 5. 1011011 = x<sup>6</sup> + x<sup>4</sup> + x<sup>3</sup> + x + 1, degree 6.</div>
 
-<div class="ans"><b class="n">20.</b> C(x) = 1011, degree r = 3 → append 3 zeros: 1101<b>000</b>.
+<div class="ans"><b class="n">14.</b> C(x) = 1011, degree r = 3 → append 3 zeros: 1101<b>000</b>.
 <pre>1101000
 1011         XOR → 0110 → drop the 0, bring down 0 → 1100
  1100
@@ -321,7 +274,7 @@ Complement → CHECKSUM = 1110 1110 1001 1111   (EE9F)</pre></div>
    1011      XOR → 0001 → remainder = 001</pre>
 CRC = <b>001</b> → transmitted frame <b>1101001</b>. (Check: 1101001 ÷ 1011 leaves remainder 000.)</div>
 
-<div class="ans"><b class="n">21.</b> C(x) = 1101, r = 3 → 10011010<b>000</b>.
+<div class="ans"><b class="n">15.</b> C(x) = 1101, r = 3 → 10011010<b>000</b>.
 <pre>1001 ⊕ 1101 = 0100 → 100, bring 1 → 1001
 1001 ⊕ 1101 = 0100 → 100, bring 0 → 1000
 1000 ⊕ 1101 = 0101 → 101, bring 1 → 1011
@@ -332,20 +285,20 @@ CRC = <b>001</b> → transmitted frame <b>1101001</b>. (Check: 1101001 ÷ 1011 l
 1000 ⊕ 1101 = 0101 → remainder = 101</pre>
 Transmitted frame = <b>10011010 101</b>.</div>
 
-<div class="ans"><b class="n">22.</b>
+<div class="ans"><b class="n">16.</b>
 <pre>1101 ⊕ 1011 = 0110 → 110, bring 0 → 1100
 1100 ⊕ 1011 = 0111 → 111, bring 1 → 1111
 1111 ⊕ 1011 = 0100 → 100, bring 1 → 1001
 1001 ⊕ 1011 = 0010 → remainder = 010 ≠ 0</pre>
 Remainder is not zero → <b>error detected</b>. (The correct frame was 1101001; bit 6 flipped.)</div>
 
-<div class="ans"><b class="n">23.</b> (a) <b>F</b> — only C(x) must be known. (b) <b>T</b>. (c) <b>T</b>. (d) <b>F</b> — the checksum is not used at the link level (it is used in IP). (e) <b>T</b>.</div>
+<div class="ans"><b class="n">17.</b> (a) <b>F</b> — only C(x) must be known. (b) <b>T</b>. (c) <b>T</b>. (d) <b>F</b> — the checksum is not used at the link level (it is used in IP). (e) <b>T</b>.</div>
 
-<div class="ans"><b class="n">24.</b> The slides' TCP/IP model has 4 layers. Transport, Network and Link each encapsulate the PDU from above → 3 × 20 = <b>60B</b> of headers.<br>
-a) 1B: 60 / (60 + 1) = <b>60/61 ≈ 0.98</b> &nbsp; b) 100B: 60 / 160 = <b>0.375</b><br>
-If you also count an application header (4 × 20 = 80B): 80/81 ≈ 0.99 and 80/180 ≈ 0.44. <b>State your assumption.</b></div>
+<div class="ans"><b class="n">18.</b> The slides' TCP/IP model has 4 layers (Application, Transport, Network, Link). The question says <i>the header of each layer is 20B</i> → 4 × 20 = <b>80B</b> of headers.<br>
+a) 1B: 80 / (80 + 1) = <b>80/81 ≈ 0.988</b> &nbsp; b) 100B: 80 / 180 = <b>0.444</b><br>
+Alternative reading (Application has no layer above to encapsulate → 3 × 20 = 60B): 60/61 ≈ 0.98 and 60/160 = 0.375. <b>State your assumption.</b></div>
 
-<div class="ans"><b class="n">25.</b> Example with 4 layers:
+<div class="ans"><b class="n">19.</b> Example with 4 layers:
 <table>
 <tr><th>Layer</th><th>Walking robot</th></tr>
 <tr><td>Application</td><td class="l">Goal / intent: "walk to the door", path planning</td></tr>
@@ -355,9 +308,9 @@ If you also count an application header (4 × 20 = 80B): 80/81 ≈ 0.99 and 80/1
 </table>
 HW asks for two versions: yours first, then an LLM's response.</div>
 
-<div class="ans"><b class="n">26.</b> (a) i 4 &nbsp; (b) ii bottom two &nbsp; (c) ii 6 months &nbsp; (d) ii BISYNC &nbsp; (e) iii UCLA &nbsp; (f) ii 1973 &nbsp; (g) i CERN &nbsp; (h) ii high→low</div>
+<div class="ans"><b class="n">20.</b> (a) i 4 &nbsp; (b) ii bottom two &nbsp; (c) ii 6 months &nbsp; (d) ii BISYNC &nbsp; (e) iii UCLA &nbsp; (f) ii 1973 &nbsp; (g) i CERN &nbsp; (h) ii high→low</div>
 
-<div class="ans"><b class="n">27.</b> (a) Protocol = rules for communication, followed strictly; standard = agreed-upon rules set by authority, custom or consensus (committees, forums, agencies).<br>
+<div class="ans"><b class="n">21.</b> (a) Protocol = rules for communication, followed strictly; standard = agreed-upon rules set by authority, custom or consensus (committees, forums, agencies).<br>
 (b) Connection-oriented: call setup, one route for all packets, guaranteed delivery and order, error/flow control by the network (telephone). Connectionless: no setup, each packet routed separately, no guarantees, error/flow control by the end hosts (postal service).<br>
 (c) Break network operation into simpler parts; standard interfaces for plug-and-play and multi-vendor; modular development.<br>
 (d) Service: reliable transfer of frames over a link. Functions: synchronization, error control, flow control.<br>
