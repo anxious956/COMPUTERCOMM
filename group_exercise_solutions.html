@@ -56,31 +56,16 @@ The checksum depends only on the ones-complement <b>sum</b> (= cb). Any fields a
 <div class="q"><div class="qt"><b class="n">4.</b> What is the CRC field content in Q2 if C(x) = 1101?</div>
 <div class="ans">
 C(x) = 1101 = x<sup>3</sup> + x<sup>2</sup> + 1 → degree r = 3 → append <b>000</b>.<br>
-Dividend: 10100010 00000110 00100011 <b>000</b>. Window method: 4-bit window; if it starts with 1 → XOR with 1101; drop the first bit; bring down the next bit.
-<pre>1010 ⊕ 1101 = 0111  → 111, bring 0 → 1110
-1110 ⊕ 1101 = 0011  → 011, bring 0 → 0110
-0110  starts with 0 → no XOR  → 110, bring 1 → 1101
-1101 ⊕ 1101 = 0000  → 000, bring 0 → 0000
-0000  starts with 0 → no XOR  → 000, bring 0 → 0000
-0000  starts with 0 → no XOR  → 000, bring 0 → 0000
-0000  starts with 0 → no XOR  → 000, bring 0 → 0000
-0000  starts with 0 → no XOR  → 000, bring 0 → 0000
-0000  starts with 0 → no XOR  → 000, bring 0 → 0000
-0000  starts with 0 → no XOR  → 000, bring 1 → 0001
-0001  starts with 0 → no XOR  → 001, bring 1 → 0011
-0011  starts with 0 → no XOR  → 011, bring 0 → 0110
-0110  starts with 0 → no XOR  → 110, bring 0 → 1100
-1100 ⊕ 1101 = 0001  → 001, bring 0 → 0010
-0010  starts with 0 → no XOR  → 010, bring 1 → 0101
-0101  starts with 0 → no XOR  → 101, bring 0 → 1010
-1010 ⊕ 1101 = 0111  → 111, bring 0 → 1110
-1110 ⊕ 1101 = 0011  → 011, bring 0 → 0110
-0110  starts with 0 → no XOR  → 110, bring 1 → 1101
-1101 ⊕ 1101 = 0000  → 000, bring 1 → 0001
-0001  starts with 0 → no XOR  → 001, bring 0 → 0010
-0010  starts with 0 → no XOR  → 010, bring 0 → 0100
-0100  starts with 0 → no XOR  → 100, bring 0 → 1000
-1000 ⊕ 1101 = 0101  → remainder = 101</pre>
+Dividend: 10100010 00000110 00100011 <b>000</b>. Only XOR steps shown: whenever the leading bit is 1, XOR 1101 under it (windows starting with 0 are skipped).
+<pre>bit  1: 1010 ⊕ 1101 = 0111
+bit  2: 1110 ⊕ 1101 = 0011
+bit  4: 1101 ⊕ 1101 = 0000
+bit 14: 1100 ⊕ 1101 = 0001
+bit 17: 1010 ⊕ 1101 = 0111
+bit 18: 1110 ⊕ 1101 = 0011
+bit 20: 1101 ⊕ 1101 = 0000
+bit 24: 1000 ⊕ 1101 = 0101
+remainder (last 3 bits) = 101</pre>
 <b>CRC field = 101</b> → transmitted: 101000100000011000100011 <b>101</b> (dividing it by 1101 leaves 000 ✓)
 </div></div>
 
@@ -114,31 +99,22 @@ Flips at different positions change the sum (±2<sup>a</sup> ± 2<sup>b</sup> �
 
 <div class="q"><div class="qt"><b class="n">8.</b> What is the CRC field content of the string in Q2 if C(x) = 1000101?</div>
 <div class="ans">
-C(x) = 1000101 = x<sup>6</sup> + x<sup>2</sup> + 1 → degree r = 6 → append <b>000000</b>. 7-bit window:
-<pre>1010001 ⊕ 1000101 = 0010100  → 010100, bring 0 → 0101000
-0101000  starts with 0 → no XOR  → 101000, bring 0 → 1010000
-1010000 ⊕ 1000101 = 0010101  → 010101, bring 0 → 0101010
-0101010  starts with 0 → no XOR  → 101010, bring 0 → 1010100
-1010100 ⊕ 1000101 = 0010001  → 010001, bring 0 → 0100010
-0100010  starts with 0 → no XOR  → 100010, bring 0 → 1000100
-1000100 ⊕ 1000101 = 0000001  → 000001, bring 1 → 0000011
-0000011  starts with 0 → no XOR  → 000011, bring 1 → 0000111
-0000111  starts with 0 → no XOR  → 000111, bring 0 → 0001110
-0001110  starts with 0 → no XOR  → 001110, bring 0 → 0011100
-0011100  starts with 0 → no XOR  → 011100, bring 0 → 0111000
-0111000  starts with 0 → no XOR  → 111000, bring 1 → 1110001
-1110001 ⊕ 1000101 = 0110100  → 110100, bring 0 → 1101000
-1101000 ⊕ 1000101 = 0101101  → 101101, bring 0 → 1011010
-1011010 ⊕ 1000101 = 0011111  → 011111, bring 0 → 0111110
-0111110  starts with 0 → no XOR  → 111110, bring 1 → 1111101
-1111101 ⊕ 1000101 = 0111000  → 111000, bring 1 → 1110001
-1110001 ⊕ 1000101 = 0110100  → 110100, bring 0 → 1101000
-1101000 ⊕ 1000101 = 0101101  → 101101, bring 0 → 1011010
-1011010 ⊕ 1000101 = 0011111  → 011111, bring 0 → 0111110
-0111110  starts with 0 → no XOR  → 111110, bring 0 → 1111100
-1111100 ⊕ 1000101 = 0111001  → 111001, bring 0 → 1110010
-1110010 ⊕ 1000101 = 0110111  → 110111, bring 0 → 1101110
-1101110 ⊕ 1000101 = 0101011  → remainder = 101011</pre>
+C(x) = 1000101 = x<sup>6</sup> + x<sup>2</sup> + 1 → degree r = 6 → append <b>000000</b>. Only XOR steps shown:
+<pre>bit  1: 1010001 ⊕ 1000101 = 0010100
+bit  3: 1010000 ⊕ 1000101 = 0010101
+bit  5: 1010100 ⊕ 1000101 = 0010001
+bit  7: 1000100 ⊕ 1000101 = 0000001
+bit 13: 1110001 ⊕ 1000101 = 0110100
+bit 14: 1101000 ⊕ 1000101 = 0101101
+bit 15: 1011010 ⊕ 1000101 = 0011111
+bit 17: 1111101 ⊕ 1000101 = 0111000
+bit 18: 1110001 ⊕ 1000101 = 0110100
+bit 19: 1101000 ⊕ 1000101 = 0101101
+bit 20: 1011010 ⊕ 1000101 = 0011111
+bit 22: 1111100 ⊕ 1000101 = 0111001
+bit 23: 1110010 ⊕ 1000101 = 0110111
+bit 24: 1101110 ⊕ 1000101 = 0101011
+remainder (last 6 bits) = 101011</pre>
 <b>CRC field = 101011</b> → transmitted: 101000100000011000100011 <b>101011</b> (remainder check = 000000 ✓)
 </div></div>
 
