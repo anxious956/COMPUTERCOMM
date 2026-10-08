@@ -140,7 +140,7 @@
 <ul>
 <li>Parity bit for each byte (row) <b>plus</b> a parity byte for each bit position across all bytes (column).</li>
 <li>Catches <b>all 1-, 2-, 3-bit errors and most 4-bit errors</b>. Misses 4 errors on the corners of a rectangle. Can <b>locate and correct</b> a single-bit error (failing row × failing column).</li>
-<li>With odd parity and an odd×even block, the corner bit computed from the row vs. column differs — state which you used.</li>
+<li>Corner bit: the professor computes it from the <b>P column</b> (the row-parity bits) — HW2 solution: P column 0,0,1 → corner 0.</li>
 </ul>
 
 <h3>10. Internet checksum</h3>

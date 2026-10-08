@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ECE422 Midterm Prep</title>
+<style>
+  @page { size: letter; margin: 0.55in; }
+  :root { color-scheme: light; }
+  body { background:#fff; color:#000; font-family:"Times New Roman", Times, serif; font-size:11.3pt; line-height:1.36; max-width:7.4in; margin:0 auto; padding:16px; }
+  h1 { text-align:center; font-size:18pt; margin:0 0 2px; letter-spacing:1px; }
+  .sub { text-align:center; font-size:10.5pt; margin-bottom:8px; }
+  .hdr { display:flex; justify-content:space-between; border-top:2px solid #000; border-bottom:2px solid #000; padding:4px 0; margin-bottom:14px; font-size:10.5pt; }
+  h2 { font-size:13pt; border-bottom:1.5px solid #000; margin:18px 0 8px; text-transform:uppercase; letter-spacing:.5px; }
+  h3 { font-size:11.5pt; margin:11px 0 3px; }
+  table { border-collapse:collapse; margin:6px 0; font-size:10.3pt; }
+  th, td { border:1px solid #000; padding:2px 7px; text-align:center; vertical-align:top; }
+  td.l { text-align:left; }
+  ul { margin:3px 0 3px 20px; padding:0; }
+  li { margin:1px 0; }
+  .q { margin:9px 0; page-break-inside:avoid; }
+  .q b.n, .ans b.n { display:inline-block; min-width:32px; }
+  .space { height:48px; border-bottom:1px dotted #000; margin-bottom:4px; }
+  .space.big { height:100px; }
+  .ans { margin:9px 0; page-break-inside:avoid; }
+  pre { font-family:"Courier New", monospace; font-size:9.8pt; border:1px solid #000; padding:5px 8px; margin:5px 0; white-space:pre-wrap; }
+  .box { border:1.5px solid #000; padding:5px 10px; margin:8px 0; page-break-inside:avoid; }
+  .brk { page-break-before:always; }
+  .sec { font-weight:bold; margin-top:14px; border-bottom:1px solid #000; }
+  svg.wave { display:block; margin:4px 0; max-width:100%; height:auto; }
+  table.jq td:first-child { width:28px; }
+  table.jq td { text-align:left; }
+  .src { font-size:9.5pt; font-style:italic; }
+</style>
+</head>
+<body>
+
+<h1>ECE422 — MIDTERM PREP</h1>
+<div class="sub">Homework-style problems + EX3 (Jeopardy) review · Ch.1 Intro, History, Protocols · Ch.2 Encoding, Framing, Error Detection, Ethernet, CSMA, Wi-Fi</div>
+<div class="hdr"><span>Name: ______________________________</span><span>Date: ____________</span><span>Score: ______</span></div>
+
+<div class="box"><b>Conventions used by the professor</b> (from his HW2 solution and slides):
+<ul>
+<li><b>Manchester:</b> 0 = low→high, 1 = high→low (= NRZ XOR clock). He draws a CLK line above NRZ and Manchester.</li>
+<li><b>2-D parity corner bit:</b> parity of the <b>P column</b> (the row-parity bits). HW2: P column 0,0,1 → odd parity → corner <b>0</b>.</li>
+<li><b>Checksum:</b> add two words → add the third → add the carry back ("plus carry") → complement.</li>
+<li><b>Counting errors:</b> written as n!/(k!(n−k)!) — e.g. 5!/(3!2!) = 10.</li>
+<li><b>CRC answers</b> may be written with a leading 0 (EX3: "R = 0111" for a 3-bit remainder 111).</li>
+</ul></div>
+
+<h2>Part I — Formula &amp; Fact Sheet</h2>
+
+<h3>Calculations</h3>
+<table>
+<tr><th>Topic</th><th>Formula / rule</th><th>Example</th></tr>
+<tr><td>Shannon</td><td class="l">C = B·log<sub>2</sub>(1 + S/N); dB = 10·log<sub>10</sub>(S/N)</td><td class="l">B = 5000, S/N = 15 → 5000·log<sub>2</sub>16 = <b>20,000 b/s</b> (EX3)</td></tr>
+<tr><td>Min frame to detect collision</td><td class="l">L = 2·d·R / c &nbsp;(transmit for one round trip)</td><td class="l">d = 2500 m, R = 10 Mb/s, c = 2×10<sup>8</sup> → <b>250 bits</b> (EX3)</td></tr>
+<tr><td>Ethernet 512 bits</td><td class="l">round trip 51.2 µs × 10 Mb/s</td><td class="l">= 512 bits = 64 bytes (14 hdr + 46 data + 4 CRC)</td></tr>
+<tr><td>Exponential backoff</td><td class="l">after n collisions pick k ∈ {0 … 2<sup>n</sup>−1}, wait k × 51.2 µs</td><td class="l">n = 2 → 0, 51.2, 102.4, 153.6 µs</td></tr>
+<tr><td>Wavelength</td><td class="l">λ = speed / f; copper speed ≈ 2/3 c</td><td class="l">300 Hz on copper → 667 km</td></tr>
+<tr><td>Overhead</td><td class="l">headers / (headers + data)</td><td class="l">4 layers × 20B, 1B data → 80/81</td></tr>
+<tr><td>k-bit errors in n bits</td><td class="l">C(n,k) = n!/(k!(n−k)!)</td><td class="l">C(5,2) = 10</td></tr>
+<tr><td>CRC</td><td class="l">append r zeros (r = degree = bits of C(x) − 1), XOR-divide, remainder = CRC</td><td class="l">C(x) = 100 = x<sup>2</sup> → R = 0 iff last 2 bits are 0</td></tr>
+<tr><td>MAC → decimal</td><td class="l">read the hex digits as one number</td><td class="l">00:00:00:00:0A:00 = 0x0A00 = <b>2560</b> (EX3)</td></tr>
+</table>
+
+<h3>Ethernet (802.3)</h3>
+<ul>
+<li>Xerox PARC, mid-1970s; root protocol <b>ALOHA</b> (U. of Hawaii, medium = air). DEC + Intel + Xerox 10 Mbps standard 1978 → IEEE 802.3; Fast Ethernet 100 Mbps, Gigabit 1000 Mbps.</li>
+<li><b>CSMA/CD</b>: carrier sense (tell idle from busy) + collision detection (listen while transmitting). Uses <b>Manchester</b> encoding.</li>
+<li>Coax segment ≤ 500 m (50 Ω), ≤ 4 repeaters between hosts, total reach <b>2500 m</b>. 10Base5 (original), <b>10Base2</b> = 10 Mbps, baseband, 200 m; <b>10BaseT</b> = twisted pair, 100 m, hub.</li>
+<li><b>Frame:</b> preamble 64 bits · dst 48 · src 48 · type 16 (demux key) · data 46–1500 bytes · CRC 32.</li>
+<li><b>Address:</b> 48 bits, belongs to the adaptor (ROM), written as 6 hex bytes, leading 0s dropped (8:0:2b:e4:b1:2). Manufacturer prefix 24 bits (AMD = 8:0:20). All 1s = <b>broadcast</b>; first bit 1 but not all 1s = <b>multicast</b>. Adaptor accepts: own address, broadcast, multicast it was told to accept.</li>
+<li><b>Transmitter:</b> idle → send now; busy → wait until idle then send at once = <b>1-persistent</b>. Collision → send <b>32-bit jam</b> then stop. Runt frame = 64 preamble + 32 jam = <b>96 bits</b>. Retry with <b>exponential backoff</b>.</li>
+<li>Works best lightly loaded; typically &lt; 200 hosts (max 1024); easy, cheap, no routing tables.</li>
+</ul>
+
+<h3>Random access (CSMA notes)</h3>
+<table>
+<tr><th>Protocol</th><th>Channel idle</th><th>Channel busy</th></tr>
+<tr><td>Pure ALOHA</td><td colspan="2" class="l">Transmit at arbitrary times — <b>no carrier sense</b>. Vulnerable period = 2 frame times.</td></tr>
+<tr><td>1-persistent CSMA</td><td class="l">transmit (probability 1)</td><td class="l">keep listening, transmit as soon as idle</td></tr>
+<tr><td>Non-persistent CSMA</td><td class="l">transmit</td><td class="l">wait a <b>random</b> time, start again</td></tr>
+<tr><td>p-persistent CSMA (slotted)</td><td class="l">transmit with prob. p, defer to next slot with q = 1−p</td><td class="l">wait a random time, start again</td></tr>
+</table>
+All: collision → wait a random time and start over. Data link layer = <b>LLC</b> + <b>MAC</b> sublayers.
+
+<h3>Wireless / 802.11 / Bluetooth / ZigBee</h3>
+<ul>
+<li>FCC allocates bands. License-exempt bands: limited <b>power</b> + must use <b>spread spectrum</b>: <b>frequency hopping</b> (pseudorandom sequence of frequencies, same seed at receiver) or <b>direct sequence</b> (each bit XOR n random bits = n-bit <b>chipping code</b>, signal n× wider).</li>
+<li>802.11 original: FH over 79 × 1-MHz, or DS with 11-bit chipping; 2.4 GHz, 2 Mbps. <b>802.11b</b> 11 Mbps (2.4 GHz). <b>802.11a</b> 54 Mbps, OFDM, 5 GHz. <b>802.11g</b> 54 Mbps, OFDM, 2.4 GHz, backward compatible with b.</li>
+<li><b>Hidden node:</b> A and C both reach B but not each other → their frames collide at B and neither knows. <b>Exposed node:</b> C hears B→A and wrongly thinks it cannot send to D.</li>
+<li><b>MACA:</b> sender sends <b>RTS</b> (with length) → receiver answers <b>CTS</b>. Node hearing CTS → stay quiet. Node hearing RTS only → free to send. MACAW adds <b>ACK</b>. No collision detection: missing CTS → collision → exponential backoff.</li>
+<li><b>Distribution system:</b> Access Points (AP) wired together (layer 2). <b>Active scanning:</b> Probe → Probe Response → Association Request → Association Response. <b>Passive scanning:</b> AP sends <b>Beacon</b>. New AP tells old AP.</li>
+<li><b>Frame:</b> 4 addresses, ToDS/FromDS bits, data ≤ 2312 bytes, CRC 32, control 16 bits (6-bit type). Both DS = 1: Addr1 = ultimate destination, Addr2 = immediate sender (last AP), Addr3 = intermediate destination (first AP), Addr4 = original source.</li>
+<li>Mobility: none (early WiMAX), within one base (Bluetooth), between bases (cell, Wi-Fi). Mesh / ad-hoc = peers forward for each other.</li>
+<li><b>Bluetooth:</b> 2.45 GHz, ~10 m, PAN, v2.0 = 2.1 Mbps, low power; <b>piconet</b> = 1 master + up to 7 slaves, slaves talk only via master, can be <b>parked</b>. <b>ZigBee:</b> IEEE 802.15.4, lower bandwidth, lower power, cheaper.</li>
+</ul>
+
+<h3>Earlier topics (still on the midterm)</h3>
+<ul>
+<li>TCP/IP (slides): Application, Transport, Network, Link — routers have the bottom two. OSI has Physical, Session, Presentation that TCP/IP does not (EX3).</li>
+<li>Transport layer: reliable message delivery, flow control, error recovery. MAC (hardware) address only travels to the <b>closest router</b>; each hop uses the <b>next hop's</b> HW address. Same LAN ⇔ same <b>network ID</b> (masked address).</li>
+<li>Packet switching gives resiliency via metadata + routing/forwarding; Sputnik (1957) → ARPA → communication tolerant to partial destruction. ARPANET 1969: UCLA, SRI, UCSB, Utah. Killer apps: e-mail, WWW.</li>
+<li>Encoding: NRZ, NRZI (flip on 1), Manchester (bit rate = ½ baud rate), 4B/5B (≤ 1 leading 0, ≤ 2 trailing 0s, 80%). FSK = different frequency for 0 and 1.</li>
+<li>Error detection: parity misses even # of errors; 2-D parity catches 1/2/3-bit; checksum (IP, not link level); CRC (HDLC, DDCMP, CSMA/CD, Token Ring).</li>
+</ul>
+
+<div class="brk"></div>
+<h2>Part II — Homework-Style Problems</h2>
+
+<div class="sec">A. Encoding &amp; Shannon</div>
+<div class="q"><b class="n">1.</b> Draw CLK, NRZ, NRZI (line starts low) and Manchester for <b>11001010</b>.<div class="space big"></div></div>
+<div class="q"><b class="n">2.</b> Show an example of FSK for <b>10011</b>.<div class="space"></div></div>
+<div class="q"><b class="n">3.</b> Max data rate: (a) B = 8000 Hz, S/N = 31; (b) B = 3000 Hz, SNR = 20 dB; (c) radio link 40 kHz, signal 100 mW, noise 10 mW.<div class="space"></div></div>
+<div class="q"><b class="n">4.</b> Which 2B/3B codes guarantee no more than two consecutive <b>1s</b> in the bit stream? Give a valid 2B→3B table.<div class="space"></div></div>
+
+<div class="sec">B. Parity</div>
+<div class="q"><b class="n">5.</b> Show the 2-D parity of <b>1011, 0110, 1100</b> using <b>odd</b> parity (use the professor's corner rule).<div class="space"></div></div>
+<div class="q"><b class="n">6.</b> Show the 2-D parity of <b>1100101, 0011010, 1110001</b> using <b>even</b> parity.<div class="space"></div></div>
+<div class="q"><b class="n">7.</b> Which two-bit errors are not detected for <b>0110P</b>, P = odd parity bit? List all strings.<div class="space"></div></div>
+
+<div class="sec">C. Checksum</div>
+<div class="q"><b class="n">8.</b> Show the 8-bit checksum transmitted to protect the fields <b>3f:c8:91</b> (hex). Verify at the receiver.<div class="space big"></div></div>
+<div class="q"><b class="n">9.</b> Show 3 field values that produce the same checksum as Q8.<div class="space"></div></div>
+
+<div class="sec">D. CRC</div>
+<div class="q"><b class="n">10.</b> M = <b>11010011</b>, C(x) = <b>1011</b>. Find R and the transmitted frame.<div class="space big"></div></div>
+<div class="q"><b class="n">11.</b> The receiver of Q10 gets <b>11010001011</b>. Is there an error?<div class="space"></div></div>
+<div class="q"><b class="n">12.</b> If C(x) = <b>1000</b> for a 6-bit M(x), how many nonzero M(x) give R(x) = 0? List them.<div class="space"></div></div>
+
+<div class="sec">E. Ethernet / MAC</div>
+<div class="q"><b class="n">13.</b> d = 1000 m, R = 100 Mb/s, c = 2×10<sup>8</sup> m/s. Minimum frame length L to detect a collision? Also show why classic Ethernet uses 512 bits.<div class="space"></div></div>
+<div class="q"><b class="n">14.</b> An adaptor has collided 3 times. Which waiting times can it choose? What is the maximum?<div class="space"></div></div>
+<div class="q"><b class="n">15.</b> (a) Write 8:0:2b:e4:b1:2 in binary. (b) What decimal number is 00:00:00:00:01:2C? (c) Which frames does an adaptor accept?<div class="space"></div></div>
+<div class="q"><b class="n">16.</b> A packet goes from host H to a destination 3 hops away (H → R1 → R2 → D). Give the destination HW address on each hop. How far does H's HW address travel?<div class="space"></div></div>
+
+<div class="sec">F. CSMA &amp; Wi-Fi</div>
+<div class="q"><b class="n">17.</b> Name the protocol: (a) channel busy → keep listening and send the moment it is idle; (b) channel busy → wait a random time; (c) idle → send with probability p; (d) no carrier sense at all.<div class="space"></div></div>
+<div class="q"><b class="n">18.</b> Nodes A–B–C–D in a line, each reaches only its neighbours. (a) A and C both send to B — what problem? (b) B sends to A, C wants to send to D — what problem? (c) How does RTS/CTS help?<div class="space big"></div></div>
+<div class="q"><b class="n">19.</b> Node C (cell of AP-2) sends a frame to node F (cell of AP-1) over the distribution system. Give ToDS, FromDS and Addr1–Addr4.<div class="space"></div></div>
+
+<div class="sec">G. Layers</div>
+<div class="q"><b class="n">20.</b> Each layer of the TCP/IP model adds a 20B header. Overhead ratio for 1B and 100B of data?<div class="space"></div></div>
+
+<div class="brk"></div>
+<h2>Part III — Answer Key</h2>
+
+<div class="ans"><b class="n">1.</b> 11001010 — Manchester = NRZ XOR CLK (0 = low→high, 1 = high→low).
+<svg class="wave" data-bits="11001010" data-type="clk"></svg>
+<svg class="wave" data-bits="11001010" data-type="nrz"></svg>
+<svg class="wave" data-bits="11001010" data-type="nrzi"></svg>
+<svg class="wave" data-bits="11001010" data-type="manch"></svg>
+NRZI: flip on each 1 → H L L L H H L L.</div>
+
+<div class="ans"><b class="n">2.</b> FSK: amplitude constant, a <b>higher frequency for 1</b>, a <b>lower frequency for 0</b>.
+<svg class="wave" data-bits="10011" data-type="fsk"></svg></div>
+
+<div class="ans"><b class="n">3.</b> (a) 8000·log<sub>2</sub>(32) = 8000 × 5 = <b>40,000 b/s</b>. (b) 20 dB → S/N = 100 → 3000·log<sub>2</sub>(101) ≈ 3000 × 6.66 ≈ <b>20 kb/s</b>. (c) S/N = 100/10 = 10 → 40,000·log<sub>2</sub>(11) ≈ 40,000 × 3.46 ≈ <b>138 kb/s</b>.</div>
+
+<div class="ans"><b class="n">4.</b> Reject codes that start with 11, end with 11, or contain 111 (011, 110, 111) → valid: <b>000, 001, 010, 100, 101</b> (5 codes; need 4). At a boundary at most 1 trailing + 1 leading 1 meet → never more than two 1s in a row. Table: 00→000, 01→001, 10→010, 11→100 (101 spare).<br>
+<span class="src">EX3 version (no more than two consecutive 0s): 010, 011, 101, 110, 111.</span></div>
+
+<div class="ans"><b class="n">5.</b> Odd parity:
+<table>
+<tr><th></th><th>Data</th><th># 1s</th><th>P</th></tr>
+<tr><td>R1</td><td>1 0 1 1</td><td>3</td><td>0</td></tr>
+<tr><td>R2</td><td>0 1 1 0</td><td>2</td><td>1</td></tr>
+<tr><td>R3</td><td>1 1 0 0</td><td>2</td><td>1</td></tr>
+<tr><td>Parity</td><td>1 1 1 0</td><td></td><td><b>1</b></td></tr>
+</table>
+Corner (professor's rule): P column 0,1,1 has two 1s → odd parity → <b>1</b>. (The parity row 1110 would give 0 — the two methods disagree with odd parity, so follow his rule and say so.)</div>
+
+<div class="ans"><b class="n">6.</b> Even parity:
+<table>
+<tr><th></th><th>Data</th><th># 1s</th><th>P</th></tr>
+<tr><td>R1</td><td>1 1 0 0 1 0 1</td><td>4</td><td>0</td></tr>
+<tr><td>R2</td><td>0 0 1 1 0 1 0</td><td>3</td><td>1</td></tr>
+<tr><td>R3</td><td>1 1 1 0 0 0 1</td><td>4</td><td>0</td></tr>
+<tr><td>Parity</td><td>0 0 0 1 1 1 0</td><td></td><td>1</td></tr>
+</table>
+With even parity both corner methods agree (= 1).</div>
+
+<div class="ans"><b class="n">7.</b> 0110 has two 1s → P = 1 → <b>01101</b>. All 2-bit errors are missed: 5!/(2!3!) = <b>10</b>:
+<table>
+<tr><th>Flipped</th><td>1,2</td><td>1,3</td><td>1,4</td><td>1,5</td><td>2,3</td><td>2,4</td><td>2,5</td><td>3,4</td><td>3,5</td><td>4,5</td></tr>
+<tr><th>String</th><td>10101</td><td>11001</td><td>11111</td><td>11100</td><td>00001</td><td>00111</td><td>00100</td><td>01011</td><td>01000</td><td>01110</td></tr>
+</table></div>
+
+<div class="ans"><b class="n">8.</b>
+<pre>  3f = 0011 1111
++ c8 = 1100 1000
+Sum 1 = 1 0000 0111        (carry out)
++ 91 = 1001 0001
+Sum 2 = 1 1001 1000 → plus carry: 1001 1000 + 1 = 1001 1001  (0x99)
+Complement → 0110 0110 = 0x66   ← transmitted checksum
+Receiver: 3f + c8 + 91 + 66 → 1111 1111 → complement 0000 0000 → OK</pre></div>
+
+<div class="ans"><b class="n">9.</b> Any fields with the same ones-complement sum (0x99): <b>91:c8:3f</b> (reordered), <b>40:c7:91</b> (+1/−1), <b>99:00:00</b>.</div>
+
+<div class="ans"><b class="n">10.</b> C(x) = 1011 → r = 3 → 11010011<b>000</b>. XOR steps:
+<pre>bit 1: 1101 ⊕ 1011 = 0110
+bit 2: 1100 ⊕ 1011 = 0111
+bit 3: 1110 ⊕ 1011 = 0101
+bit 4: 1011 ⊕ 1011 = 0000
+bit 8: 1000 ⊕ 1011 = 0011
+remainder = 011</pre>
+<b>R = 011</b> → transmitted <b>11010011 011</b>.</div>
+
+<div class="ans"><b class="n">11.</b> 11010001011 ÷ 1011 → remainder <b>001 ≠ 0</b> → <b>error detected</b> (bit 7 was flipped).</div>
+
+<div class="ans"><b class="n">12.</b> C(x) = 1000 = x<sup>3</sup> → R = 0 exactly when the last 3 bits of M are 0 → M = xxx000. Nonzero choices for the first 3 bits: 2<sup>3</sup> − 1 = <b>7</b> values: <b>8, 16, 24, 32, 40, 48, 56</b>.<br>
+<span class="src">EX3 version: C(x) = 100 → last 2 bits 0 → 15 values: 4, 8, …, 60.</span></div>
+
+<div class="ans"><b class="n">13.</b> L = 2·d·R / c = 2 × 1000 × 10<sup>8</sup> / (2×10<sup>8</sup>) = <b>1000 bits</b>. Classic Ethernet: round trip 51.2 µs × 10 Mb/s = <b>512 bits</b> (64 bytes). EX3: 2 × 2500 × 10<sup>7</sup> / 2×10<sup>8</sup> = 250 bits.</div>
+
+<div class="ans"><b class="n">14.</b> n = 3 → k ∈ {0,…,2<sup>3</sup>−1 = 7} → wait k × 51.2 µs: 0, 51.2, 102.4, …, <b>358.4 µs</b> (max).</div>
+
+<div class="ans"><b class="n">15.</b> (a) 00001000 00000000 00101011 11100100 10110001 00000010. (b) 0x012C = 256 + 32 + 12 = <b>300</b>. (c) Frames to its own address, the broadcast address (all 1s), and multicast addresses it was told to accept.</div>
+
+<div class="ans"><b class="n">16.</b> Hop 1 (H→R1): dst HW = R1; hop 2 (R1→R2): dst HW = R2; hop 3 (R2→D): dst HW = D. The IP addresses stay the same. H's HW address travels only <b>up to the closest router (R1)</b>.</div>
+
+<div class="ans"><b class="n">17.</b> (a) 1-persistent CSMA (Ethernet). (b) Non-persistent CSMA. (c) p-persistent CSMA. (d) ALOHA.</div>
+
+<div class="ans"><b class="n">18.</b> (a) <b>Hidden node</b>: A and C cannot hear each other, frames collide at B, neither knows. (b) <b>Exposed node</b>: C hears B and wrongly stays silent, though C→D would not disturb A. (c) Sender sends RTS, receiver replies CTS (both carry the length). Nodes that hear the <b>CTS</b> stay quiet (fixes hidden node); nodes that hear only the <b>RTS</b> may transmit (fixes exposed node).</div>
+
+<div class="ans"><b class="n">19.</b> ToDS = 1, FromDS = 1. Addr1 = <b>F</b> (ultimate destination), Addr2 = <b>AP-1</b> (immediate sender), Addr3 = <b>AP-2</b> (intermediate destination), Addr4 = <b>C</b> (original source).</div>
+
+<div class="ans"><b class="n">20.</b> 4 layers × 20B = 80B: 1B → 80/81 ≈ <b>0.988</b>; 100B → 80/180 ≈ <b>0.444</b>. (If the application layer adds no header: 60/61 and 60/160.)</div>
+
+<div class="brk"></div>
+<h2>Part IV — Jeopardy Review (EX3 + more)</h2>
+<p class="src">Questions 1–20 are EX3 with the professor's answers. 21–50 are new questions in the same style from the slides.</p>
+<table class="jq">
+<tr><th>#</th><th>Question</th><th>Answer</th></tr>
+<tr><td>1</td><td>If pkt dst is 3 hops away, whose HW@ is used as dst after hop 1?</td><td>Hop 2's HW@</td></tr>
+<tr><td>2</td><td>Show an example of FSK of 10011</td><td>Figure: two frequencies, one for 1, one for 0</td></tr>
+<tr><td>3</td><td>B = 5000 Hz, S/N = 15, max data rate?</td><td>20,000 b/s</td></tr>
+<tr><td>4</td><td>Which 2B/3B codes do not give &gt; two consecutive 0s?</td><td>010, 011, 101, 110, 111</td></tr>
+<tr><td>5</td><td>C(x) = 100 for 6-bit M(x): # of M(x) with R(x) = 0?</td><td>15 values: 4, 8, …, 60</td></tr>
+<tr><td>6</td><td>Sublayers of the Data-Link layer?</td><td>LLC and MAC</td></tr>
+<tr><td>7</td><td>Protocol that uses no carrier sense?</td><td>ALOHA</td></tr>
+<tr><td>8</td><td>If channel is idle, wait random time — persistency type?</td><td>Non-persistent and p-persistent</td></tr>
+<tr><td>9</td><td>d = 2500 m, R = 10 Mb/s, c = 2×10<sup>8</sup> m/s: min L to detect collision?</td><td>250 bits</td></tr>
+<tr><td>10</td><td>Hidden station problem in Wi-Fi?</td><td>Tx station close to the receiver but out of range of the other transmitter</td></tr>
+<tr><td>11</td><td>Layers in OSI but not in TCP/IP?</td><td>Physical, Session, Presentation</td></tr>
+<tr><td>12</td><td>Decimal value of 00:00:00:00:0A:00?</td><td>2560</td></tr>
+<tr><td>13</td><td>R if C = 1011, M = 11001010111001?</td><td>R = 0111 (= 111), after appending 000</td></tr>
+<tr><td>14</td><td>Sending a pkt to Instagram — how far does your phone's HW@ travel?</td><td>Up to your closest router</td></tr>
+<tr><td>15</td><td>How to know 2 or more hosts are in the same LAN?</td><td>Same network ID (masked net address)</td></tr>
+<tr><td>16</td><td>How does a packet network achieve resiliency to destruction?</td><td>Metadata + packet routing/forwarding</td></tr>
+<tr><td>17</td><td>An example of an Internet killer application</td><td>E-mail, WWW</td></tr>
+<tr><td>18</td><td>Early adopter institutions of the Internet (4)?</td><td>U. Utah, Stanford Research Institute, UCLA, UCSB</td></tr>
+<tr><td>19</td><td>Why did Sputnik push the development of communications?</td><td>To make communications tolerant to partial destruction</td></tr>
+<tr><td>20</td><td>Main function(s) of the Transport layer?</td><td>Reliable message delivery, flow control, error recovery</td></tr>
+<tr><td>21</td><td>What does CSMA/CD stand for?</td><td>Carrier Sense Multiple Access with Collision Detection</td></tr>
+<tr><td>22</td><td>Root protocol of Ethernet, and where was it developed?</td><td>ALOHA, University of Hawaii</td></tr>
+<tr><td>23</td><td>Where/when was Ethernet developed? Which IEEE standard?</td><td>Xerox PARC, mid-1970s; IEEE 802.3</td></tr>
+<tr><td>24</td><td>Max repeaters between two hosts; total reach?</td><td>4 repeaters; 2500 m</td></tr>
+<tr><td>25</td><td>What does 10Base2 mean?</td><td>10 Mb/s, baseband, segment ≤ 200 m</td></tr>
+<tr><td>26</td><td>10BaseT: cable, length, device?</td><td>Twisted pair, 100 m, hub (multiway repeater)</td></tr>
+<tr><td>27</td><td>Encoding used by Ethernet?</td><td>Manchester</td></tr>
+<tr><td>28</td><td>Ethernet frame fields and sizes?</td><td>Preamble 64, dst 48, src 48, type 16 bits, data 46–1500 B, CRC 32</td></tr>
+<tr><td>29</td><td>Minimum Ethernet frame and why?</td><td>512 bits = 64 B; long enough to detect a collision (51.2 µs round trip)</td></tr>
+<tr><td>30</td><td>Size of the jam sequence; size of a runt frame?</td><td>32 bits; 96 bits (64 preamble + 32 jam)</td></tr>
+<tr><td>31</td><td>Ethernet persistency type?</td><td>1-persistent</td></tr>
+<tr><td>32</td><td>Exponential backoff after n collisions?</td><td>Wait k × 51.2 µs, k random in 0 … 2<sup>n</sup>−1</td></tr>
+<tr><td>33</td><td>Ethernet address size, and who owns it?</td><td>48 bits; the adaptor (burned in ROM)</td></tr>
+<tr><td>34</td><td>Broadcast address? Multicast address?</td><td>All 1s; first bit 1 but not all 1s</td></tr>
+<tr><td>35</td><td>How many bits identify the manufacturer?</td><td>24-bit prefix (e.g. AMD 8:0:20)</td></tr>
+<tr><td>36</td><td>p-persistent CSMA when idle?</td><td>Send with probability p, defer to next slot with q = 1−p</td></tr>
+<tr><td>37</td><td>Two spread spectrum techniques?</td><td>Frequency hopping, direct sequence (chipping code)</td></tr>
+<tr><td>38</td><td>Restrictions on license-exempt bands?</td><td>Power limit + spread spectrum</td></tr>
+<tr><td>39</td><td>Who allocates frequency bands in the USA?</td><td>FCC</td></tr>
+<tr><td>40</td><td>802.11b / 802.11a / 802.11g speeds and bands?</td><td>11 Mb/s 2.4 GHz / 54 Mb/s 5 GHz OFDM / 54 Mb/s 2.4 GHz OFDM</td></tr>
+<tr><td>41</td><td>Exposed node problem?</td><td>A node hears a transmission and wrongly holds back, although its own send would not interfere</td></tr>
+<tr><td>42</td><td>What do RTS and CTS stand for?</td><td>Request To Send, Clear To Send</td></tr>
+<tr><td>43</td><td>Node hears CTS — may it send? Hears only RTS?</td><td>No (close to receiver); yes (free to send)</td></tr>
+<tr><td>44</td><td>How does 802.11 learn about a collision?</td><td>No CTS received → backoff (no collision detection)</td></tr>
+<tr><td>45</td><td>Active vs passive scanning?</td><td>Active: node sends Probe; passive: AP sends Beacon</td></tr>
+<tr><td>46</td><td>Frames to join an AP?</td><td>Probe, Probe Response, Association Request, Association Response</td></tr>
+<tr><td>47</td><td>How many addresses in an 802.11 frame? Max data?</td><td>4 addresses; 2312 bytes</td></tr>
+<tr><td>48</td><td>Bluetooth band, range, network name?</td><td>2.45 GHz, ~10 m, piconet (PAN)</td></tr>
+<tr><td>49</td><td>Piconet size?</td><td>1 master + up to 7 slaves</td></tr>
+<tr><td>50</td><td>ZigBee standard and goal?</td><td>IEEE 802.15.4; very low power, low bandwidth, cheap</td></tr>
+</table>
+
+<script>
+document.querySelectorAll('svg.wave').forEach(function(svg){
+  var bits=svg.dataset.bits, t=svg.dataset.type;
+  var L=110, W=60, T=26, H=30, n=bits.length, w=L+n*W+10, h=T+H+18;
+  var hi=T, lo=T+H, mid=T+H/2, o='', pts=[];
+  var name={nrz:'NRZ',nrzi:'NRZI',manch:'Manchester',clk:'CLK',fsk:'FSK'}[t];
+  svg.setAttribute('viewBox','0 0 '+w+' '+h); svg.setAttribute('width',w); svg.setAttribute('height',h);
+  o+='<text x="4" y="'+(mid+4)+'" font-size="12" font-weight="bold">'+name+'</text>';
+  for(var i=0;i<=n;i++){var x=L+i*W;o+='<line x1="'+x+'" y1="'+(T-8)+'" x2="'+x+'" y2="'+(lo+6)+'" stroke="#000" stroke-width="0.6" stroke-dasharray="2,3"/>';}
+  var lvl=lo;
+  for(var i=0;i<n;i++){var b=bits[i],x=L+i*W;
+    o+='<text x="'+(x+W/2)+'" y="'+(T-12)+'" font-size="13" font-weight="bold" text-anchor="middle">'+b+'</text>';
+    if(t==='manch'){var a=b==='0'?lo:hi, c=b==='0'?hi:lo; pts.push([x,a],[x+W/2,a],[x+W/2,c],[x+W,c]);}
+    else if(t==='clk'){pts.push([x,lo],[x+W/2,lo],[x+W/2,hi],[x+W,hi],[x+W,lo]);}
+    else if(t==='nrzi'){ if(b==='1') lvl=(lvl===hi?lo:hi); pts.push([x,lvl],[x+W,lvl]); }
+    else if(t==='fsk'){var cyc=b==='1'?4:2; for(var k=0;k<=60;k++){pts.push([x+k*W/60, mid-(H/2)*Math.sin(2*Math.PI*cyc*k/60)]);}}
+    else {var y=b==='1'?hi:lo; pts.push([x,y],[x+W,y]);}
+  }
+  if(t==='nrzi'){o+='<polyline fill="none" stroke="#000" stroke-width="2.2" stroke-dasharray="4,2" points="'+(L-28)+','+lo+' '+L+','+lo+'"/>';pts.unshift([L,lo]);}
+  if(t!=='fsk'){o+='<text x="'+(L-6)+'" y="'+(hi+4)+'" font-size="10" text-anchor="end">high</text><text x="'+(L-6)+'" y="'+(lo+4)+'" font-size="10" text-anchor="end">low</text>';}
+  else {o+='<text x="'+(L-6)+'" y="'+(lo+14)+'" font-size="9" text-anchor="end">1 = high f, 0 = low f</text>';}
+  o+='<polyline fill="none" stroke="#000" stroke-width="'+(t==='fsk'?1.6:2.2)+'" points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ')+'"/>';
+  svg.innerHTML=o;
+});
+</script>
+</body>
+</html>
