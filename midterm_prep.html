@@ -284,6 +284,30 @@ remainder = 011</pre>
 <tr><td>50</td><td>ZigBee standard and goal?</td><td>IEEE 802.15.4; very low power, low bandwidth, cheap</td></tr>
 </table>
 
+<div class="brk"></div>
+<h2>Part V — EX3 (Jeopardy) — Original Questions &amp; Answers</h2>
+<p class="src">The 20 questions from ECE422-EX3-J-Fall 2026 with the professor's answers, plus a one-line explanation.</p>
+<div class="ans"><b class="n">1.</b> If pkt dst 3 hops away, whose HW@ used as dst after hop 1?<br><b>A:</b> Hop 2 HW@<br><span class="src">Why: Each hop uses the next hop's hardware (MAC) address; IP addresses stay the same.</span></div>
+<div class="ans"><b class="n">2.</b> Show example of FSK of 10011<br><b>A:</b> Show figure<br><span class="src">Why: Constant amplitude; one frequency for 1, another for 0 (see Part III, Q2).</span></div>
+<div class="ans"><b class="n">3.</b> If B = 5000 Hz, S/N = 15, max data rate?<br><b>A:</b> 20,000 b/s<br><span class="src">Why: C = 5000·log<sub>2</sub>(1+15) = 5000·log<sub>2</sub>16 = 5000 × 4.</span></div>
+<div class="ans"><b class="n">4.</b> Which 2B/3B codes do not give &gt; two consecutive 0s?<br><b>A:</b> 010, 011, 101, 110, 111<br><span class="src">Why: Drop 000, 001 (starts with 00) and 100 (ends with 00): at a boundary at most 1 + 1 zeros meet.</span></div>
+<div class="ans"><b class="n">5.</b> If C(x) = 100 for 6-bit M(x), # of M(x) → R(x) = 0?<br><b>A:</b> 15 values: 4, 8, …, 60<br><span class="src">Why: C(x) = x<sup>2</sup> divides M exactly when the last 2 bits are 00 → xxxx00, first 4 bits nonzero: 2<sup>4</sup> − 1 = 15.</span></div>
+<div class="ans"><b class="n">6.</b> Sublayers of the Data-Link layer?<br><b>A:</b> LLC and MAC<br><span class="src">Why: Logical Link Control + Media Access Control.</span></div>
+<div class="ans"><b class="n">7.</b> Protocol that uses no carrier sense?<br><b>A:</b> ALOHA<br><span class="src">Why: Pure ALOHA transmits at arbitrary times.</span></div>
+<div class="ans"><b class="n">8.</b> If channel is idle, wait random time. Persistency type?<br><b>A:</b> Non-persistent and p-persistent<br><span class="src">Why: 1-persistent never waits a random time before sending.</span></div>
+<div class="ans"><b class="n">9.</b> d = 2500 m, R = 10 Mb/s, c = 2×10<sup>8</sup> m/s: min L to detect collision?<br><b>A:</b> 250 bits<br><span class="src">Why: L = 2dR/c = 2 × 2500 × 10<sup>7</sup> / (2×10<sup>8</sup>) = 250.</span></div>
+<div class="ans"><b class="n">10.</b> What is the hidden station problem in Wi-Fi?<br><b>A:</b> Tx station close to the receiver but out of range of the other transmitter<br><span class="src">Why: A and C both reach B but not each other → collision at B, neither detects it.</span></div>
+<div class="ans"><b class="n">11.</b> Layers in OSI but not in TCP/IP?<br><b>A:</b> Physical, Session, Presentation<br><span class="src">Why: TCP/IP (per slides): Application, Transport, Network, Link.</span></div>
+<div class="ans"><b class="n">12.</b> What decimal number is 00:00:00:00:0A:00?<br><b>A:</b> 2560<br><span class="src">Why: 0x0A00 = 10 × 256 = 2560.</span></div>
+<div class="ans"><b class="n">13.</b> R? if C = 1011, M = 11001010111001<br><b>A:</b> R = 0111 (with +000)<br><span class="src">Why: Append 3 zeros, XOR-divide by 1011 → remainder 111 (written 0111).</span></div>
+<div class="ans"><b class="n">14.</b> If transmitting a pkt to Instagram, how far does your phone's HW@ travel?<br><b>A:</b> Up to your closest router<br><span class="src">Why: MAC addresses are only used on one link; the router replaces them.</span></div>
+<div class="ans"><b class="n">15.</b> How to know 2 or more hosts are in the same LAN?<br><b>A:</b> They have the same network ID (masked net @)<br><span class="src">Why: Apply the mask to each IP address and compare.</span></div>
+<div class="ans"><b class="n">16.</b> How does a packet network achieve resiliency (to destruction)?<br><b>A:</b> Using metadata and pkt routing/forwarding<br><span class="src">Why: Each packet carries its addresses and can take another route.</span></div>
+<div class="ans"><b class="n">17.</b> An example of an Internet killer application<br><b>A:</b> E-mail, WWW<br><span class="src">Why: E-mail 1971, WWW 1991 (CERN).</span></div>
+<div class="ans"><b class="n">18.</b> Early adopter institutions of the Internet (4)?<br><b>A:</b> U. Utah, Stanford R.I., UCLA, UCSB<br><span class="src">Why: ARPANET's first 4 nodes, 1969.</span></div>
+<div class="ans"><b class="n">19.</b> Why did Sputnik push the development of communications?<br><b>A:</b> To make communications tolerant to partial destruction<br><span class="src">Why: 1957 → ARPA → packet switching, no single point of failure.</span></div>
+<div class="ans"><b class="n">20.</b> Main function(s) of the Transport layer?<br><b>A:</b> Reliable message delivery, flow control, and error recovery<br><span class="src">Why: End-to-end delivery between hosts.</span></div>
+
 <script>
 document.querySelectorAll('svg.wave').forEach(function(svg){
   var bits=svg.dataset.bits, t=svg.dataset.type;
