@@ -78,9 +78,9 @@ HW5 Q5: lease 128.17.144.0/22 into /27 → 5 subnet bits → 32 subnets
    120 → 128 (/25): 14.24.74.0/25    (.0–.127)
     60 →  64 (/26): 14.24.74.128/26  (.128–.191)
     10 →  16 (/28): 14.24.74.192/28  (.192–.207)
-   reserve: 14.24.74.208 – .255 (48 @s)          [slide says .209: typo]
+   d. 208 @s used, 48 @s left in reserve: first 14.24.74.209, last 14.24.74.255
 Ex. 5.34 (embedded): 70.12.100.128/26 → Central 32: .128/27 (.128–.159)
-   East 16: .160/28 (.160–.175)   West 16: .176/28 (.176–.191)  [slide repeats .160: typo]
+   East: 70.12.100.160/28 to 70.12.100.175/28   West: 70.12.100.160/28 to 70.12.100.175/28
 Ex. 5.35 (groups): ISP 190.100.0.0/16
    G1: 64 customers × 256 = 16,384 → /18: 190.100.0.0/18,  each customer /24
    G2: 128 × 128 = 16,384 → /18: 190.100.64.0/18,  each /25
@@ -94,10 +94,12 @@ Ex. 5.35 (groups): ISP 190.100.0.0/16
 <li>Slide example: 192.4.16 … 192.4.31 share 20 bits → <b>192.4.16.0/20</b>.</li>
 </ul>
 <pre>HW5 Q3: 18.198.34.192/30, 18.198.34.240/30, 18.198.33.252/30
-        34 = 0010 0010, 33 = 0010 0001 → common: 0010 00 (6 bits) → 16 + 6 = /22
-        → 18.198.32.0/22                     [solution text says "/23": typo, answer /22 is right]
+        34: 0010 0010
+        33: 0010 0001
+        So, bit 23 (starting from the most significant bit) is different, so the new mask is /23
+        The new CIDR address is then 18.198.32.0/22
 Jeopardy: 193.221.231.43, .233.44, .234.45 → 231=1110 0111, 233=1110 1001, 234=1110 1010
-        common 1110 → /20 → 193.221.224.0/20   [Jeopardy sheet says 192: typo]</pre>
+        A: 192.221.224.0/20</pre>
 
 <h3>4. Forwarding</h3>
 <ul>
@@ -176,7 +178,7 @@ MTU: Ethernet 1500 B, FDDI 4500 B.</pre>
 <div class="q"><b class="n">16.</b> CIDR of 18.198.34.192/30, 18.198.34.240/30, 18.198.33.252/30:
 <div class="opts">a) 18.198.32.0/23 &nbsp; b) 18.198.32.0/22 &nbsp; c) 18.198.33.0/22 &nbsp; d) 18.198.0.0/16 &nbsp; e) none</div><div class="space"></div></div>
 <div class="q"><b class="n">17.</b> CIDR of hosts 193.221.231.43, 193.221.233.44, 193.221.234.45:
-<div class="opts">a) 193.221.224.0/20 &nbsp; b) 193.221.231.0/21 &nbsp; c) 193.221.0.0/16 &nbsp; d) 192.221.224.0/20 &nbsp; e) none</div><div class="space"></div></div>
+<div class="opts">a) 193.221.224.0/20 &nbsp; b) 193.221.231.0/21 &nbsp; c) 193.221.0.0/16 &nbsp; d) 193.221.231.0/20 &nbsp; e) none</div><div class="space"></div></div>
 <div class="q"><b class="n">18.</b> 92.0.35.64/28 and 92.0.35.192/29 as a single network:
 <div class="opts">a) 92.0.35.64/26 &nbsp; b) 92.0.35.0/25 &nbsp; c) 92.0.35.0/24 &nbsp; d) 92.0.35.128/25 &nbsp; e) none</div><div class="space"></div></div>
 <div class="q"><b class="n">19.</b> Main advantage of CIDR?
@@ -230,8 +232,8 @@ G3: 128 × 64 = 8192 → /19 → 150.80.64.0/19  (64.0 – 95.255)
 last G3 customer = 64.0 + 127 × 64 = 64.0 + 8128 = 64.0 + 31×256 + 192 → 150.80.95.192/26</pre></div>
 <div class="ans"><b class="n">14.</b> <b>b</b>. 65,536 − 3 × 8,192 = 40,960 (from 150.80.96.0).</div>
 <div class="ans"><b class="n">15.</b> <b>b</b>. (a) 6 × 128 = 768; (b) 2 × 1024 + 4 × 128 = 2560.</div>
-<div class="ans"><b class="n">16.</b> <b>b</b>. 34 = 0010 0010, 33 = 0010 0001 → common 001000 (6 bits) → /22 → 18.198.32.0/22. (a) is the typo in the HW5 text.</div>
-<div class="ans"><b class="n">17.</b> <b>a</b>. 231 = 1110 0111, 233 = 1110 1001, 234 = 1110 1010 → common 1110 → /20 → 224. (d) is the Jeopardy typo (192).</div>
+<div class="ans"><b class="n">16.</b> <b>b</b>. 34 = 0010 0010, 33 = 0010 0001 → common 001000 (6 bits) → /22 → 18.198.32.0/22.</div>
+<div class="ans"><b class="n">17.</b> <b>a</b>. 231 = 1110 0111, 233 = 1110 1001, 234 = 1110 1010 → common 1110 → /20 → 224.</div>
 <div class="ans"><b class="n">18.</b> <b>c</b>. 64 = 0100 0000, 192 = 1100 0000 → differ in the first bit of byte 4 → /24 → 92.0.35.0/24.</div>
 <div class="ans"><b class="n">19.</b> <b>b</b>. Aggregate routes: one entry for many networks; also more efficient address assignment.</div>
 <div class="ans"><b class="n">20.</b> <b>b</b>. Longest prefix match.</div>
@@ -253,29 +255,29 @@ Trap: (b) forgets the 20 B header; (c) gives the offset in bytes.</div>
 <div class="ans"><b class="n">30.</b> <b>c</b>. Routers fragment, the destination host reassembles (all fragments share the same Ident).</div>
 
 <div class="brk"></div>
-<h2>Part IV — Pre-Exam Jeopardy (with corrections)</h2>
+<h2>Part IV — Pre-Exam Jeopardy (professor's answers)</h2>
 <table>
 <tr><th>#</th><th>Question</th><th>Answer</th></tr>
 <tr><td>1</td><td class="l">How many fields in the (default) IP header?</td><td class="l">12 fields (20 bytes)</td></tr>
-<tr><td>2</td><td class="l">What does Flags (IP header) indicate?</td><td class="l">0 (reserved), do not fragment, more fragments</td></tr>
+<tr><td>2</td><td class="l">What does Flags (IP header) indicate?</td><td class="l">0, do not fragment, more fragments</td></tr>
 <tr><td>3</td><td class="l">Possible use of IP header options?</td><td class="l">Source route or record route</td></tr>
-<tr><td>4</td><td class="l">What does the PROTOCOL field indicate?</td><td class="l">Transport protocol, e.g. UDP or TCP</td></tr>
+<tr><td>4</td><td class="l">What does the PROTOCOL field indicate?</td><td class="l">Transport protocol, like UDP or TCP</td></tr>
 <tr><td>5</td><td class="l">MTU = 61 B, TL = 100 B: fragment offset of 2nd frag?</td><td class="l">5</td></tr>
-<tr><td>6</td><td class="l">Difference between routing and forwarding tables?</td><td class="l">Routing: cost, options; forwarding: no cost, one option</td></tr>
+<tr><td>6</td><td class="l">Difference between routing and forwarding tables?</td><td class="l">Rting: cost, options, Fwding: no cost, one option</td></tr>
 <tr><td>7</td><td class="l">Which has priority: a.b.c.0/24 or a.b.c.d/26?</td><td class="l">Longest prefix = /26</td></tr>
-<tr><td>8</td><td class="l">Pkt dst 15.34.45.83: match 15.88.0.0/13 or 15.80.0.0/12?</td><td class="l">Sheet says 15.80.0.0/12. <b>Check:</b> 34 = 0010… matches neither; 15.84.x.x would match /12 (see Q21–22)</td></tr>
-<tr><td>9</td><td class="l">CIDR of 193.221.231.43, .233.44, .234.45?</td><td class="l"><b>193</b>.221.224.0/20 (sheet typo: 192)</td></tr>
+<tr><td>8</td><td class="l">Pkt dst 15.34.45.83: match 15.88.0.0/13 or 15.80.0.0/12?</td><td class="l">15.80.0.0/12</td></tr>
+<tr><td>9</td><td class="l">CIDR of 193.221.231.43, .233.44, .234.45?</td><td class="l">A: 192.221.224.0/20</td></tr>
 <tr><td>10</td><td class="l">Forwarding table of R2?</td><td class="l">Directly connected nets with "–", remote nets via neighbour's IP, sorted longest prefix first (HW6 format)</td></tr>
-<tr><td>11</td><td class="l">Range of host @s in 35.117.160.0/19?</td><td class="l">35.117.160.1 to 35.117.191.254 (.255 = broadcast)</td></tr>
+<tr><td>11</td><td class="l">Range of host @s in 35.117.160.0/19?</td><td class="l">35.117.160.1 to 35.117.191.255</td></tr>
 <tr><td>12</td><td class="l">Range of host @s in 35.110.180.0/27?</td><td class="l">35.110.180.1 to 35.110.180.30</td></tr>
-<tr><td>13</td><td class="l">Total host @s if /20 is subnetted to /27?</td><td class="l">2<sup>7</sup> × (2<sup>5</sup> − 2) = 3840</td></tr>
+<tr><td>13</td><td class="l">Total host @s if /20 is subnetted to /27?</td><td class="l">(2^7)(2^5−2) = 3840 host @s</td></tr>
 <tr><td>14</td><td class="l">Host 129.110.92.33 /27: host @s in its LAN?</td><td class="l">129.110.92.33 to 129.110.92.62</td></tr>
 <tr><td>15</td><td class="l">Which topology has more host IP @s?</td><td class="l">(b): 2 × 1024 + 4 × 128 = 2560 vs 6 × 128 = 768</td></tr>
-<tr><td>16</td><td class="l">Which IP @ cannot be a destination?</td><td class="l">Host bits all 0 (network address)</td></tr>
+<tr><td>16</td><td class="l">Which IP @ cannot be a destination?</td><td class="l">Host bits equal to 0</td></tr>
 <tr><td>17</td><td class="l">Class B private block?</td><td class="l">172.16.0.0 to 172.31.255.255</td></tr>
-<tr><td>18</td><td class="l">Class of 11010010.10010001.00000000.00000000?</td><td class="l">Class C (110…, = 210)</td></tr>
-<tr><td>19</td><td class="l">How many class B @s in IPv4?</td><td class="l">2<sup>30</sup></td></tr>
-<tr><td>20</td><td class="l">92.0.35.64/28 and 92.0.35.192/29 as a single net?</td><td class="l">92.0.35.0/24</td></tr>
+<tr><td>18</td><td class="l">Class of 11010010.10010001.00000000.00000000?</td><td class="l">This is a Class-C IP @</td></tr>
+<tr><td>19</td><td class="l">How many class B @s in IPv4?</td><td class="l">2^30 @s</td></tr>
+<tr><td>20</td><td class="l">92.0.35.64/28 and 92.0.35.192/29 as a single net?</td><td class="l">With net@ 92.0.35.0/24 (CIDR)</td></tr>
 </table>
 
 </body>
