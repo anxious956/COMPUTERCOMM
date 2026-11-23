@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ECE422 Midterm 2 Cheat Sheet</title>
+<style>
+  @page { size: letter; margin: 0.32in; }
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { background:#fff; color:#000; font-family:"Arial Narrow", Arial, Helvetica, sans-serif; font-size:10.4pt; line-height:1.3; margin:0; }
+  .page + .page { page-break-before:always; }
+  h1 { font-size:12pt; margin:0 0 3px; text-align:center; letter-spacing:.5px; border-bottom:1.5px solid #000; padding-bottom:2px; }
+  .cols { column-count:2; column-gap:12px; column-rule:0.6px solid #000; }
+  h3 { font-size:10.6pt; margin:7px 0 2px; padding:0 2px; border-bottom:0.8px solid #000; break-after:avoid; text-transform:uppercase; }
+  ul { margin:1px 0 2px 11px; padding:0; } li { margin:0 0 1px; }
+  table { border-collapse:collapse; width:100%; margin:1px 0 3px; break-inside:avoid; }
+  th, td { border:0.6px solid #000; padding:0.5px 3px; text-align:left; vertical-align:top; }
+  pre { font-family:"Courier New", monospace; font-size:9.2pt; margin:1px 0 3px; border:0.6px solid #000; padding:2px 3px; white-space:pre-wrap; break-inside:avoid; line-height:1.15; }
+  .box { border:1px solid #000; padding:2px 4px; margin:2px 0 3px; break-inside:avoid; }
+</style>
+</head>
+<body>
+
+<div class="page">
+<h1>ECE422 MIDTERM 2 — METHODS (front)</h1>
+<div class="cols">
+
+<div class="box"><b>Exam traps (M1):</b> convert units first · add the whole carry · re-check the circled letter vs scrap work · compute before reading options ("none" is real) · offset in 8-byte units · hosts = addresses − 2.</div>
+
+<h3>Powers of 2 / mask bytes</h3>
+<table>
+<tr><th>bits in byte</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
+<tr><th>mask byte</th><td>128</td><td>192</td><td>224</td><td>240</td><td>248</td><td>252</td><td>254</td><td>255</td></tr>
+<tr><th>block size</th><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+</table>
+2<sup>1…8</sup>: 2 · 4 · 8 · 16 · 32 · 64 · 128 · 256<br>2<sup>9…16</sup>: 512 · 1024 · 2048 · 4096 · 8192 · 16384 · 32768 · 65536
+
+<h3>Addresses</h3>
+<ul>
+<li>/n → # @s = 2<sup>32−n</sup>, hosts = 2<sup>32−n</sup> − 2. Network = host AND mask (host bits 0, <b>cannot be a destination</b>); broadcast = host bits 1.</li>
+<li>Network starts at a multiple of the block size in the byte where the mask ends (/19 → byte 3, block 32; /27 → byte 4, block 32).</li>
+<li>Classes (1st byte): A 0–127 (0…) ½ = 2<sup>31</sup> · B 128–191 (10…) ¼ = 2<sup>30</sup> · C 192–223 (110…) ⅛ = 2<sup>29</sup> · D 224–239 multicast · E 240–255.</li>
+<li>Private: 10.0.0.0/8 · 172.16.0.0–172.31.255.255 (/12) · 192.168.0.0/16.</li>
+</ul>
+<pre>145.144.0.0/12: byte2 144 = 1001|0000 → .144.0.0 – .159.255.255
+131.14.12.3, 255.255.224.0 → /19 → 12 AND 224 = 0 → 131.14.0.0/19 (– .31.255)
+35.117.160.0/19 → hosts .160.1 – .191.254
+129.110.92.33/27 → net .32, hosts .33 – .62, bcast .63</pre>
+
+<h3>Subnetting</h3>
+<ul>
+<li>1) <b>Feasibility:</b> sum of needs (rounded up to 2<sup>k</sup>) ≤ block size. 2) per subnet: k = log<sub>2</sub>(size) host bits → mask 32−k. 3) bits between old and new mask = subnet ID.</li>
+<li><b>k-th subnet</b> = write (k−1) in binary into the subnet-ID bits.</li>
+<li><b>Multiple masks:</b> round up, <b>largest first</b>, each starts at a multiple of its size; rest = reserve.</li>
+<li><b>Groups</b> (ISP): group block = customers × size → prefix; then split per customer. <b>Embedded:</b> subnets of different sizes inside one block.</li>
+<li># hosts after /a → /b: 2<sup>b−a</sup> × (2<sup>32−b</sup> − 2). /20→/27 = 128 × 30 = 3840.</li>
+</ul>
+<pre>194.23.56.128/25, 3 × 32 → /27: 00 .128  01 .160  10 .192  (11 .224 spare)
+128.17.144.0/22 → /27, 20th = ID 19 = 10011:
+  1001 00|10.011|0 0000 = 146.96 → 128.17.146.96/27 (.96–.127)
+14.24.74.0/24, need 120,60,10 → .0/25, .128/26, .192/28, reserve .208–.255
+70.12.100.128/26: 32 .128/27 · 16 .160/28 · 16 .176/28
+190.100.0.0/16: 64×256 → .0.0/18 (each /24) · 128×128 → .64.0/18 (/25)
+  · 128×64 → .128.0/19 (/26) · left 24,576 from .160.0
+150.80.0.0/16: 32×256 .0.0/19 · 64×128 .32.0/19 · 128×64 .64.0/19
+  last G3 = 64.0 + 127×64 = .95.192/26 · left 40,960</pre>
+
+<h3>CIDR</h3>
+<ul>
+<li>Binary of the differing byte → count common leading bits → prefix; zero the rest.</li>
+<li>Why: <b>route aggregation</b> (fewer table entries) + efficiency vs classes (C for 2 hosts 2/255 = 0.78%; B for 256 hosts 256/65,535 = 0.39%). Prefix any length 2–32, written /X.</li>
+</ul>
+<pre>34 = 0010 0010, 33 = 0010 0001 → 6 bits → /22 → 18.198.32.0/22
+231 1110 0111, 233 1110 1001, 234 1110 1010 → 4 bits → 193.221.224.0/20
+64 = 0100 0000, 192 = 1100 0000 → 0 bits → 92.0.35.0/24
+192.4.16 … 192.4.31 → 11000000 00000100 0001 → 192.4.16.0/20</pre>
+</div>
+</div>
+
+<div class="page">
+<h1>ECE422 MIDTERM 2 — FORWARDING, IP HEADER, JEOPARDY (back)</h1>
+<div class="cols">
+
+<h3>Forwarding</h3>
+<ul>
+<li>Dst on my network → deliver on that interface; else in table → NextHop; else → <b>default router</b>.</li>
+<li>Entry matches if <b>D AND mask = DST</b>. Several match → <b>longest prefix</b> wins.</li>
+<li>Table: <b>DST | Mask | Next Hop | Interface</b>. Direct → Next Hop "–". Next hop = <b>neighbour's IP on the shared net</b>. Default = 0.0.0.0 /0 (replaces several entries). Sort /32 → … → /0. /32 = one host.</li>
+<li>Routing table: costs, several options. Forwarding table: no cost, one option.</li>
+<li>Datagram: full dst address in every packet, each forwarded independently, may take different paths, survives failures.</li>
+</ul>
+<pre>HW6 R1: 192.168.1.0   /24  –              i1
+        192.168.128.0 /24  –              i2
+        0.0.0.0       /0   192.168.128.3  i2
+HW6 R2: 192.168.128.0 /24  –              i3   (solution typo: 192.168.2.0)
+        192.168.160.0 /24  –              i4
+        192.168.1.0   /24  192.168.128.2  i3
+        192.168.168.0 /24  192.168.160.5  i4
+15.84.45.83: 84 = 0101 0100 → /12 (0101 = 80) ✓, /13 (01010 vs 01011) ✗
+15.34.45.83: 0010 → no match → default</pre>
+
+<h3>IP header (12 fields, 20 B, Hlen = 5)</h3>
+<table>
+<tr><td>Version 4</td><td>Hlen 4 (32-bit words)</td><td>TOS 8</td><td>Length 16 (total B)</td></tr>
+<tr><td>Ident 16</td><td>Flags 3: 0, DF, MF</td><td colspan="2">Offset 13 (in <b>8-byte units</b>)</td></tr>
+<tr><td>TTL 8 (hops)</td><td>Protocol 8: TCP 6, UDP 17</td><td colspan="2">Checksum 16 (<b>header only</b>)</td></tr>
+<tr><td colspan="2">SrcAddr 32 · DestAddr 32</td><td colspan="2">Options: source / record route</td></tr>
+</table>
+IP = connectionless, best effort (loss, out of order, duplicates, delay).
+
+<h3>Fragmentation</h3>
+<pre>data = TL − 20; per frag = (MTU − 20) ↓ multiple of 8
+offset = bytes before / 8; MF = 1 except last; frag TL = data + 20
+TL 100, MTU 61: 80 B; 41 → 40 → 40 + 40 → offsets 0, 5
+TL 1420, MTU 532: 1400; 512 → 512, 512, 376 → off 0, 64, 128; last TL 396
+TL 4000, MTU 1500: 3980; 1480, 1480, 1020 → off 0, 185, 370</pre>
+Routers fragment, <b>destination host reassembles</b>; same Ident in all fragments; IP does not recover lost fragments. MTU: Ethernet 1500 B, FDDI 4500 B.
+
+<h3>Pre-exam Jeopardy</h3>
+<table>
+<tr><td>1</td><td>Fields in IP header?</td><td>12 (20 B)</td></tr>
+<tr><td>2</td><td>Flags?</td><td>0, DF, MF</td></tr>
+<tr><td>3</td><td>Options use?</td><td>Source / record route</td></tr>
+<tr><td>4</td><td>Protocol field?</td><td>Transport (TCP/UDP)</td></tr>
+<tr><td>5</td><td>MTU 61, TL 100: offset 2nd?</td><td>5</td></tr>
+<tr><td>6</td><td>Routing vs fwd table?</td><td>cost, options vs no cost, one option</td></tr>
+<tr><td>7</td><td>/24 or /26?</td><td>/26 (longest)</td></tr>
+<tr><td>8</td><td>15.x.45.83 vs /13, /12</td><td>15.80.0.0/12 (only if byte 2 is 80–87)</td></tr>
+<tr><td>9</td><td>CIDR .231/.233/.234</td><td>193.221.224.0/20</td></tr>
+<tr><td>11</td><td>35.117.160.0/19 hosts</td><td>.160.1 – .191.254</td></tr>
+<tr><td>12</td><td>35.110.180.0/27 hosts</td><td>.1 – .30</td></tr>
+<tr><td>13</td><td>/20 → /27 hosts</td><td>2<sup>7</sup>(2<sup>5</sup>−2) = 3840</td></tr>
+<tr><td>14</td><td>.33 /27 LAN</td><td>.33 – .62</td></tr>
+<tr><td>15</td><td>More host @s?</td><td>(b) 2560 vs 768</td></tr>
+<tr><td>16</td><td>Cannot be dst?</td><td>host bits all 0</td></tr>
+<tr><td>17</td><td>Class B private</td><td>172.16.0.0 – 172.31.255.255</td></tr>
+<tr><td>18</td><td>11010010…</td><td>Class C</td></tr>
+<tr><td>19</td><td># class B @s</td><td>2<sup>30</sup></td></tr>
+<tr><td>20</td><td>.64/28 + .192/29</td><td>92.0.35.0/24</td></tr>
+</table>
+</div>
+</div>
+
+</body>
+</html>

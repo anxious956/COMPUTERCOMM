@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ECE422 Midterm 2 Prep</title>
+<style>
+  @page { size: letter; margin: 0.55in; }
+  :root { color-scheme: light; }
+  body { background:#fff; color:#000; font-family:"Times New Roman", Times, serif; font-size:11.2pt; line-height:1.36; max-width:7.4in; margin:0 auto; padding:16px; }
+  h1 { text-align:center; font-size:18pt; margin:0 0 2px; letter-spacing:1px; }
+  .sub { text-align:center; font-size:10.5pt; margin-bottom:8px; }
+  .hdr { display:flex; justify-content:space-between; border-top:2px solid #000; border-bottom:2px solid #000; padding:4px 0; margin-bottom:12px; font-size:10.5pt; }
+  h2 { font-size:13pt; border-bottom:1.5px solid #000; margin:16px 0 8px; text-transform:uppercase; letter-spacing:.5px; }
+  h3 { font-size:11.5pt; margin:10px 0 3px; }
+  table { border-collapse:collapse; margin:5px 0; font-size:10.3pt; }
+  th, td { border:1px solid #000; padding:2px 7px; text-align:center; vertical-align:top; }
+  td.l { text-align:left; }
+  ul { margin:3px 0 3px 20px; padding:0; } li { margin:1px 0; }
+  .q { margin:10px 0; page-break-inside:avoid; }
+  .q b.n, .ans b.n { display:inline-block; min-width:30px; }
+  .opts { margin-left:30px; }
+  .ans { margin:8px 0; page-break-inside:avoid; }
+  pre { font-family:"Courier New", monospace; font-size:9.8pt; border:1px solid #000; padding:4px 8px; margin:4px 0; white-space:pre-wrap; }
+  .box { border:1.5px solid #000; padding:5px 10px; margin:8px 0; page-break-inside:avoid; }
+  .brk { page-break-before:always; }
+  .sec { font-weight:bold; margin-top:14px; border-bottom:1px solid #000; }
+  .trap { font-style:italic; font-size:10.3pt; }
+  .space { height:30px; }
+</style>
+</head>
+<body>
+
+<h1>ECE422 — MIDTERM 2 PREP</h1>
+<div class="sub">IP addresses · Subnetting (single / multiple masks, groups, embedded) · CIDR · Forwarding tables · IP header, MTU, fragmentation</div>
+<div class="hdr"><span>Name: ______________________________</span><span>Date: ____________</span><span>Score: ______ / 30</span></div>
+
+<div class="box"><b>Lessons from Midterm 1</b> (multiple choice, scrap work required):
+<ul>
+<li><b>Convert units before dividing</b> (mW vs µW lost Q3). <b>Add the whole carry back</b> (it can be "10") (lost Q6). <b>Re-check the circled letter</b> against your scrap work (Q4: scrap said D, circled a).</li>
+<li>Concept questions ask for <b>differences, advantages and disadvantages</b>. Pick the option that matches the slide's own wording.</li>
+<li>"None of the above" is a real option: compute first, then look at the choices.</li>
+</ul></div>
+
+<h2>Part I — Methods (how the professor solves them)</h2>
+
+<h3>1. Address basics</h3>
+<ul>
+<li>IPv4 = 32 bits = network (prefix) + host. Mask /n = n ones. 255.255.224.0 → third byte 224 = 1110 0000 → /16+3 = <b>/19</b>.</li>
+<li># addresses = 2<sup>32−n</sup>. Usable hosts = 2<sup>32−n</sup> − 2 (first = network address, last = broadcast).</li>
+<li><b>Network address</b> = host AND mask (zero the host bits). <b>Last address</b> = set host bits to 1. A network address (host bits all 0) <b>cannot be a destination</b> for a host.</li>
+<li>Block size in the "interesting" byte = 256 / (2<sup>bits of mask in that byte</sup>)… easier: /19 → 2<sup>(24−19)</sup> = 32 in the 3rd byte; /27 → 2<sup>(32−27)</sup> = 32 in the 4th byte. Network starts at a multiple of the block size.</li>
+<li><b>Classes</b> (first byte): A 0–127 (0…), B 128–191 (10…), C 192–223 (110…), D 224–239 multicast, E 240–255. Of 2<sup>32</sup> addresses: A = ½ (2<sup>31</sup>), B = ¼ (2<sup>30</sup>), C = ⅛ (2<sup>29</sup>).</li>
+<li><b>Private blocks:</b> 10.0.0.0/8 (A) · 172.16.0.0 – 172.31.255.255 = 172.16.0.0/12 (B) · 192.168.0.0/16 (C).</li>
+</ul>
+<pre>HW5 Q1: range of 145.144.0.0/12 → 2nd byte 144 = 1001|0000 → keep 1001, vary the rest
+        smallest 1001 0000 = 144, largest 1001 1111 = 159 → 145.144.0.0 – 145.159.255.255
+HW5 Q2: host 131.14.12.3, mask 255.255.224.0 (/19) → 3rd byte 12 AND 224 = 0
+        network 131.14.0.0/19, range 131.14.0.0 – 131.14.31.255</pre>
+
+<h3>2. Subnetting</h3>
+<ul>
+<li><b>Feasibility test first:</b> total addresses needed (rounded up to powers of 2) ≤ addresses in the leased block.</li>
+<li><b>Single mask, multiple subnets:</b> bits for each subnet = log<sub>2</sub>(addresses per subnet) → new mask; the bits between the old and new mask are the <b>subnet ID</b>.</li>
+<li><b>k-th subnet</b> = subnet ID (k−1) written in binary in those bits.</li>
+<li>Total hosts after splitting /20 into /27: 2<sup>7</sup> subnets × (2<sup>5</sup> − 2) = 128 × 30 = <b>3840</b>.</li>
+<li><b>Multiple masks (variable size):</b> round each request up to a power of 2, assign the <b>largest first</b>, each subnet starts at a multiple of its own size. Leftover = reserve.</li>
+<li><b>Groups of subnets</b> (ISP): first give each group one block (customers × size), then split each group's block per customer.</li>
+<li><b>Embedded subnets:</b> a subnet inside a bigger one (multiple masks, multiple subnets), e.g. a /26 split into a /27 + two /28.</li>
+</ul>
+<pre>HW5 Q4: lease 194.23.56.128/25 (128 @s), need 3 subnets × 32 = 96 ≤ 128 → feasible
+        32 @s → 5 host bits → /27; subnet bits = 2 (bits 26–27):
+        00 → .128/27   01 → .160/27   10 → .192/27   (11 → .224/27 spare)
+        hosts: .129–.158, .161–.190, .193–.222
+HW5 Q5: lease 128.17.144.0/22 into /27 → 5 subnet bits → 32 subnets
+        3rd.4th byte: 1001 00|SS.SSS0 0000; 20th subnet = ID 19 = 10011
+        → 1001 0010 . 0110 0000 = 146.96 → 128.17.146.96/27, range .96 – .127</pre>
+<pre>Ex. 5.33 (multiple masks): block 14.24.74.0/24, need 120, 60, 10 @s
+   120 → 128 (/25): 14.24.74.0/25    (.0–.127)
+    60 →  64 (/26): 14.24.74.128/26  (.128–.191)
+    10 →  16 (/28): 14.24.74.192/28  (.192–.207)
+   reserve: 14.24.74.208 – .255 (48 @s)          [slide says .209: typo]
+Ex. 5.34 (embedded): 70.12.100.128/26 → Central 32: .128/27 (.128–.159)
+   East 16: .160/28 (.160–.175)   West 16: .176/28 (.176–.191)  [slide repeats .160: typo]
+Ex. 5.35 (groups): ISP 190.100.0.0/16
+   G1: 64 customers × 256 = 16,384 → /18: 190.100.0.0/18,  each customer /24
+   G2: 128 × 128 = 16,384 → /18: 190.100.64.0/18,  each /25
+   G3: 128 × 64  =  8,192 → /19: 190.100.128.0/19, each /26
+   left: 65,536 − 40,960 = 24,576 @s (from 190.100.160.0)</pre>
+
+<h3>3. CIDR (supernetting)</h3>
+<ul>
+<li>Write the bytes that differ in binary, keep the <b>common leading bits</b>, count them → prefix length; zero the rest → CIDR address.</li>
+<li>Why: fewer forwarding-table entries (aggregate routes) + better address-assignment efficiency than classes A/B/C. Class C for 2 hosts: 2/255 = 0.78%; class B for 256 hosts: 256/65,535 = 0.39%.</li>
+<li>Slide example: 192.4.16 … 192.4.31 share 20 bits → <b>192.4.16.0/20</b>.</li>
+</ul>
+<pre>HW5 Q3: 18.198.34.192/30, 18.198.34.240/30, 18.198.33.252/30
+        34 = 0010 0010, 33 = 0010 0001 → common: 0010 00 (6 bits) → 16 + 6 = /22
+        → 18.198.32.0/22                     [solution text says "/23": typo, answer /22 is right]
+Jeopardy: 193.221.231.43, .233.44, .234.45 → 231=1110 0111, 233=1110 1001, 234=1110 1010
+        common 1110 → /20 → 193.221.224.0/20   [Jeopardy sheet says 192: typo]</pre>
+
+<h3>4. Forwarding</h3>
+<ul>
+<li>Algorithm: destination on one of my networks → deliver directly on that interface; else in my table → send to <b>NextHop</b>; else → <b>default router</b>.</li>
+<li>Test an entry: <b>D AND mask = DST?</b> If several entries match, the <b>longest prefix</b> wins (171.69.10.5 matches 171.69/16 and 171.69.10/24 → /24).</li>
+<li><b>Table format</b> (HW6): DST | Mask | Next Hop | Interface. Directly connected → Next Hop "–". Next hop = <b>neighbour router's IP on the shared network</b>. Default route = 0.0.0.0 /0. Sort longest prefix first; /32 = one host.</li>
+<li><b>Routing table</b> (built by routing protocols): costs, several options per destination. <b>Forwarding table</b> (used per packet): no cost, one option (next hop + interface).</li>
+<li>Datagram network: each packet carries the full destination address and is forwarded independently (may take different paths, survives failures).</li>
+</ul>
+<pre>HW6 Q1, R1: 192.168.1.0  /24  –             i1
+            192.168.128.0 /24  –             i2
+            0.0.0.0       /0   192.168.128.3 i2   ← default replaces 2 entries</pre>
+
+<h3>5. IP header, MTU, fragmentation</h3>
+<table>
+<tr><th>Field</th><th>Bits</th><th>Meaning</th></tr>
+<tr><td>Version</td><td>4</td><td class="l">4 for IPv4</td></tr>
+<tr><td>Hlen</td><td>4</td><td class="l">header length in 32-bit words (default 5 = 20 B)</td></tr>
+<tr><td>TOS</td><td>8</td><td class="l">type of service</td></tr>
+<tr><td>Length</td><td>16</td><td class="l">total bytes of the datagram (header + data), max 65,535</td></tr>
+<tr><td>Ident</td><td>16</td><td class="l">same in all fragments of one datagram</td></tr>
+<tr><td>Flags</td><td>3</td><td class="l">0 (reserved), DF = do not fragment, MF = more fragments</td></tr>
+<tr><td>Offset</td><td>13</td><td class="l">position of the fragment's data, in <b>8-byte units</b></td></tr>
+<tr><td>TTL</td><td>8</td><td class="l">hop limit, −1 per router, dropped at 0</td></tr>
+<tr><td>Protocol</td><td>8</td><td class="l">demux key: TCP = 6, UDP = 17</td></tr>
+<tr><td>Checksum</td><td>16</td><td class="l">of the <b>header only</b></td></tr>
+<tr><td>Src / Dst addr</td><td>32 + 32</td><td class="l">IP addresses</td></tr>
+<tr><td>Options</td><td>var.</td><td class="l">e.g. source route, record route</td></tr>
+</table>
+Default header: <b>12 fields, 20 bytes</b>. IP service = connectionless, best effort (loss, reorder, duplicates, delay).
+<pre>Fragmentation recipe: data = TL − 20;  per fragment data = (MTU − 20) rounded DOWN to a multiple of 8
+  offset = bytes before this fragment / 8;  MF = 1 on all but the last;  each fragment TL = data + 20
+Jeopardy: TL 100, MTU 61 → data 80; (61−20)=41 → 40 → frags 40 + 40 → offsets 0, 5
+Ex.:      TL 4000, MTU 1500 → data 3980; 1480 per frag → 1480, 1480, 1020 → offsets 0, 185, 370
+Fragmenting = routers; reassembly = destination host; IP does not recover missing fragments.
+MTU: Ethernet 1500 B, FDDI 4500 B.</pre>
+
+<div class="brk"></div>
+<h2>Part II — Practice Exam (multiple choice, show scrap work)</h2>
+
+<div class="sec">A. Addresses</div>
+<div class="q"><b class="n">1.</b> What is the address range of network 145.144.0.0/12?
+<div class="opts">a) 145.144.0.0–145.144.255.255 &nbsp; b) 145.144.0.0–145.159.255.255 &nbsp; c) 145.128.0.0–145.159.255.255 &nbsp; d) 145.144.0.0–145.151.255.255 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">2.</b> A host is 131.14.12.3 with mask 255.255.224.0. Its network address is:
+<div class="opts">a) 131.14.12.0/24 &nbsp; b) 131.14.0.0/16 &nbsp; c) 131.14.0.0/19 &nbsp; d) 131.14.12.0/19 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">3.</b> Range of host addresses in 35.117.160.0/19:
+<div class="opts">a) 35.117.160.1–35.117.191.254 &nbsp; b) 35.117.160.1–35.117.175.254 &nbsp; c) 35.117.160.0–35.117.160.255 &nbsp; d) 35.117.128.1–35.117.191.254 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">4.</b> Which address is a class C address?
+<div class="opts">a) 11010010.10010001.0.0 &nbsp; b) 10100000.1.1.1 &nbsp; c) 01111111.0.0.1 &nbsp; d) 11100000.0.0.5 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">5.</b> Which is the class B private block?
+<div class="opts">a) 10.0.0.0/8 &nbsp; b) 172.16.0.0–172.31.255.255 &nbsp; c) 192.168.0.0/16 &nbsp; d) 172.0.0.0/8 &nbsp; e) 169.254.0.0/16</div><div class="space"></div></div>
+<div class="q"><b class="n">6.</b> How many class B addresses exist in IPv4?
+<div class="opts">a) 2<sup>16</sup> &nbsp; b) 2<sup>14</sup> &nbsp; c) 2<sup>30</sup> &nbsp; d) 2<sup>31</sup> &nbsp; e) 2<sup>29</sup></div><div class="space"></div></div>
+<div class="q"><b class="n">7.</b> Which IP address cannot be used as a destination in LAN 129.110.92.32/27?
+<div class="opts">a) 129.110.92.33 &nbsp; b) 129.110.92.32 &nbsp; c) 129.110.92.62 &nbsp; d) 129.110.92.45 &nbsp; e) none</div><div class="space"></div></div>
+
+<div class="sec">B. Subnetting</div>
+<div class="q"><b class="n">8.</b> You lease 194.23.56.128/25 and need 3 subnets of 32 addresses. Which is NOT one of the subnet addresses?
+<div class="opts">a) 194.23.56.128/27 &nbsp; b) 194.23.56.160/27 &nbsp; c) 194.23.56.192/27 &nbsp; d) 194.23.56.144/27 &nbsp; e) all are valid</div><div class="space"></div></div>
+<div class="q"><b class="n">9.</b> 128.17.144.0/22 is divided into subnets of 32 addresses. The 20th subnet (from the smallest) is:
+<div class="opts">a) 128.17.146.96/27 &nbsp; b) 128.17.146.128/27 &nbsp; c) 128.17.144.96/27 &nbsp; d) 128.17.146.64/27 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">10.</b> Total host addresses if a /20 network is subnetted into /27s:
+<div class="opts">a) 4096 &nbsp; b) 4094 &nbsp; c) 3840 &nbsp; d) 3968 &nbsp; e) 128</div><div class="space"></div></div>
+<div class="q"><b class="n">11.</b> Block 14.24.74.0/24 must hold subnets of 120, 60 and 10 hosts (largest first). The 10-host subnet is:
+<div class="opts">a) 14.24.74.192/28 &nbsp; b) 14.24.74.180/28 &nbsp; c) 14.24.74.192/29 &nbsp; d) 14.24.74.208/28 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">12.</b> Block 70.12.100.128/26: Central gets 32 @s, East and West 16 each. West's subnet is:
+<div class="opts">a) 70.12.100.160/28 &nbsp; b) 70.12.100.176/28 &nbsp; c) 70.12.100.192/28 &nbsp; d) 70.12.100.176/27 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">13.</b> ISP 150.80.0.0/16: group 1 = 32 customers × 256 @s, group 2 = 64 customers × 128 @s, group 3 = 128 customers × 64 @s, assigned in that order. Address of the <b>last</b> customer of group 3?
+<div class="opts">a) 150.80.95.192/26 &nbsp; b) 150.80.95.128/26 &nbsp; c) 150.80.127.192/26 &nbsp; d) 150.80.64.127/26 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">14.</b> In Q13, how many addresses remain unassigned?
+<div class="opts">a) 24,576 &nbsp; b) 40,960 &nbsp; c) 32,768 &nbsp; d) 8,192 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">15.</b> Which topology gives more host addresses: (a) one router with six LANs of 128 @s, or (b) two LANs of 1024 @s plus four LANs of 128 @s?
+<div class="opts">a) (a) &nbsp; b) (b) &nbsp; c) the same &nbsp; d) cannot tell</div><div class="space"></div></div>
+
+<div class="sec">C. CIDR</div>
+<div class="q"><b class="n">16.</b> CIDR of 18.198.34.192/30, 18.198.34.240/30, 18.198.33.252/30:
+<div class="opts">a) 18.198.32.0/23 &nbsp; b) 18.198.32.0/22 &nbsp; c) 18.198.33.0/22 &nbsp; d) 18.198.0.0/16 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">17.</b> CIDR of hosts 193.221.231.43, 193.221.233.44, 193.221.234.45:
+<div class="opts">a) 193.221.224.0/20 &nbsp; b) 193.221.231.0/21 &nbsp; c) 193.221.0.0/16 &nbsp; d) 192.221.224.0/20 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">18.</b> 92.0.35.64/28 and 92.0.35.192/29 as a single network:
+<div class="opts">a) 92.0.35.64/26 &nbsp; b) 92.0.35.0/25 &nbsp; c) 92.0.35.0/24 &nbsp; d) 92.0.35.128/25 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">19.</b> Main advantage of CIDR?
+<div class="opts">a) More address classes &nbsp; b) Fewer forwarding-table entries (route aggregation) &nbsp; c) Larger header &nbsp; d) No masks needed &nbsp; e) Faster links</div><div class="space"></div></div>
+
+<div class="sec">D. Forwarding</div>
+<div class="q"><b class="n">20.</b> A table has a.b.c.0/24 and a.b.c.d/26, both matching a packet. Which one is used?
+<div class="opts">a) /24 &nbsp; b) /26 &nbsp; c) the first one listed &nbsp; d) the default route &nbsp; e) both</div><div class="space"></div></div>
+<div class="q"><b class="n">21.</b> Packet to 15.84.45.83. Table: 15.88.0.0/13 → R1, 15.80.0.0/12 → R2, 0.0.0.0/0 → R3. Next hop?
+<div class="opts">a) R1 &nbsp; b) R2 &nbsp; c) R3 &nbsp; d) dropped &nbsp; e) R1 and R2</div><div class="space"></div></div>
+<div class="q"><b class="n">22.</b> Packet to 15.34.45.83, same table as Q21. Next hop?
+<div class="opts">a) R1 &nbsp; b) R2 &nbsp; c) R3 &nbsp; d) dropped &nbsp; e) R1 and R2</div><div class="space"></div></div>
+<div class="q"><b class="n">23.</b> Difference between routing and forwarding tables?
+<div class="opts">a) none &nbsp; b) routing: costs and several options; forwarding: one next hop, no cost &nbsp; c) forwarding has costs, routing does not &nbsp; d) routing tables are in hosts only &nbsp; e) forwarding uses MAC addresses only</div><div class="space"></div></div>
+<div class="q"><b class="n">24.</b> In R1's table (HW6), the entry for a directly connected network has Next Hop:
+<div class="opts">a) the router's own IP &nbsp; b) "–" (deliver on the interface) &nbsp; c) 0.0.0.0 &nbsp; d) the default router &nbsp; e) the broadcast address</div><div class="space"></div></div>
+<div class="q"><b class="n">25.</b> In HW6, why does R1 use 0.0.0.0/0 → 192.168.128.3?
+<div class="opts">a) to drop packets &nbsp; b) every non-local network is reached through R2, so one default entry replaces several &nbsp; c) to reach the Internet only &nbsp; d) it is required in every router &nbsp; e) none</div><div class="space"></div></div>
+
+<div class="sec">E. IP header &amp; fragmentation</div>
+<div class="q"><b class="n">26.</b> How many fields does the default IP header have, and how long is it?
+<div class="opts">a) 12 fields, 20 B &nbsp; b) 10 fields, 20 B &nbsp; c) 12 fields, 40 B &nbsp; d) 14 fields, 24 B &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">27.</b> The Protocol field indicates:
+<div class="opts">a) IPv4 or IPv6 &nbsp; b) the transport protocol (TCP = 6, UDP = 17) &nbsp; c) the link protocol &nbsp; d) the routing protocol &nbsp; e) the application</div><div class="space"></div></div>
+<div class="q"><b class="n">28.</b> MTU = 61 B, total length = 100 B (20 B header). Fragment offset of the 2nd fragment?
+<div class="opts">a) 41 &nbsp; b) 40 &nbsp; c) 5 &nbsp; d) 8 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">29.</b> A 1420 B datagram (20 B header) crosses a link with MTU 532 B. Total length and offset of the last fragment?
+<div class="opts">a) 396 B, 128 &nbsp; b) 376 B, 128 &nbsp; c) 396 B, 1024 &nbsp; d) 532 B, 64 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">30.</b> Who reassembles fragments?
+<div class="opts">a) the next router &nbsp; b) the last router &nbsp; c) the destination host &nbsp; d) the source &nbsp; e) every router</div><div class="space"></div></div>
+
+<div class="brk"></div>
+<h2>Part III — Answer Key with Scrap Work</h2>
+
+<div class="ans"><b class="n">1.</b> <b>b</b>. /12 = 8 bits of byte 1 + 4 of byte 2. 144 = 1001|0000 → 1001 0000 (144) to 1001 1111 (159).</div>
+<div class="ans"><b class="n">2.</b> <b>c</b>. 224 = 1110 0000 → /19. 12 AND 224 = 0000 1100 AND 1110 0000 = 0 → 131.14.0.0/19 (range to .31.255).</div>
+<div class="ans"><b class="n">3.</b> <b>a</b>. /19 → block of 32 in byte 3 → 160 … 191. First host .160.1, last host .191.254 (.191.255 is broadcast).</div>
+<div class="ans"><b class="n">4.</b> <b>a</b>. 11010010 = 210, starts with 110 → class C. (b) 10… = B, (c) 0… = A, (d) 1110… = D.</div>
+<div class="ans"><b class="n">5.</b> <b>b</b>. 172.16.0.0–172.31.255.255 (= 172.16.0.0/12).</div>
+<div class="ans"><b class="n">6.</b> <b>c</b>. Class B = first two bits fixed (10) → 2<sup>30</sup> addresses (¼ of the space).</div>
+<div class="ans"><b class="n">7.</b> <b>b</b>. .32 has all host bits 0 → network address. Hosts: .33–.62 (.63 = broadcast).</div>
+<div class="ans"><b class="n">8.</b> <b>d</b>. /27 subnets start at multiples of 32: .128, .160, .192, .224. 144 is not a multiple of 32 (144 − 128 = 16).</div>
+<div class="ans"><b class="n">9.</b> <b>a</b>. /22 → /27 = 5 subnet bits. 20th → ID 19 = 10011 → bytes 3.4 = 1001 00<u>10</u>.<u>011</u>0 0000 = 146.96 → 128.17.146.96/27 (.96–.127).</div>
+<div class="ans"><b class="n">10.</b> <b>c</b>. 2<sup>27−20</sup> = 128 subnets × (2<sup>5</sup> − 2) = 128 × 30 = 3840. Trap: (a) counts all addresses, not hosts.</div>
+<div class="ans"><b class="n">11.</b> <b>a</b>. 120 → 128 (/25) .0; 60 → 64 (/26) .128; 10 → 16 (/28) .192. (c) /29 = 8 @s, too small for 10 hosts.</div>
+<div class="ans"><b class="n">12.</b> <b>b</b>. Central .128/27 (.128–.159), East .160/28 (.160–.175), West .176/28 (.176–.191).</div>
+<div class="ans"><b class="n">13.</b> <b>a</b>.
+<pre>G1: 32 × 256 = 8192 → /19 → 150.80.0.0/19   (0.0 – 31.255)
+G2: 64 × 128 = 8192 → /19 → 150.80.32.0/19  (32.0 – 63.255)
+G3: 128 × 64 = 8192 → /19 → 150.80.64.0/19  (64.0 – 95.255)
+last G3 customer = 64.0 + 127 × 64 = 64.0 + 8128 = 64.0 + 31×256 + 192 → 150.80.95.192/26</pre></div>
+<div class="ans"><b class="n">14.</b> <b>b</b>. 65,536 − 3 × 8,192 = 40,960 (from 150.80.96.0).</div>
+<div class="ans"><b class="n">15.</b> <b>b</b>. (a) 6 × 128 = 768; (b) 2 × 1024 + 4 × 128 = 2560.</div>
+<div class="ans"><b class="n">16.</b> <b>b</b>. 34 = 0010 0010, 33 = 0010 0001 → common 001000 (6 bits) → /22 → 18.198.32.0/22. (a) is the typo in the HW5 text.</div>
+<div class="ans"><b class="n">17.</b> <b>a</b>. 231 = 1110 0111, 233 = 1110 1001, 234 = 1110 1010 → common 1110 → /20 → 224. (d) is the Jeopardy typo (192).</div>
+<div class="ans"><b class="n">18.</b> <b>c</b>. 64 = 0100 0000, 192 = 1100 0000 → differ in the first bit of byte 4 → /24 → 92.0.35.0/24.</div>
+<div class="ans"><b class="n">19.</b> <b>b</b>. Aggregate routes: one entry for many networks; also more efficient address assignment.</div>
+<div class="ans"><b class="n">20.</b> <b>b</b>. Longest prefix match.</div>
+<div class="ans"><b class="n">21.</b> <b>b</b>. 84 = 0101 0100. /12 → first 4 bits of byte 2: 0101 = 80 ✓. /13 → first 5 bits: 01010 vs 88 = 01011 ✗. → 15.80.0.0/12 → R2.</div>
+<div class="ans"><b class="n">22.</b> <b>c</b>. 34 = 0010 0010 → 0010 ≠ 0101 → neither matches → default → R3. (Trap: without a default route it would be dropped.)</div>
+<div class="ans"><b class="n">23.</b> <b>b</b>. Jeopardy wording: Routing: cost, options; Forwarding: no cost, one option.</div>
+<div class="ans"><b class="n">24.</b> <b>b</b>.</div>
+<div class="ans"><b class="n">25.</b> <b>b</b>. Professor: "default router, saves us from adding two network destinations".</div>
+<div class="ans"><b class="n">26.</b> <b>a</b>. Version, Hlen, TOS, Length, Ident, Flags, Offset, TTL, Protocol, Checksum, SrcAddr, DestAddr = 12; Hlen = 5 words = 20 B.</div>
+<div class="ans"><b class="n">27.</b> <b>b</b>.</div>
+<div class="ans"><b class="n">28.</b> <b>c</b>.
+<pre>data = 100 − 20 = 80 B;  per fragment: 61 − 20 = 41 → round DOWN to a multiple of 8 = 40
+frag 1: data 0–39, offset 0, MF 1, TL 60;  frag 2: data 40–79, offset 40/8 = 5, MF 0, TL 60</pre>
+Trap: (b) forgets to divide by 8; (a) forgets to round to a multiple of 8.</div>
+<div class="ans"><b class="n">29.</b> <b>a</b>.
+<pre>data = 1400; per frag (532 − 20) = 512 (multiple of 8 ✓)
+512 + 512 + 376 → offsets 0, 64, 128 → last TL = 376 + 20 = 396 B, offset 128, MF 0</pre>
+Trap: (b) forgets the 20 B header; (c) gives the offset in bytes.</div>
+<div class="ans"><b class="n">30.</b> <b>c</b>. Routers fragment, the destination host reassembles (all fragments share the same Ident).</div>
+
+<div class="brk"></div>
+<h2>Part IV — Pre-Exam Jeopardy (with corrections)</h2>
+<table>
+<tr><th>#</th><th>Question</th><th>Answer</th></tr>
+<tr><td>1</td><td class="l">How many fields in the (default) IP header?</td><td class="l">12 fields (20 bytes)</td></tr>
+<tr><td>2</td><td class="l">What does Flags (IP header) indicate?</td><td class="l">0 (reserved), do not fragment, more fragments</td></tr>
+<tr><td>3</td><td class="l">Possible use of IP header options?</td><td class="l">Source route or record route</td></tr>
+<tr><td>4</td><td class="l">What does the PROTOCOL field indicate?</td><td class="l">Transport protocol, e.g. UDP or TCP</td></tr>
+<tr><td>5</td><td class="l">MTU = 61 B, TL = 100 B: fragment offset of 2nd frag?</td><td class="l">5</td></tr>
+<tr><td>6</td><td class="l">Difference between routing and forwarding tables?</td><td class="l">Routing: cost, options; forwarding: no cost, one option</td></tr>
+<tr><td>7</td><td class="l">Which has priority: a.b.c.0/24 or a.b.c.d/26?</td><td class="l">Longest prefix = /26</td></tr>
+<tr><td>8</td><td class="l">Pkt dst 15.34.45.83: match 15.88.0.0/13 or 15.80.0.0/12?</td><td class="l">Sheet says 15.80.0.0/12. <b>Check:</b> 34 = 0010… matches neither; 15.84.x.x would match /12 (see Q21–22)</td></tr>
+<tr><td>9</td><td class="l">CIDR of 193.221.231.43, .233.44, .234.45?</td><td class="l"><b>193</b>.221.224.0/20 (sheet typo: 192)</td></tr>
+<tr><td>10</td><td class="l">Forwarding table of R2?</td><td class="l">Directly connected nets with "–", remote nets via neighbour's IP, sorted longest prefix first (HW6 format)</td></tr>
+<tr><td>11</td><td class="l">Range of host @s in 35.117.160.0/19?</td><td class="l">35.117.160.1 to 35.117.191.254 (.255 = broadcast)</td></tr>
+<tr><td>12</td><td class="l">Range of host @s in 35.110.180.0/27?</td><td class="l">35.110.180.1 to 35.110.180.30</td></tr>
+<tr><td>13</td><td class="l">Total host @s if /20 is subnetted to /27?</td><td class="l">2<sup>7</sup> × (2<sup>5</sup> − 2) = 3840</td></tr>
+<tr><td>14</td><td class="l">Host 129.110.92.33 /27: host @s in its LAN?</td><td class="l">129.110.92.33 to 129.110.92.62</td></tr>
+<tr><td>15</td><td class="l">Which topology has more host IP @s?</td><td class="l">(b): 2 × 1024 + 4 × 128 = 2560 vs 6 × 128 = 768</td></tr>
+<tr><td>16</td><td class="l">Which IP @ cannot be a destination?</td><td class="l">Host bits all 0 (network address)</td></tr>
+<tr><td>17</td><td class="l">Class B private block?</td><td class="l">172.16.0.0 to 172.31.255.255</td></tr>
+<tr><td>18</td><td class="l">Class of 11010010.10010001.00000000.00000000?</td><td class="l">Class C (110…, = 210)</td></tr>
+<tr><td>19</td><td class="l">How many class B @s in IPv4?</td><td class="l">2<sup>30</sup></td></tr>
+<tr><td>20</td><td class="l">92.0.35.64/28 and 92.0.35.192/29 as a single net?</td><td class="l">92.0.35.0/24</td></tr>
+</table>
+
+</body>
+</html>
