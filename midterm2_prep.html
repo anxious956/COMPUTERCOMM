@@ -267,7 +267,7 @@ Trap: (b) forgets the 20 B header; (c) gives the offset in bytes.</div>
 <tr><td>7</td><td class="l">Which has priority: a.b.c.0/24 or a.b.c.d/26?</td><td class="l">Longest prefix = /26</td></tr>
 <tr><td>8</td><td class="l">Pkt dst 15.34.45.83: match 15.88.0.0/13 or 15.80.0.0/12?</td><td class="l">15.80.0.0/12</td></tr>
 <tr><td>9</td><td class="l">CIDR of 193.221.231.43, .233.44, .234.45?</td><td class="l">A: 192.221.224.0/20</td></tr>
-<tr><td>10</td><td class="l">Forwarding table of R2?</td><td class="l">Directly connected nets with "–", remote nets via neighbour's IP, sorted longest prefix first (HW6 format)</td></tr>
+<tr><td>10</td><td class="l">What is the Fwd table of R2?</td><td class="l">Worked solution below (Part V)</td></tr>
 <tr><td>11</td><td class="l">Range of host @s in 35.117.160.0/19?</td><td class="l">35.117.160.1 to 35.117.191.255</td></tr>
 <tr><td>12</td><td class="l">Range of host @s in 35.110.180.0/27?</td><td class="l">35.110.180.1 to 35.110.180.30</td></tr>
 <tr><td>13</td><td class="l">Total host @s if /20 is subnetted to /27?</td><td class="l">(2^7)(2^5−2) = 3840 host @s</td></tr>
@@ -279,6 +279,52 @@ Trap: (b) forgets the 20 B header; (c) gives the offset in bytes.</div>
 <tr><td>19</td><td class="l">How many class B @s in IPv4?</td><td class="l">2^30 @s</td></tr>
 <tr><td>20</td><td class="l">92.0.35.64/28 and 92.0.35.192/29 as a single net?</td><td class="l">With net@ 92.0.35.0/24 (CIDR)</td></tr>
 </table>
+
+<div class="brk"></div>
+<h2>Part V — Jeopardy Q10 Worked: Forwarding Table of R2</h2>
+<div style="font-size:10.4pt;line-height:1.28">
+<p>Topology: R1 —(i2)— <b>R2</b> —(i3)— R3; R3 connects to R6 (i5/i6) and to R5 (i7/i8).</p>
+
+<h3>Step 1 — Network address of every link (address AND mask)</h3>
+<table>
+<tr><th>Link</th><th>Addresses on the figure</th><th>Mask</th><th>Interesting byte</th><th>Network</th></tr>
+<tr><td>R1–R2</td><td class="l">132.23.252.14 (R1), 132.23.252.15 (R2 i2)</td><td>255.255.240.0 = /20</td><td>252 AND 240 = 1111 1100 AND 1111 0000 = 240</td><td><b>132.23.240.0/20</b></td></tr>
+<tr><td>R2–R3</td><td class="l">132.23.224.24 (R2 i3), 132.23.224.45 (R3 i4)</td><td>/20</td><td>224 AND 240 = 224</td><td><b>132.23.224.0/20</b></td></tr>
+<tr><td>R3–R5</td><td class="l">132.23.248.37 (R3 i7), 132.23.248.49 (R5 i8)</td><td>255.255.248.0 = /21</td><td>248 AND 248 = 248</td><td><b>132.23.248.0/21</b></td></tr>
+<tr><td>R3–R6</td><td class="l">132.23.240.38 (R6 i6)</td><td>/20</td><td>240 AND 240 = 240</td><td><b>132.23.240.0/20</b></td></tr>
+</table>
+
+<h3>Step 2 — Directly connected vs remote (from R2's point of view)</h3>
+<ul>
+<li>Directly connected: 132.23.240.0/20 on <b>i2</b> and 132.23.224.0/20 on <b>i3</b> → Next Hop "–".</li>
+<li>Remote: everything behind R3 (R5 and R6 links) → Next Hop = R3's address on the shared link = <b>132.23.224.45</b>, interface <b>i3</b>.</li>
+</ul>
+
+<h3>Step 3 — Basic table (HW6 format, longest prefix first)</h3>
+<table>
+<tr><th>DST</th><th>Mask</th><th>Next Hop</th><th>Interface</th></tr>
+<tr><td>132.23.248.0</td><td>/21</td><td>132.23.224.45</td><td>i3</td></tr>
+<tr><td>132.23.240.0</td><td>/20</td><td>–</td><td>i2</td></tr>
+<tr><td>132.23.224.0</td><td>/20</td><td>–</td><td>i3</td></tr>
+</table>
+<p>Why /21 must be listed before /20: 132.23.248.0/21 (248–255) lies <b>inside</b> 132.23.240.0/20 (240–255). A packet to R5 (132.23.248.49) matches both; the <b>longest prefix (/21)</b> sends it to R3. This is the point of the question.</p>
+
+<h3>Step 4 — Overlaps in the figure and how a /32 entry fixes them</h3>
+<ul>
+<li>R1's address 132.23.<b>252</b>.14 is also inside 132.23.248.0/21 (252 ≥ 248). By longest prefix R2 would wrongly send R1's packets to R3.</li>
+<li>The R3–R6 link computes to 132.23.240.0/20, the <b>same</b> network as R2's i2 link, so R2 would wrongly deliver R6's packets on i2.</li>
+<li>Fix with host routes (/32 = one host, as in HW6 Q2), which beat every shorter prefix:</li>
+</ul>
+<table>
+<tr><th>DST</th><th>Mask</th><th>Next Hop</th><th>Interface</th></tr>
+<tr><td>132.23.252.14</td><td>/32 (host R1)</td><td>–</td><td>i2</td></tr>
+<tr><td>132.23.240.38</td><td>/32 (host R6)</td><td>132.23.224.45</td><td>i3</td></tr>
+<tr><td>132.23.248.0</td><td>/21</td><td>132.23.224.45</td><td>i3</td></tr>
+<tr><td>132.23.240.0</td><td>/20</td><td>–</td><td>i2</td></tr>
+<tr><td>132.23.224.0</td><td>/20</td><td>–</td><td>i3</td></tr>
+</table>
+<p class="trap">On the exam: write the basic table (Step 3). If the addresses overlap like this, add the /32 rows or a one-line note. Networks behind R1, R5 and R6 are not given, so they are not in the table (HW6 Q2: "we would need more information"). If the question allows it, a default 0.0.0.0/0 → 132.23.224.45 (i3) covers everything beyond R3.</p>
+</div>
 
 </body>
 </html>
