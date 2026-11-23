@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ECE422 Midterm 2 Extra Practice</title>
+<style>
+  @page { size: letter; margin: 0.55in; }
+  :root { color-scheme: light; }
+  body { background:#fff; color:#000; font-family:"Times New Roman", Times, serif; font-size:11.2pt; line-height:1.36; max-width:7.4in; margin:0 auto; padding:16px; }
+  h1 { text-align:center; font-size:18pt; margin:0 0 2px; letter-spacing:1px; }
+  .sub { text-align:center; font-size:10.5pt; margin-bottom:8px; }
+  .hdr { display:flex; justify-content:space-between; border-top:2px solid #000; border-bottom:2px solid #000; padding:4px 0; margin-bottom:12px; font-size:10.5pt; }
+  h2 { font-size:13pt; border-bottom:1.5px solid #000; margin:16px 0 8px; text-transform:uppercase; letter-spacing:.5px; }
+  table { border-collapse:collapse; margin:5px 0; font-size:10.3pt; }
+  th, td { border:1px solid #000; padding:2px 7px; text-align:center; }
+  .q { margin:10px 0; page-break-inside:avoid; }
+  .q b.n, .ans b.n { display:inline-block; min-width:30px; }
+  .opts { margin-left:30px; }
+  .ans { margin:8px 0; page-break-inside:avoid; }
+  pre { font-family:"Courier New", monospace; font-size:9.8pt; border:1px solid #000; padding:4px 8px; margin:4px 0; white-space:pre-wrap; }
+  .brk { page-break-before:always; }
+  .sec { font-weight:bold; margin-top:14px; border-bottom:1px solid #000; }
+  .trap { font-style:italic; font-size:10.3pt; }
+  .space { height:34px; }
+</style>
+</head>
+<body>
+
+<h1>ECE422 — MIDTERM 2 EXTRA PRACTICE</h1>
+<div class="sub">24 new questions in the professor's style, one block per topic of the M2 announcement · show scrap work</div>
+<div class="hdr"><span>Name: ______________________________</span><span>Date: ____________</span><span>Score: ______ / 24</span></div>
+
+<div class="sec">1. IP addresses</div>
+<div class="q"><b class="n">1.</b> A host has address 172.30.157.200/20. What is its network address and address range?
+<div class="opts">a) 172.30.157.0/20, .157.0–.157.255 &nbsp; b) 172.30.144.0/20, .144.0–.159.255 &nbsp; c) 172.30.128.0/20, .128.0–.143.255 &nbsp; d) 172.30.144.0/20, .144.0–.151.255 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">2.</b> A subnet has mask 255.255.255.192. How many host addresses does it have?
+<div class="opts">a) 64 &nbsp; b) 62 &nbsp; c) 192 &nbsp; d) 30 &nbsp; e) 126</div><div class="space"></div></div>
+<div class="q"><b class="n">3.</b> Someone writes the network as 10.77.0.0/11. What is the real network address?
+<div class="opts">a) 10.77.0.0/11 &nbsp; b) 10.64.0.0/11 &nbsp; c) 10.72.0.0/11 &nbsp; d) 10.0.0.0/11 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">4.</b> Which address can NOT be assigned to a host in 200.1.1.64/26?
+<div class="opts">a) 200.1.1.65 &nbsp; b) 200.1.1.100 &nbsp; c) 200.1.1.127 &nbsp; d) 200.1.1.126 &nbsp; e) all can be assigned</div><div class="space"></div></div>
+<div class="q"><b class="n">5.</b> Which of these is a private address?
+<div class="opts">a) 172.32.0.1 &nbsp; b) 192.169.1.1 &nbsp; c) 172.20.5.5 &nbsp; d) 11.0.0.1 &nbsp; e) none</div><div class="space"></div></div>
+
+<div class="sec">2. Subnetting: single mask</div>
+<div class="q"><b class="n">6.</b> You lease 201.45.18.0/24 and split it into 8 equal subnets. What are the 6th subnet and its host range?
+<div class="opts">a) 201.45.18.160/27, .161–.190 &nbsp; b) 201.45.18.192/27, .193–.222 &nbsp; c) 201.45.18.160/27, .160–.191 &nbsp; d) 201.45.18.150/27 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">7.</b> You lease 150.10.64.0/18 and divide it into subnets of 256 addresses. The 37th subnet is:
+<div class="opts">a) 150.10.37.0/24 &nbsp; b) 150.10.101.0/24 &nbsp; c) 150.10.100.0/24 &nbsp; d) 150.10.64.37/24 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">8.</b> Total number of host addresses if a /22 is subnetted into /26s:
+<div class="opts">a) 1024 &nbsp; b) 1022 &nbsp; c) 992 &nbsp; d) 1008 &nbsp; e) 16</div><div class="space"></div></div>
+
+<div class="sec">3. Subnetting: multiple masks, groups, embedded</div>
+<div class="q"><b class="n">9.</b> Block 198.51.100.0/24 must hold LANs with 50, 25, 100 and 12 <b>hosts</b> (largest first). Which subnet is given to the 25-host LAN?
+<div class="opts">a) 198.51.100.192/27 &nbsp; b) 198.51.100.128/27 &nbsp; c) 198.51.100.224/28 &nbsp; d) 198.51.100.192/28 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">10.</b> In Q9, how many addresses are left in reserve, and from which address?
+<div class="opts">a) 16, from .240 &nbsp; b) 32, from .224 &nbsp; c) 0 &nbsp; d) 16, from .224 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">11.</b> You lease a /26 and need LANs with 30, 20 and 10 hosts. Is it feasible?
+<div class="opts">a) yes, 60 ≤ 64 &nbsp; b) yes, 64 ≤ 64 &nbsp; c) no, 80 &gt; 64 &nbsp; d) no, 96 &gt; 64 &nbsp; e) cannot tell</div><div class="space"></div></div>
+<div class="q"><b class="n">12.</b> ISP 120.60.0.0/16: group 1 = 16 customers × 1024 @s, group 2 = 32 customers × 512 @s, group 3 = 64 customers × 128 @s, assigned in this order. The 10th customer of group 2 gets:
+<div class="opts">a) 120.60.82.0/23 &nbsp; b) 120.60.73.0/23 &nbsp; c) 120.60.84.0/23 &nbsp; d) 120.60.82.0/22 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">13.</b> In Q12, the 5th customer of group 3 gets:
+<div class="opts">a) 120.60.128.5/25 &nbsp; b) 120.60.130.0/25 &nbsp; c) 120.60.132.0/25 &nbsp; d) 120.60.130.128/25 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">14.</b> In Q12, how many addresses remain, starting at which address?
+<div class="opts">a) 24,576 from 120.60.160.0 &nbsp; b) 40,960 from 120.60.96.0 &nbsp; c) 24,576 from 120.60.144.0 &nbsp; d) 32,768 from 120.60.128.0 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">15.</b> Embedded subnets: a router has 66.80.12.128/25 → i1 and 66.80.12.160/27 → i2. A packet to 66.80.12.170 leaves on:
+<div class="opts">a) i1 &nbsp; b) i2 &nbsp; c) both &nbsp; d) default route &nbsp; e) it is dropped</div><div class="space"></div></div>
+
+<div class="sec">4. Supernetting (CIDR)</div>
+<div class="q"><b class="n">16.</b> CIDR address of 172.20.64.0/24, 172.20.65.0/24, 172.20.66.0/24 and 172.20.67.0/24:
+<div class="opts">a) 172.20.64.0/22 &nbsp; b) 172.20.64.0/23 &nbsp; c) 172.20.0.0/16 &nbsp; d) 172.20.64.0/21 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">17.</b> Smallest single CIDR block that covers 172.20.63.0/24 and 172.20.66.0/24:
+<div class="opts">a) 172.20.60.0/22 &nbsp; b) 172.20.0.0/17 &nbsp; c) 172.20.62.0/21 &nbsp; d) 172.20.63.0/22 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">18.</b> CIDR of hosts 81.14.205.7, 81.14.198.33 and 81.14.201.250:
+<div class="opts">a) 81.14.192.0/20 &nbsp; b) 81.14.192.0/21 &nbsp; c) 81.14.198.0/20 &nbsp; d) 81.14.0.0/16 &nbsp; e) none</div><div class="space"></div></div>
+
+<div class="sec">5. Packet forwarding and forwarding tables</div>
+<div class="q"><b class="n">19.</b> Forwarding table: 64.12.0.0/14 → A, 64.14.0.0/15 → B, 64.14.128.0/17 → C, 0.0.0.0/0 → D. Give the next hop for (i) 64.14.200.5, (ii) 64.13.5.5, (iii) 64.15.1.1, (iv) 64.16.0.1.
+<div class="opts">a) C, A, B, D &nbsp; b) C, A, C, D &nbsp; c) B, A, B, A &nbsp; d) A, A, B, D &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">20.</b> Ra connects 10.1.0.0/16 (e0) and 10.2.0.0/16 (e1, Ra = 10.2.0.1). Rb connects 10.2.0.0/16 (Rb = 10.2.0.2) and 10.3.0.0/16 (Rb = 10.3.0.2). Rc connects 10.3.0.0/16 (Rc = 10.3.0.3) and 10.4.0.0/16. Which is the smallest correct table for Ra?
+<div class="opts">a) 10.1.0.0/16 – e0; 10.2.0.0/16 – e1; 0.0.0.0/0 10.2.0.2 e1 &nbsp; b) 10.1.0.0/16 – e0; 0.0.0.0/0 10.2.0.1 e1 &nbsp; c) 10.4.0.0/16 10.3.0.3 e1 only &nbsp; d) 0.0.0.0/0 10.2.0.2 e0 &nbsp; e) none</div><div class="space"></div></div>
+
+<div class="sec">6. IP header, MTU, fragmentation</div>
+<div class="q"><b class="n">21.</b> A header has Hlen = 6 and Length = 1500. How long is the header and how much data does it carry?
+<div class="opts">a) 20 B, 1480 B &nbsp; b) 24 B, 1476 B &nbsp; c) 6 B, 1494 B &nbsp; d) 48 B, 1452 B &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">22.</b> A 2400 B datagram (20 B header) crosses a link with MTU 820 B. Number of fragments and offset of the last one:
+<div class="opts">a) 3, 200 &nbsp; b) 3, 1600 &nbsp; c) 3, 100 &nbsp; d) 4, 300 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">23.</b> A 1000 B datagram (20 B header) crosses MTU 310 B. Offset of the 2nd fragment?
+<div class="opts">a) 290 &nbsp; b) 36 &nbsp; c) 288 &nbsp; d) 37 &nbsp; e) none</div><div class="space"></div></div>
+<div class="q"><b class="n">24.</b> A fragment (offset 100, MF = 1, 800 B of data) reaches a link with MTU 420 B. Offsets and MF of the new fragments?
+<div class="opts">a) 0 and 50, MF 1 and 0 &nbsp; b) 100 and 150, MF 1 and 1 &nbsp; c) 100 and 150, MF 1 and 0 &nbsp; d) 100 and 500, MF 1 and 1 &nbsp; e) none</div><div class="space"></div></div>
+
+<div class="brk"></div>
+<h2>Answer Key with Scrap Work</h2>
+
+<div class="ans"><b class="n">1.</b> <b>b</b>. /20 → mask ends in byte 3, block 2<sup>24−20</sup> = 16. 157 AND 240 = 1001 1101 AND 1111 0000 = 1001 0000 = 144 → 172.30.144.0/20, last = 144 + 15 = 159 → .144.0 – .159.255.</div>
+<div class="ans"><b class="n">2.</b> <b>b</b>. 192 = 1100 0000 → /26 → 2<sup>6</sup> = 64 addresses − 2 = 62 hosts. Trap: (a) forgets −2.</div>
+<div class="ans"><b class="n">3.</b> <b>b</b>. /11 = 8 bits of byte 1 + 3 of byte 2. 77 = <u>010</u>0 1101 → keep 010, zero the rest → 0100 0000 = 64 → 10.64.0.0/11 (range to 10.95.255.255). Trap: (a) has host bits that are not 0.</div>
+<div class="ans"><b class="n">4.</b> <b>c</b>. /26 → block 64 → .64–.127. .64 = network, .127 = broadcast → cannot be hosts. Hosts .65–.126.</div>
+<div class="ans"><b class="n">5.</b> <b>c</b>. Private B block is 172.16.0.0–172.31.255.255; 172.20 is inside, 172.32 is outside (trap a). 192.169 is not 192.168 (trap b).</div>
+<div class="ans"><b class="n">6.</b> <b>a</b>. 8 = 2<sup>3</sup> → 3 subnet bits → /27, block 32. 6th → ID 5 = 101 → 101<u>0 0000</u> = 160 → .160/27, hosts .161–.190 (.160 network, .191 broadcast). Trap: (c) gives addresses, not hosts.</div>
+<div class="ans"><b class="n">7.</b> <b>c</b>. 256 @s → /24 → 6 subnet bits (19–24). 37th → ID 36. Byte 3 = 64 + 36 = 100 → 150.10.100.0/24. Trap: (b) forgets "−1" (uses 37).</div>
+<div class="ans"><b class="n">8.</b> <b>c</b>. 2<sup>26−22</sup> = 16 subnets × (2<sup>6</sup> − 2) = 16 × 62 = 992.</div>
+<div class="ans"><b class="n">9.</b> <b>a</b>. Hosts + 2, round up: 100 → 128 (/25), 50 → 64 (/26), 25 → 32 (/27), 12 → 16 (/28). Largest first:
+<pre>/25 → .0   (.0 – .127)     100 hosts
+/26 → .128 (.128 – .191)    50 hosts
+/27 → .192 (.192 – .223)    25 hosts
+/28 → .224 (.224 – .239)    12 hosts
+reserve .240 – .255 (16 @s)</pre></div>
+<div class="ans"><b class="n">10.</b> <b>a</b>. 128 + 64 + 32 + 16 = 240 used → 16 left, from .240.</div>
+<div class="ans"><b class="n">11.</b> <b>c</b>. 30 + 2 = 32 → 32; 20 + 2 = 22 → 32; 10 + 2 = 12 → 16. Total 80 &gt; 64 → not feasible. Trap: (a) adds the host counts without rounding to powers of 2.</div>
+<div class="ans"><b class="n">12.</b> <b>a</b>.
+<pre>G1: 16 × 1024 = 16,384 → /18 → 120.60.0.0/18  (0.0 – 63.255), each /22
+G2: 32 × 512  = 16,384 → /18 → 120.60.64.0/18 (64.0 – 127.255), each /23
+G3: 64 × 128  =  8,192 → /19 → 120.60.128.0/19 (128.0 – 159.255), each /25
+10th of G2 = 64.0 + 9 × 512 = 64.0 + 4608 = 64.0 + 18 × 256 → 120.60.82.0/23</pre>
+Trap: (c) uses 10 × 512 instead of 9 × 512.</div>
+<div class="ans"><b class="n">13.</b> <b>b</b>. 128.0 + 4 × 128 = 128.0 + 512 = 128.0 + 2 × 256 → 120.60.130.0/25.</div>
+<div class="ans"><b class="n">14.</b> <b>a</b>. 65,536 − 16,384 − 16,384 − 8,192 = 24,576, starting after G3 → 120.60.160.0.</div>
+<div class="ans"><b class="n">15.</b> <b>b</b>. .170 is in .128/25 (.128–.255) and in .160/27 (.160–.191). The /27 is embedded in the /25 → longest prefix → i2.</div>
+<div class="ans"><b class="n">16.</b> <b>a</b>. 64 = 0100 00<u>00</u>, 67 = 0100 00<u>11</u> → common 0100 00 (6 bits) → /22 → 172.20.64.0/22.</div>
+<div class="ans"><b class="n">17.</b> <b>b</b>. 63 = <u>0</u>011 1111, 66 = <u>0</u>100 0010 → only the first bit is common → /16 + 1 = /17 → 172.20.0.0/17. Lesson: blocks that cross a power-of-2 boundary need a much bigger CIDR.</div>
+<div class="ans"><b class="n">18.</b> <b>a</b>. 205 = 1100 1101, 198 = 1100 0110, 201 = 1100 1001 → common 1100 → /20 → 1100 0000 = 192 → 81.14.192.0/20.</div>
+<div class="ans"><b class="n">19.</b> <b>a</b>.
+<pre>/14 → byte 2 bits 0000 11xx → 12–15     /15 → 0000 111x → 14–15     /17 → 64.14.128 – 64.14.255
+64.14.200.5: matches /14, /15, /17 → longest /17 → C
+64.13.5.5:   13 → only /14 → A
+64.15.1.1:   15 → /14, /15 (not /17: byte 2 is 15, not 14) → B
+64.16.0.1:   16 → none → default → D</pre></div>
+<div class="ans"><b class="n">20.</b> <b>a</b>. Directly connected nets with "–"; everything else is behind Rb, so one default entry with next hop = Rb's address on the shared net (10.2.0.2), interface e1. (b) uses Ra's own address; (d) the wrong interface.</div>
+<div class="ans"><b class="n">21.</b> <b>b</b>. Hlen counts 32-bit words: 6 × 4 = 24 B (20 B + 4 B options). Data = 1500 − 24 = 1476 B.</div>
+<div class="ans"><b class="n">22.</b> <b>a</b>.
+<pre>data = 2380; per frag 820 − 20 = 800 (multiple of 8 ✓)
+800 + 800 + 780 → offsets 0, 800/8 = 100, 1600/8 = 200; TL 820, 820, 800; MF 1, 1, 0</pre>
+Trap: (b) offset in bytes.</div>
+<div class="ans"><b class="n">23.</b> <b>b</b>.
+<pre>data = 980; 310 − 20 = 290 → NOT a multiple of 8 → round down to 288
+288, 288, 288, 116 → offsets 0, 36, 72, 108</pre>
+Trap: (a) and (d) forget to round down to a multiple of 8.</div>
+<div class="ans"><b class="n">24.</b> <b>b</b>. 420 − 20 = 400 (multiple of 8). 800 → 400 + 400. Offsets continue from the original: 100 and 100 + 400/8 = 150. The original had MF = 1, so the last piece keeps MF = 1 (more fragments still follow). Trap: (c) sets MF = 0.</div>
+
+</body>
+</html>
