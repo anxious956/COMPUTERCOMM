@@ -33,6 +33,8 @@
   .ex pre { margin:3px 0; }
   .ex .a { border-top:0.8px dashed #000; margin-top:4px; padding-top:2px; }
 
+  .p5 table { font-size:9.4pt; }
+  .p5 h3 { margin:6px 0 2px; }
 </style>
 </head>
 <body>
@@ -89,9 +91,13 @@
 <li><b>Routing table</b> (built by routing protocols): costs, several options per destination. <b>Forwarding table</b> (used per packet): no cost, one option (next hop + interface).</li>
 <li>Datagram network: each packet carries the full destination address and is forwarded independently (may take different paths, survives failures).</li>
 </ul>
-<div class="ex"><div class="t">HW6 Q1 — forwarding table of R1</div><span class="lbl">Question:</span> Write the forwarding tables for R1, R2 and R3 in a generic way (including all destinations). R1 connects 192.168.1.0/24 (i1) and 192.168.128.0/24 (i2); R2 (.3 on i3) connects 192.168.128.0/24 and 192.168.160.0/24; R3 connects 192.168.160.0/24 and 192.168.168.0/24.<br><span class="lbl">Solution:</span><ol><li>Directly connected networks of R1: 192.168.1.0/24 on i1 and 192.168.128.0/24 on i2 → Next Hop "–".</li><li>All other networks (160.0 and 168.0) are reached through R2 → Next Hop = R2's address on the shared network: 192.168.128.3, interface i2.</li><li>They all go the same way, so one default entry 0.0.0.0/0 replaces them.</li></ol><div class="a"><span class="lbl">Answer:</span> <pre>192.168.1.0    /24  –              i1
+<div class="ex"><div class="t">HW6 Q1 — forwarding table of R1</div><span class="lbl">Question:</span> Write the forwarding tables for R1, R2 and R3 in a generic way (including all destinations). R1 connects 192.168.1.0/24 (i1) and 192.168.128.0/24 (i2); R2 (.3 on i3) connects 192.168.128.0/24 and 192.168.160.0/24; R3 connects 192.168.160.0/24 and 192.168.168.0/24.<img src="img/hw6_q1.png" alt="figure" style="display:block;max-width:95%;margin:5px auto;border:0.6px solid #000"><span class="lbl">Solution:</span><ol><li>Directly connected networks of R1: 192.168.1.0/24 on i1 and 192.168.128.0/24 on i2 → Next Hop "–".</li><li>All other networks (160.0 and 168.0) are reached through R2 → Next Hop = R2's address on the shared network: 192.168.128.3, interface i2.</li><li>They all go the same way, so one default entry 0.0.0.0/0 replaces them.</li></ol><div class="a"><span class="lbl">Answer:</span> <pre>192.168.1.0    /24  –              i1
 192.168.128.0  /24  –              i2
-0.0.0.0        /0   192.168.128.3  i2</pre>"The last entry; default router, saves us from adding two network destinations."</div></div>
+0.0.0.0        /0   192.168.128.3  i2</pre>"The last entry; default router, saves us from adding two network destinations."</div></div><div class="ex"><div class="t">HW6 Q2 — forwarding table of router R</div><span class="lbl">Question:</span> Write the forwarding table of router R in the network diagram below.<img src="img/hw6_q2.png" alt="figure" style="display:block;max-width:80%;margin:5px auto;border:0.6px solid #000"><span class="lbl">Solution:</span><ol><li>Directly connected network with a known mask: 10.4.0.0/24 on m3 → Next Hop "–".</li><li>Networks behind R<sub>m1</sub>: 10.0.3.0/28 → Next Hop = R<sub>m1</sub>'s address 10.2.3.24, interface m1.</li><li>Networks behind R<sub>m2</sub>: 10.5.0.0/24 and the single host 10.5.24.5/32 → Next Hop 10.3.4.1, m2.</li><li>Internet behind R<sub>m4</sub> → default 0.0.0.0/0 → 134.45.51.x, m4.</li><li>Sort from the longest prefix to the shortest: /32, /28, /24, /0.</li></ol><div class="a"><span class="lbl">Answer (professor's table):</span><pre>10.5.24.5   /32 (host)  10.3.4.1     m2
+10.0.3.0    /28         10.2.3.24    m1
+10.5.0.0    /24         10.3.4.1     m2
+10.4.0.0    /24         –            m3
+0.0.0.0     /0          134.45.51.x  m4</pre>"We don't have the mask of the directly connected segments, so we will skip them … We would need to add the networks of router's interfaces that are directly connected: 10.2.3.24, 10.3.4.1, and 134.45.51.x, but we need more information."</div></div>
 
 <h3>5. IP header, MTU, fragmentation</h3>
 <table>
@@ -257,8 +263,8 @@ Trap: (b) forgets the 20 B header; (c) gives the offset in bytes.</div>
 
 <div class="brk"></div>
 <h2>Part V — Jeopardy Q10 Worked: Forwarding Table of R2</h2>
-<div style="font-size:10.4pt;line-height:1.28">
-<p>Topology: R1 —(i2)— <b>R2</b> —(i3)— R3; R3 connects to R6 (i5/i6) and to R5 (i7/i8).</p>
+<div class="p5" style="font-size:9.7pt;line-height:1.22">
+<p>Topology: R1 —(i2)— <b>R2</b> —(i3)— R3; R3 connects to R6 (i5/i6) and to R5 (i7/i8).</p><img src="img/jeopardy_r2.png" alt="figure" style="display:block;max-width:58%;margin:5px auto;border:0.6px solid #000">
 
 <h3>Step 1 — Network address of every link (address AND mask)</h3>
 <table>
@@ -305,7 +311,7 @@ Trap: (b) forgets the 20 B header; (c) gives the offset in bytes.</div>
 <h2>Part VI — Professor's New Practice Exercises (worked)</h2>
 <div style="font-size:10.6pt;line-height:1.3">
 <h3>Practice Exercise: Forwarding Table of router Rx</h3>
-<p>Topology: 11.3.32.0/24 —(i1 .1)— R1 —(i2 .2)— 11.3.64.0/24 —(.1 i1)— <b>Rx</b> —(i2 .2)— 11.3.96.0/24 —(.1 i1)— R2 —(i3 .2)— Internet; R1 also has 11.3.128.0/24 on i3 (.3).</p>
+<p>Topology: 11.3.32.0/24 —(i1 .1)— R1 —(i2 .2)— 11.3.64.0/24 —(.1 i1)— <b>Rx</b> —(i2 .2)— 11.3.96.0/24 —(.1 i1)— R2 —(i3 .2)— Internet; R1 also has 11.3.128.0/24 on i3 (.3).</p><img src="img/practice_rx.png" alt="figure" style="display:block;max-width:95%;margin:5px auto;border:0.6px solid #000">
 <table>
 <tr><th>DST</th><th>Mask</th><th>Next Hop</th><th>Interface</th></tr>
 <tr><td>11.3.32.0</td><td>/24</td><td>11.3.64.2</td><td>i1</td></tr>
