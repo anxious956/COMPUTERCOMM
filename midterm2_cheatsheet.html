@@ -4,144 +4,269 @@
 <meta charset="utf-8">
 <title>ECE422 Midterm 2 Cheat Sheet</title>
 <style>
-  @page { size: letter; margin: 0.32in; }
+  @page { size: letter; margin: 0.22in; }
   :root { color-scheme: light; }
   * { box-sizing: border-box; }
-  body { background:#fff; color:#000; font-family:"Arial Narrow", Arial, Helvetica, sans-serif; font-size:10.4pt; line-height:1.3; margin:0; }
+  body { background:#fff; color:#000; font-family:"Liberation Sans", Arial, Helvetica, sans-serif; font-size:9pt; line-height:1.17; margin:0; }
+  .page { }
   .page + .page { page-break-before:always; }
-  h1 { font-size:12pt; margin:0 0 3px; text-align:center; letter-spacing:.5px; border-bottom:1.5px solid #000; padding-bottom:2px; }
-  .cols { column-count:2; column-gap:12px; column-rule:0.6px solid #000; }
-  h3 { font-size:10.6pt; margin:7px 0 2px; padding:0 2px; border-bottom:0.8px solid #000; break-after:avoid; text-transform:uppercase; }
-  ul { margin:1px 0 2px 11px; padding:0; } li { margin:0 0 1px; }
-  table { border-collapse:collapse; width:100%; margin:1px 0 3px; break-inside:avoid; }
-  th, td { border:0.6px solid #000; padding:0.5px 3px; text-align:left; vertical-align:top; }
-  pre { font-family:"Courier New", monospace; font-size:9.2pt; margin:1px 0 3px; border:0.6px solid #000; padding:2px 3px; white-space:pre-wrap; break-inside:avoid; line-height:1.15; }
-  .box { border:1px solid #000; padding:2px 4px; margin:2px 0 3px; break-inside:avoid; }
+  h1 { font-size:9pt; margin:0 0 2px; text-align:center; border-bottom:1.2px solid #000; padding-bottom:1px; letter-spacing:.3px; }
+  .cols { column-count:2; column-gap:10px; column-rule:0.5px solid #000; column-fill:auto; }
+  h2 { font-size:7.9pt; margin:3px 0 1px; padding:1px 3px; background:#000; color:#fff; break-after:avoid; }
+  h3 { font-size:7.4pt; margin:2px 0 0; text-decoration:underline; break-after:avoid; }
+  p { margin:0 0 2px; }
+  ul { margin:0 0 2px 9px; padding:0; } li { margin:0; }
+  table { border-collapse:collapse; width:100%; margin:1px 0 2px; break-inside:avoid; }
+  th, td { border:0.5px solid #000; padding:0 2px; text-align:left; vertical-align:top; }
+  th { font-weight:bold; }
+  pre { font-family:"Liberation Mono", "DejaVu Sans Mono", monospace; font-size:7.9pt; line-height:1.13; margin:1px 0 2px; border:0.5px solid #000; padding:1px 2px; white-space:pre-wrap; break-inside:avoid; }
+  .q { font-weight:bold; }
+  .qa { break-inside:avoid; }
+  .box { border:0.9px solid #000; padding:1px 3px; margin:1px 0 2px; break-inside:avoid; }
+  .n { font-size:6.6pt; font-style:italic; }
 </style>
 </head>
 <body>
 
+<!-- =========================== FRONT =========================== -->
 <div class="page">
-<h1>ECE422 MIDTERM 2 — METHODS (front)</h1>
+<h1>ECE422 MIDTERM 2 — RULES · ADDRESSES · SUBNETTING · CIDR (front)</h1>
 <div class="cols">
 
-<div class="box"><b>Exam traps (M1):</b> convert units first · add the whole carry · re-check the circled letter vs scrap work · compute before reading options ("none" is real) · offset in 8-byte units · hosts = addresses − 2.</div>
+<h2>0. EXAM RULES (lessons from M1)</h2>
+<div class="box">Convert units first · add the whole carry · re-check the circled letter vs scrap work · compute before reading the options ("none" is real) · offset in 8-byte units · hosts = addresses − 2 · show scrap work.</div>
 
-<div class="box"><b>Quick rules:</b>
-<b>Which byte?</b> /1–8 byte 1 · /9–16 byte 2 · /17–24 byte 3 · /25–32 byte 4 — write in binary only the bytes from where the old mask ends to where the new mask ends (CIDR: the first byte where the addresses differ). Bytes on the left are copied; values don't matter.<br>
-<b>Mask</b> = 32 − host bits (32 @s = 2<sup>5</sup> → /27). <b>Subnet bits</b> = new − old mask; # subnets = 2<sup>new−old</sup>.<br>
-<b>1st subnet = ID 0</b> = start of the block; <b>k-th</b> = ID k−1 → start + (k−1) × size (20th → 19 × 32 = 608 = 2·256 + 96).<br>
-<b>Network</b> = first (host bits 0), <b>broadcast</b> = last = first + size − 1; <b>hosts</b> = first+1 … last−1. "Address range" includes both ends; "host addresses" does not.</div>
-<h3>Powers of 2 / mask bytes</h3>
+<h2>1. QUICK RULES</h2>
+<ul>
+<li><b>Which byte:</b> /1–8 byte 1 · /9–16 byte 2 · /17–24 byte 3 · /25–32 byte 4. Write in binary only the bytes between where the old and new masks end (CIDR: the first byte that differs). Values don't matter.</li>
+<li><b>Mask</b> = 32 − host bits (32 @s = 2<sup>5</sup> → /27). <b>Subnet bits</b> = new − old; # subnets = 2<sup>new−old</sup>.</li>
+<li><b>1st subnet = ID 0</b> = start of block. <b>k-th</b> = ID k−1 → start + (k−1) × size.</li>
+<li><b>Network</b> = first @ (host bits 0, cannot be a destination). <b>Broadcast</b> = last = first + size − 1. <b>Hosts</b> = first+1 … last−1. "Address range" includes both ends; "host addresses" doesn't.</li>
+<li># hosts /a → /b: 2<sup>b−a</sup> × (2<sup>32−b</sup> − 2).</li>
+</ul>
 <table>
-<tr><th>bits in byte</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
-<tr><th>mask byte</th><td>128</td><td>192</td><td>224</td><td>240</td><td>248</td><td>252</td><td>254</td><td>255</td></tr>
-<tr><th>block size</th><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+<tr><th>bits</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
+<tr><th>mask</th><td>128</td><td>192</td><td>224</td><td>240</td><td>248</td><td>252</td><td>254</td><td>255</td></tr>
+<tr><th>block</th><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
 </table>
-2<sup>1…8</sup>: 2 · 4 · 8 · 16 · 32 · 64 · 128 · 256<br>2<sup>9…16</sup>: 512 · 1024 · 2048 · 4096 · 8192 · 16384 · 32768 · 65536
+<table>
+<tr><th>@s</th><td>16</td><td>32</td><td>64</td><td>128</td><td>256</td><td>512</td><td>1024</td><td>4096</td><td>8192</td><td>16384</td></tr>
+<tr><th>/</th><td>28</td><td>27</td><td>26</td><td>25</td><td>24</td><td>23</td><td>22</td><td>20</td><td>19</td><td>18</td></tr>
+</table>
 
-<h3>Addresses</h3>
+<h2>2. ADDRESSES</h2>
 <ul>
-<li>/n → # @s = 2<sup>32−n</sup>, hosts = 2<sup>32−n</sup> − 2. Network = host AND mask (host bits 0, <b>cannot be a destination</b>); broadcast = host bits 1.</li>
-<li>Network starts at a multiple of the block size in the byte where the mask ends (/19 → byte 3, block 32; /27 → byte 4, block 32).</li>
-<li>Classes (1st byte): A 0–127 (0…) ½ = 2<sup>31</sup> · B 128–191 (10…) ¼ = 2<sup>30</sup> · C 192–223 (110…) ⅛ = 2<sup>29</sup> · D 224–239 multicast · E 240–255.</li>
-<li>Private: 10.0.0.0/8 · 172.16.0.0–172.31.255.255 (/12) · 192.168.0.0/16.</li>
+<li>Classes (1st byte): <b>A</b> 0–127 (0…) ½ = 2<sup>31</sup> · <b>B</b> 128–191 (10…) ¼ = 2<sup>30</sup> · <b>C</b> 192–223 (110…) ⅛ = 2<sup>29</sup> · D 224–239 multicast · E 240–255.</li>
+<li>Private: 10.0.0.0/8 · <b>172.16.0.0–172.31.255.255</b> (/12) · 192.168.0.0/16. (172.32 / 192.169 are NOT private.)</li>
 </ul>
-<pre>145.144.0.0/12: byte2 144 = 1001|0000 → .144.0.0 – .159.255.255
-131.14.12.3, 255.255.224.0 → /19 → 12 AND 224 = 0 → 131.14.0.0/19 (– .31.255)
-35.117.160.0/19 → hosts .160.1 – .191.255
-129.110.92.33/27 → net .32, hosts .33 – .62, bcast .63</pre>
+<div class="qa"><p class="q">HW5 Q1: range of 145.144.0.0/12?</p>
+<pre>/12 → byte 2: 144 = 1001|0000 → 1001 0000 (144) … 1001 1111 (159)
+→ 145.144.0.0 – 145.159.255.255</pre></div>
+<div class="qa"><p class="q">HW5 Q2: mask 255.255.224.0, host 131.14.12.3 → network, range?</p>
+<pre>224 = 1110 0000 → /19; 12 AND 224 = 0 → 131.14.0.0/19
+block 32 in byte 3 → 131.14.0.0 – 131.14.31.255</pre></div>
+<div class="qa"><p class="q">172.30.157.200/20 → network?</p>
+<pre>157 = 1001 1101 AND 240 → 1001 0000 = 144 → 172.30.144.0/20 (–.159.255)</pre></div>
+<div class="qa"><p class="q">10.77.0.0/11 → real network?</p>
+<pre>byte 2: 77 = 010|0 1101 → 0100 0000 = 64 → 10.64.0.0/11 (–10.95.255.255)</pre></div>
+<table>
+<tr><th colspan="2">Jeopardy (professor's answers)</th></tr>
+<tr><td>35.117.160.0/19 hosts</td><td>35.117.160.1 to 35.117.191.255 <span class="n">(last host .254)</span></td></tr>
+<tr><td>35.110.180.0/27 hosts</td><td>35.110.180.1 to .30</td></tr>
+<tr><td>129.110.92.33 /27 LAN</td><td>.33 to .62 (net .32, bcast .63)</td></tr>
+<tr><td>Cannot be destination?</td><td>Host bits equal to 0</td></tr>
+<tr><td>Class-B private block</td><td>172.16.0.0 to 172.31.255.255</td></tr>
+<tr><td>11010010.10010001.0.0</td><td>Class-C (110… = 210)</td></tr>
+<tr><td># Class-B @s in IPv4</td><td>2^30 @s</td></tr>
+<tr><td>More host @s: (a) 6 LAN × 128 vs (b) 2×1024 + 4×128</td><td>(b): 2560 vs 768</td></tr>
+<tr><td>Mask 255.255.255.192 hosts</td><td>/26 → 64 − 2 = 62</td></tr>
+<tr><td>Not a host in 200.1.1.64/26</td><td>.64 (net), .127 (bcast)</td></tr>
+</table>
 
-<h3>Subnetting</h3>
-<ul>
-<li>1) <b>Feasibility:</b> sum of needs (rounded up to 2<sup>k</sup>) ≤ block size. 2) per subnet: k = log<sub>2</sub>(size) host bits → mask 32−k. 3) bits between old and new mask = subnet ID.</li>
-<li><b>k-th subnet</b> = write (k−1) in binary into the subnet-ID bits.</li>
-<li><b>Multiple masks:</b> round up, <b>largest first</b>, each starts at a multiple of its size; rest = reserve.</li>
-<li><b>Groups</b> (ISP): group block = customers × size → prefix; then split per customer. <b>Embedded:</b> subnets of different sizes inside one block.</li>
-<li># hosts after /a → /b: 2<sup>b−a</sup> × (2<sup>32−b</sup> − 2). /20→/27 = 128 × 30 = 3840.</li>
-</ul>
-<pre>194.23.56.128/25, 3 × 32 → /27: 00 .128  01 .160  10 .192  (11 .224 spare)
-128.17.144.0/22 → /27, 20th = ID 19 = 10011:
-  1001 00|10.011|0 0000 = 146.96 → 128.17.146.96/27 (.96–.127)
-14.24.74.0/24, need 120,60,10 → .0/25, .128/26, .192/28, reserve .209–.255
-70.12.100.128/26: Central .128/27 · East .160/28 · West .176/28 (slide typo: .160)
-190.100.0.0/16: 64×256 → .0.0/18 (each /24) · 128×128 → .64.0/18 (/25)
-  · 128×64 → .128.0/19 (/26) · left 24,576 from .160.0
-150.80.0.0/16: 32×256 .0.0/19 · 64×128 .32.0/19 · 128×64 .64.0/19
-  last G3 = 64.0 + 127×64 = .95.192/26 · left 40,960</pre>
+<h2>3. SUBNETTING — SINGLE MASK</h2>
+<div class="qa"><p class="q">HW5 Q4: lease 194.23.56.128/25, 3 subnets × 32 @s, host @s?</p>
+<pre>feasible: 128 ≥ 96 · 32 → /27 · subnet bits 26–27:
+1 00 00000 .128/27 hosts .129–.158
+1 01 00000 .160/27 hosts .161–.190
+1 10 00000 .192/27 hosts .193–.222   (11 → .224 spare)</pre></div>
+<div class="qa"><p class="q">HW5 Q5: 128.17.144.0/22 into 32-@ subnets → 20th subnet?</p>
+<pre>/27 → 5 subnet bits (32 subnets); 20th = ID 19 = 10011
+1001 00|10 . 011|0 0000 = 146.96 → 128.17.146.96/27 (.96–.127)
+check: 19 × 32 = 608 = 2·256 + 96 → 144+2 = 146, 96</pre></div>
+<div class="qa"><p class="q">201.45.18.0/24 into 8 subnets → 6th?</p>
+<pre>8 = 2^3 → /27; ID 5 = 101 → 1010 0000 = 160 → .160/27, hosts .161–.190</pre></div>
+<div class="qa"><p class="q">150.10.64.0/18 into /24s → 37th?</p>
+<pre>ID 36 → 64 + 36 = 100 → 150.10.100.0/24</pre></div>
+<div class="qa"><p class="q">Total hosts: /20 → /27 (Jeopardy) · /22 → /26</p>
+<pre>2^7 × (2^5 − 2) = 128 × 30 = 3840 host @s · 2^4 × 62 = 992</pre></div>
 
-<h3>CIDR</h3>
-<ul>
-<li>Binary of the differing byte → count common leading bits → prefix; zero the rest.</li>
-<li>Why: <b>route aggregation</b> (fewer table entries) + efficiency vs classes (C for 2 hosts 2/255 = 0.78%; B for 256 hosts 256/65,535 = 0.39%). Prefix any length 2–32, written /X.</li>
-</ul>
-<pre>34 = 0010 0010, 33 = 0010 0001 → 6 bits → /22 → 18.198.32.0/22
-231 1110 0111, 233 1110 1001, 234 1110 1010 → A: 192.221.224.0/20
-64 = 0100 0000, 192 = 1100 0000 → 0 bits → 92.0.35.0/24
-192.4.16 … 192.4.31 → 11000000 00000100 0001 → 192.4.16.0/20</pre>
+<h2>4. MULTIPLE MASKS · GROUPS · EMBEDDED</h2>
+<p><b>Method:</b> (1) feasibility: round each need up to 2<sup>k</sup> (hosts: +2 first), sum ≤ block. (2) <b>largest first</b>, each starts at a multiple of its size, consecutive. (3) rest = reserve. Groups: group block = customers × size, then split per customer.</p>
+<div class="qa"><p class="q">Prof Ex1: 129.249.64.0/20, sub-blocks a) 32 b) 512 c) 128, lowest &amp; consecutive</p>
+<pre>/20 = 4096 (64.0–79.255); need 672 ✓
+b) 512 → 129.249.64.0/23    (64.0–65.255)
+c) 128 → 129.249.66.0/25    (66.0–66.127)
+a)  32 → 129.249.66.128/27  (66.128–66.159)
+left 3424 (66.160–79.255). Listed order a,b,c breaks alignment!</pre></div>
+<div class="qa"><p class="q">Ex 5.33: 14.24.74.0/24 → 120, 60, 10 @s</p>
+<pre>120→128 /25 .0 (–.127) · 60→64 /26 .128 (–.191)
+10→16 /28 .192 (–.207) · 208 used, 48 left (slide: first .209, last .255)</pre></div>
+<div class="qa"><p class="q">Ex 5.34 (embedded): 70.12.100.128/26 → Central 32, East/West rest</p>
+<pre>Central .128/27 (.128–.159) · East .160/28 (.160–.175)
+West .176/28 (.176–.191)  [slide repeats .160: typo]</pre></div>
+<div class="qa"><p class="q">Ex 5.35 (groups): ISP 190.100.0.0/16</p>
+<pre>G1 64×256=16384 /18 → 190.100.0.0/18  (0–63)   each /24
+G2 128×128=16384 /18 → 190.100.64.0/18 (64–127) each /25
+G3 128×64=8192  /19 → 190.100.128.0/19 (128–159) each /26
+left 65536−40960 = 24,576 from 190.100.160.0
+(16384/256 = 64 values of byte 3; 8192/256 = 32)</pre></div>
+<div class="qa"><p class="q">150.80.0.0/16: G1 32×256, G2 64×128, G3 128×64</p>
+<pre>each 8192 /19: .0.0 · .32.0 · .64.0; last G3 = 64.0 + 127×64 = .95.192/26
+left 40,960 from 150.80.96.0</pre></div>
+<div class="qa"><p class="q">120.60.0.0/16: G1 16×1024, G2 32×512, G3 64×128</p>
+<pre>G1 .0.0/18 (/22 each) · G2 .64.0/18 (/23) · G3 .128.0/19 (/25)
+10th of G2 = 64.0 + 9×512 = .82.0/23 · 5th of G3 = .130.0/25
+left 24,576 from 120.60.160.0</pre></div>
+<div class="qa"><p class="q">198.51.100.0/24 → 50, 25, 100, 12 hosts</p>
+<pre>+2, round: 128 /25 .0 · 64 /26 .128 · 32 /27 .192 · 16 /28 .224
+reserve .240–.255 (16)</pre></div>
+<div class="qa"><p class="q">/26 for 30, 20, 10 hosts feasible?</p>
+<pre>32 + 32 + 16 = 80 > 64 → NOT feasible</pre></div>
+
+<h2>5. CIDR (SUPERNETTING)</h2>
+<p><b>Method:</b> binary of the first differing byte → count common leading bits → prefix; zero the rest. <b>Why:</b> route aggregation (fewer table entries) + efficiency (class C for 2 hosts 2/255 = 0.78%; class B for 256 hosts 256/65,535 = 0.39%).</p>
+<div class="qa"><p class="q">HW5 Q3: 18.198.34.192/30, .34.240/30, .33.252/30</p>
+<pre>34 = 0010 0010, 33 = 0010 0001 → 6 bits → /22
+→ 18.198.32.0/22  (prof text says "/23", answer /22)</pre></div>
+<div class="qa"><p class="q">Jeopardy: CIDR(193.221.231.43, .233.44, .234.45)</p>
+<pre>231 1110 0111 · 233 1110 1001 · 234 1110 1010 → 4 bits → /20
+A: 192.221.224.0/20 (prof) — math gives 193.221.224.0/20</pre></div>
+<div class="qa"><p class="q">Jeopardy: 92.0.35.64/28 + 92.0.35.192/29 as one net</p>
+<pre>64 = 0100 0000, 192 = 1100 0000 → 0 bits → 92.0.35.0/24</pre></div>
+<div class="qa"><p class="q">Slide: 192.4.16 … 192.4.31</p>
+<pre>11000000 00000100 0001 xxxx → 192.4.16.0/20</pre></div>
+
 </div>
 </div>
 
+<!-- =========================== BACK =========================== -->
 <div class="page">
-<h1>ECE422 MIDTERM 2 — FORWARDING, IP HEADER, JEOPARDY (back)</h1>
+<h1>ECE422 MIDTERM 2 — FORWARDING · IP HEADER · FRAGMENTATION (back)</h1>
 <div class="cols">
 
-<h3>Forwarding</h3>
+<h2>5. CIDR (cont.)</h2>
+<div class="qa"><p class="q">More: 172.20.64–67.0/24 · 172.20.63 + .66 · 81.14.205/.198/.201</p>
+<pre>64..67 → 0100 00xx → 172.20.64.0/22
+63 = 0011 1111, 66 = 0100 0010 → 1 bit → 172.20.0.0/17
+205 1100 1101, 198 1100 0110, 201 1100 1001 → 81.14.192.0/20</pre></div>
+<h2>6. FORWARDING</h2>
 <ul>
-<li>Dst on my network → deliver on that interface; else in table → NextHop; else → <b>default router</b>.</li>
+<li>Algorithm: dst on my network → deliver on that interface; else in table → Next Hop; else → <b>default router</b>.</li>
 <li>Entry matches if <b>D AND mask = DST</b>. Several match → <b>longest prefix</b> wins.</li>
-<li>Table: <b>DST | Mask | Next Hop | Interface</b>. Direct → Next Hop "–". Next hop = <b>neighbour's IP on the shared net</b>. Default = 0.0.0.0 /0 (replaces several entries). Sort /32 → … → /0. /32 = one host.</li>
-<li>Routing table: costs, several options. Forwarding table: no cost, one option.</li>
-<li>Datagram: full dst address in every packet, each forwarded independently, may take different paths, survives failures.</li>
+<li>Table: <b>DST | Mask | Next Hop | Interface</b>. Directly connected → "–". Next Hop = <b>neighbour's IP on the shared net</b>. Default 0.0.0.0/0 replaces several entries. Sort /32 → … → /0 (/32 = one host).</li>
+<li><b>Routing table:</b> cost, options. <b>Forwarding table:</b> no cost, one option.</li>
+<li>Datagram: full dst @ in every packet, forwarded independently, may take different paths, survives failures.</li>
 </ul>
-<pre>HW6 R1: 192.168.1.0   /24  –              i1
-        192.168.128.0 /24  –              i2
-        0.0.0.0       /0   192.168.128.3  i2
-HW6 R2: 192.168.2.0   /24  –              i3
-        192.168.160.0 /24  –              i4
-        192.168.1.0   /24  192.168.128.2  i3
-        192.168.168.0 /24  192.168.160.5  i4
-15.84.45.83: 84 = 0101 0100 → /12 (0101 = 80) ✓, /13 (01010 vs 01011) ✗
-15.34.45.83: 0010 → no match → default</pre>
+<div class="qa"><p class="q">HW6 Q1: R1 (.1 i1 192.168.1.0, .2 i2 128.0) · R2 (.3 i3 128.0, .4 i4 160.0) · R3 (.5 i5 160.0, .6 i6 168.0)</p>
+<pre>R1: 192.168.1.0   /24 –              i1
+    192.168.128.0 /24 –              i2
+    0.0.0.0       /0  192.168.128.3  i2   "default saves 2 entries"
+R2: 192.168.128.0 /24 –              i3   (sol. typo: 192.168.2.0)
+    192.168.160.0 /24 –              i4
+    192.168.1.0   /24 192.168.128.2  i3
+    192.168.168.0 /24 192.168.160.5  i4
+R3: 192.168.160.0 /24 –              i5
+    192.168.168.0 /24 –              i6
+    0.0.0.0       /0  192.168.160.4  i5</pre></div>
+<div class="qa"><p class="q">HW6 Q2: router R (Rm1 10.2.3.24, Rm2 10.3.4.1, m3 10.4.0.0/24, Rm4 134.45.51.x → Internet)</p>
+<pre>10.5.24.5  /32 (host) 10.3.4.1     m2
+10.0.3.0   /28        10.2.3.24    m1
+10.5.0.0   /24        10.3.4.1     m2
+10.4.0.0   /24        –            m3
+0.0.0.0    /0         134.45.51.x  m4
+(directly connected segments skipped: masks not given)</pre></div>
+<div class="qa"><p class="q">Prof practice: Rx (11.3.64.0/24 .1 i1 ↔ R1 .2; 11.3.96.0/24 .2 i2 ↔ R2 .1 → Internet; R1 has 11.3.32.0/24, 11.3.128.0/24)</p>
+<pre>11.3.32.0  /24 11.3.64.2  i1
+11.3.64.0  /24 –          i1
+11.3.96.0  /24 –          i2
+11.3.128.0 /24 11.3.64.2  i1
+0.0.0.0    /0  11.3.96.1  i2   (Internet via R2)
+32 & 128 can't merge (would be 11.3.0.0/16)</pre></div>
+<div class="qa"><p class="q">Jeopardy Q10: R2 (i2 132.23.252.15/20 ↔ R1 .252.14; i3 .224.24/20 ↔ R3 .224.45; R3–R5 .248.37/.49 /21; R6 .240.38/20)</p>
+<pre>nets: 252 AND 240 = 240 → .240.0/20 · .224.0/20 · 248 → .248.0/21
+132.23.248.0 /21 132.23.224.45 i3   (/21 inside /20 → longest wins)
+132.23.240.0 /20 –             i2
+132.23.224.0 /20 –             i3
+overlaps → add 132.23.252.14/32 – i2, 132.23.240.38/32 .224.45 i3</pre></div>
+<div class="qa"><p class="q">Longest-prefix examples</p>
+<pre>a.b.c.0/24 vs a.b.c.d/26 → /26 (Jeopardy)
+15.88.0.0/13 (88–95) · 15.80.0.0/12 (80–95):
+ Jeopardy "15.34.45.83" → prof: 15.80.0.0/12 (34 matches neither)
+ 15.84.x.x → 0101 0100 → /12 only · 15.90.x.x → both → /13
+64.12/14→A 64.14/15→B 64.14.128/17→C 0/0→D:
+ 64.14.200.5→C · 64.13.5.5→A · 64.15.1.1→B · 64.16.0.1→D
+171.69.10.5: 171.69/16 and 171.69.10/24 → /24
+66.80.12.170: .128/25 and .160/27 → /27 (embedded)</pre></div>
+<div class="qa"><p class="q">Ra (10.1/16 e0, 10.2.0.1 e1) – Rb 10.2.0.2 / 10.3.0.2 – Rc 10.3.0.3 – 10.4/16</p>
+<pre>Ra: 10.1.0.0/16 – e0 · 10.2.0.0/16 – e1 · 0.0.0.0/0 10.2.0.2 e1
+Rb → 10.4.0.0/16 via 10.3.0.3</pre></div>
 
-<h3>IP header (12 fields, 20 B, Hlen = 5)</h3>
+<h2>7. IP HEADER (12 fields, 20 B, Hlen = 5)</h2>
 <table>
-<tr><td>Version 4</td><td>Hlen 4 (32-bit words)</td><td>TOS 8</td><td>Length 16 (total B)</td></tr>
-<tr><td>Ident 16</td><td>Flags 3: 0, DF, MF</td><td colspan="2">Offset 13 (in <b>8-byte units</b>)</td></tr>
-<tr><td>TTL 8 (hops)</td><td>Protocol 8: TCP 6, UDP 17</td><td colspan="2">Checksum 16 (<b>header only</b>)</td></tr>
-<tr><td colspan="2">SrcAddr 32 · DestAddr 32</td><td colspan="2">Options: source / record route</td></tr>
+<tr><th>Field</th><th>bits</th><th>meaning</th></tr>
+<tr><td>Version</td><td>4</td><td>4 = IPv4</td></tr>
+<tr><td>Hlen</td><td>4</td><td>header in 32-bit words: 5 → 20 B, 6 → 24 B</td></tr>
+<tr><td>TOS</td><td>8</td><td>type of service</td></tr>
+<tr><td>Length</td><td>16</td><td>total bytes (hdr + data), max 65,535</td></tr>
+<tr><td>Ident</td><td>16</td><td>same in all fragments</td></tr>
+<tr><td>Flags</td><td>3</td><td>0, DF (don't fragment → drop if too big), MF (more fragments)</td></tr>
+<tr><td>Offset</td><td>13</td><td>data position in <b>8-byte units</b></td></tr>
+<tr><td>TTL</td><td>8</td><td>−1 per router, drop at 0 (64 − 5 routers = 59)</td></tr>
+<tr><td>Protocol</td><td>8</td><td>TCP 6, UDP 17 (demux key)</td></tr>
+<tr><td>Checksum</td><td>16</td><td><b>header only</b> (recomputed each hop)</td></tr>
+<tr><td>Src, Dst</td><td>32+32</td><td>IP addresses (unchanged end to end)</td></tr>
+<tr><td>Options</td><td>var</td><td>source route, record route</td></tr>
 </table>
-IP = connectionless, best effort (loss, out of order, duplicates, delay).
-
-<h3>Fragmentation</h3>
-<pre>data = TL − 20; per frag = (MTU − 20) ↓ multiple of 8
-offset = bytes before / 8; MF = 1 except last; frag TL = data + 20
-TL 100, MTU 61: 80 B; 41 → 40 → 40 + 40 → offsets 0, 5
-TL 1420, MTU 532: 1400; 512 → 512, 512, 376 → off 0, 64, 128; last TL 396
-TL 4000, MTU 1500: 3980; 1480, 1480, 1020 → off 0, 185, 370</pre>
-Routers fragment, <b>destination host reassembles</b>; same Ident in all fragments; IP does not recover lost fragments. MTU: Ethernet 1500 B, FDDI 4500 B.
-
-<h3>Pre-exam Jeopardy</h3>
+<p>IP = <b>connectionless, best effort</b> (loss, out of order, duplicates, delay). Hlen 6, Length 1500 → header 24 B, data 1476 B.</p>
 <table>
-<tr><td>1</td><td>Fields in IP header?</td><td>12 (20 B)</td></tr>
-<tr><td>2</td><td>Flags?</td><td>0, DF, MF</td></tr>
-<tr><td>3</td><td>Options use?</td><td>Source / record route</td></tr>
-<tr><td>4</td><td>Protocol field?</td><td>Transport (TCP/UDP)</td></tr>
-<tr><td>5</td><td>MTU 61, TL 100: offset 2nd?</td><td>5</td></tr>
-<tr><td>6</td><td>Routing vs fwd table?</td><td>cost, options vs no cost, one option</td></tr>
-<tr><td>7</td><td>/24 or /26?</td><td>/26 (longest)</td></tr>
-<tr><td>8</td><td>15.x.45.83 vs /13, /12</td><td>15.80.0.0/12</td></tr>
-<tr><td>9</td><td>CIDR .231/.233/.234</td><td>A: 192.221.224.0/20</td></tr>
-<tr><td>11</td><td>35.117.160.0/19 hosts</td><td>.160.1 – .191.255</td></tr>
-<tr><td>12</td><td>35.110.180.0/27 hosts</td><td>.1 – .30</td></tr>
-<tr><td>13</td><td>/20 → /27 hosts</td><td>2<sup>7</sup>(2<sup>5</sup>−2) = 3840</td></tr>
-<tr><td>14</td><td>.33 /27 LAN</td><td>.33 – .62</td></tr>
-<tr><td>15</td><td>More host @s?</td><td>(b) 2560 vs 768</td></tr>
-<tr><td>16</td><td>Cannot be dst?</td><td>host bits all 0</td></tr>
-<tr><td>17</td><td>Class B private</td><td>172.16.0.0 – 172.31.255.255</td></tr>
-<tr><td>18</td><td>11010010…</td><td>Class C</td></tr>
-<tr><td>19</td><td># class B @s</td><td>2<sup>30</sup></td></tr>
-<tr><td>20</td><td>.64/28 + .192/29</td><td>92.0.35.0/24</td></tr>
+<tr><th colspan="2">Jeopardy (professor's answers)</th></tr>
+<tr><td>Fields in IP header?</td><td>12 fields (20 bytes)</td></tr>
+<tr><td>Flag indicates?</td><td>0, do not fragment, more fragments</td></tr>
+<tr><td>Use of options?</td><td>Source or Record Route</td></tr>
+<tr><td>PROTOCOL field?</td><td>Transport protocol, like UDP or TCP</td></tr>
+<tr><td>Rting vs Fwding tables?</td><td>Rting: cost, options, Fwding: no cost, one option</td></tr>
+</table>
+
+<h2>8. MTU &amp; FRAGMENTATION</h2>
+<ul>
+<li>MTU = max datagram a network carries (Ethernet 1500, FDDI 4500). <b>Router fragments</b> if datagram &gt; MTU; <b>destination host reassembles</b> (same Ident, Offset gives order, MF = 0 last). Lost fragment → whole datagram lost. DF = 1 &amp; too big → dropped.</li>
+<li>Why ×8: 13-bit offset for 16-bit length → 2<sup>16</sup>/2<sup>13</sup> = 8.</li>
+</ul>
+<div class="box"><b>Method:</b> (1) data = Length − 20. (2) per frag = (MTU − 20) <b>↓ multiple of 8</b>. (3) cut; last gets the rest. (4) each: Length = data + 20, Offset = bytes before / 8, MF = 1 except last (last keeps original MF).</div>
+<pre>Jeopardy: MTU 61, TL 100 → data 80; 41 → 40
+  40 + 40 → offsets 0, 5 → "Fragment offset = 5"
+TL 4000, MTU 1500 → 3980; 1480 per frag
+  1480 | 1480 | 1020 → off 0 | 185 | 370 · Length 1500, 1500, 1040
+TL 1420, MTU 532 → 1400; 512
+  512 | 512 | 376 → off 0 | 64 | 128 · last Length 396
+TL 2400, MTU 820 → 2380; 800
+  800 | 800 | 780 → off 0 | 100 | 200 · 3 fragments
+TL 1000, MTU 310 → 980; 290 → 288 (!)
+  288×3 + 116 → off 0 | 36 | 72 | 108
+Refragment: off 100, MF 1, 800 B, MTU 420 → 400 + 400
+  → off 100, 150, both MF 1 (original MF kept)</pre>
+
+<h2>9. CONCEPT QUICK ANSWERS (slides)</h2>
+<table>
+<tr><td>IP service model?</td><td>Connectionless, best effort (unreliable)</td></tr>
+<tr><td>Forwarding table maps…</td><td>network number → next hop; every host has a default router</td></tr>
+<tr><td>Subnet mask purpose?</td><td>adds a subnet level to the hierarchy; D AND mask = subnet number</td></tr>
+<tr><td>Are subnets visible outside?</td><td>No, only within the site</td></tr>
+<tr><td>CIDR prefix length?</td><td>Any length 2–32 bits, stored as &lt;length, value&gt;; all routers must understand it</td></tr>
+<tr><td>Problem CIDR solves?</td><td>Backbone table growth + address-space exhaustion (class B)</td></tr>
+<tr><td>Overlapping prefixes?</td><td>Allowed; longest match (171.69.10.5 → 171.69.10/24, 171.69.20.5 → 171.69/16)</td></tr>
+<tr><td>Datagram network?</td><td>Each packet has the full dst @, forwarded independently; no setup; may take different paths</td></tr>
+<tr><td>Default route?</td><td>0.0.0.0/0: used when nothing else matches; replaces many entries</td></tr>
 </table>
 </div>
 </div>
