@@ -80,6 +80,15 @@
 <li>Last address (broadcast): that byte + block size − 1. Later bytes become 255.</li>
 <li>Hosts are everything between: first + 1 up to last − 1. Number of hosts = addresses − 2.</li>
 </ol></div>
+<table>
+<tr><th colspan="2">Jeopardy quick answers (professor's)</th></tr>
+<tr><td>Hosts in 35.117.160.0/19</td><td>35.117.160.1 to 35.117.191.255 (last host is .254)</td></tr>
+<tr><td>Hosts in 35.110.180.0/27</td><td>35.110.180.1 to 35.110.180.30</td></tr>
+<tr><td>LAN of 129.110.92.33 /27</td><td>129.110.92.33 to 129.110.92.62</td></tr>
+<tr><td>Cannot be a destination</td><td>host bits equal to 0</td></tr>
+<tr><td>CIDR of 193.221.231/.233/.234</td><td>prof: 192.221.224.0/20 (math: 193…)</td></tr>
+<tr><td>92.0.35.64/28 + 92.0.35.192/29</td><td>92.0.35.0/24</td></tr>
+</table>
 <div class="ex"><div class="q">Example (HW5 Q2): host 131.14.12.3, mask 255.255.224.0. Network and range?</div>
 <pre>Mask byte 3 is 224 = 1110 0000, three ones, so the mask is /19.
 Block size in byte 3 is 32, so networks start at 0, 32, 64, ...
@@ -274,6 +283,9 @@ Fragment 2 carries bytes 40–79.  Offset 40 ÷ 8 = 5, MF 0</pre>
 <li>All fragments carry the same Ident; a lost fragment means the whole datagram is lost.</li>
 <li>CIDR prefixes can be any length; every router must understand them.</li>
 <li>Flags field: 0, do not fragment, more fragments. Options: source route or record route.</li>
+<li>Default IP header: 12 fields, 20 bytes. Protocol field: transport protocol, like UDP or TCP.</li>
+<li>A host has one default router; a router has a forwarding table.</li>
+<li>Overlapping prefixes are allowed; the longest match is used.</li>
 </ul>
 </div>
 </div>
