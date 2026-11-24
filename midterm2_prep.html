@@ -99,24 +99,65 @@
 10.4.0.0    /24         –            m3
 0.0.0.0     /0          134.45.51.x  m4</pre>"We don't have the mask of the directly connected segments, so we will skip them … We would need to add the networks of router's interfaces that are directly connected: 10.2.3.24, 10.3.4.1, and 134.45.51.x, but we need more information."</div></div>
 
+<div class="brk"></div>
 <h3>5. IP header, MTU, fragmentation</h3>
+
+<p><b>5.1 What IP gives (service model).</b> IP is <b>connectionless</b> (no setup, each datagram is routed on its own) and <b>best effort</b>: packets can be lost, arrive out of order, be duplicated, or be delayed a long time. IP does not fix any of this; higher layers (e.g. TCP) do.</p>
+
+<p><b>5.2 The header (IPv4).</b> It is drawn as rows of 32 bits (4 bytes). Without options there are 5 rows → <b>20 bytes</b>, and <b>12 fields</b>.</p>
+<pre style="page-break-inside:avoid"> 0        4        8               16    19                       31
++--------+--------+---------------+------------------------------+
+|Version | Hlen   |      TOS      |            Length            |   row 1
++--------+--------+---------------+-----+------------------------+
+|            Ident                |Flags|        Offset          |   row 2
++-----------------+---------------+-----+------------------------+
+|      TTL        |   Protocol    |          Checksum            |   row 3
++-----------------+---------------+------------------------------+
+|                        SourceAddr (32)                         |   row 4
++----------------------------------------------------------------+
+|                     DestinationAddr (32)                       |   row 5
++----------------------------------------------------------------+
+|            Options (variable)              |      Pad          |   only if used
++----------------------------------------------------------------+
+|                             Data                               |</pre>
 <table>
-<tr><th>Field</th><th>Bits</th><th>Meaning</th></tr>
-<tr><td>Version</td><td>4</td><td class="l">4 for IPv4</td></tr>
-<tr><td>Hlen</td><td>4</td><td class="l">header length in 32-bit words (default 5 = 20 B)</td></tr>
-<tr><td>TOS</td><td>8</td><td class="l">type of service</td></tr>
-<tr><td>Length</td><td>16</td><td class="l">total bytes of the datagram (header + data), max 65,535</td></tr>
-<tr><td>Ident</td><td>16</td><td class="l">same in all fragments of one datagram</td></tr>
-<tr><td>Flags</td><td>3</td><td class="l">0 (reserved), DF = do not fragment, MF = more fragments</td></tr>
-<tr><td>Offset</td><td>13</td><td class="l">position of the fragment's data, in <b>8-byte units</b></td></tr>
-<tr><td>TTL</td><td>8</td><td class="l">hop limit, −1 per router, dropped at 0</td></tr>
-<tr><td>Protocol</td><td>8</td><td class="l">demux key: TCP = 6, UDP = 17</td></tr>
-<tr><td>Checksum</td><td>16</td><td class="l">of the <b>header only</b></td></tr>
-<tr><td>Src / Dst addr</td><td>32 + 32</td><td class="l">IP addresses</td></tr>
-<tr><td>Options</td><td>var.</td><td class="l">e.g. source route, record route</td></tr>
+<tr><th>Field</th><th>Bits</th><th>What it means / why it is there</th></tr>
+<tr><td>Version</td><td>4</td><td class="l">IP version: 4 for IPv4.</td></tr>
+<tr><td>Hlen</td><td>4</td><td class="l">Header length counted in <b>32-bit words</b> (4 bytes each). Default 5 → 5 × 4 = 20 B. With options it is larger (6 → 24 B).</td></tr>
+<tr><td>TOS</td><td>8</td><td class="l">Type of service (priority / quality); not widely used.</td></tr>
+<tr><td>Length</td><td>16</td><td class="l">Total length of the datagram in <b>bytes</b> = header + data. 16 bits → max 65,535 B.</td></tr>
+<tr><td>Ident</td><td>16</td><td class="l">A number for the datagram. All fragments of one datagram carry the <b>same</b> Ident so the receiver knows which pieces belong together.</td></tr>
+<tr><td>Flags</td><td>3</td><td class="l">bit 0 = 0 (reserved), <b>DF</b> = Do not Fragment (if 1 and the packet is too big → it is dropped), <b>MF</b> = More Fragments (1 on every fragment except the last).</td></tr>
+<tr><td>Offset</td><td>13</td><td class="l">Where this fragment's data starts inside the original data, counted in <b>8-byte units</b>.</td></tr>
+<tr><td>TTL</td><td>8</td><td class="l">Time to live: each router subtracts 1; at 0 the packet is dropped (stops endless loops).</td></tr>
+<tr><td>Protocol</td><td>8</td><td class="l">Demux key: which higher protocol gets the data (TCP = 6, UDP = 17).</td></tr>
+<tr><td>Checksum</td><td>16</td><td class="l">Checksum of the <b>header only</b> (not the data); recomputed at each router because TTL changes.</td></tr>
+<tr><td>SourceAddr, DestinationAddr</td><td>32 + 32</td><td class="l">IP addresses of the sender and the final receiver (they do not change hop by hop).</td></tr>
+<tr><td>Options</td><td>var.</td><td class="l">Rarely used, e.g. <b>source route</b> (sender lists the route) or <b>record route</b> (routers write their addresses).</td></tr>
 </table>
-Default header: <b>12 fields, 20 bytes</b>. IP service = connectionless, best effort (loss, reorder, duplicates, delay).
-<div class="ex"><div class="t">Jeopardy Q5 — fragment offset</div><span class="lbl">Question:</span> MTU = 61 B, TL (IP header) = 100 B. Fragment offset of the 2nd fragment?<br><span class="lbl">Solution:</span><ol><li>Data in the datagram = TL − header = 100 − 20 = 80 B.</li><li>Data per fragment = MTU − 20 = 41 B → round down to a multiple of 8 → 40 B.</li><li>Fragment 1 carries data bytes 0–39 (offset 0, MF = 1); fragment 2 carries bytes 40–79.</li><li>Offset is counted in 8-byte units: 40 / 8 = 5.</li></ol><div class="a"><span class="lbl">Answer:</span> Fragment offset = 5</div></div><div class="ex"><div class="t">Example — 3 fragments</div><span class="lbl">Question:</span> A datagram of TL = 4000 B (20 B header) is sent over a network with MTU = 1500 B. Give the length, offset and MF of each fragment.<br><span class="lbl">Solution:</span><ol><li>Data = 4000 − 20 = 3980 B.</li><li>Data per fragment = 1500 − 20 = 1480 B (1480 / 8 = 185 ✓ multiple of 8).</li><li>3980 = 1480 + 1480 + 1020 → 3 fragments.</li><li>Offsets: 0, 1480/8 = 185, 2960/8 = 370. TL = data + 20. MF = 1 except the last.</li></ol><div class="a"><span class="lbl">Answer:</span> TL 1500 / off 0 / MF 1 · TL 1500 / off 185 / MF 1 · TL 1040 / off 370 / MF 0</div></div><p>Routers fragment; the <b>destination host reassembles</b>; all fragments carry the same Ident; IP does not recover missing fragments. MTU: Ethernet 1500 B, FDDI 4500 B.</p>
+
+<p><b>5.3 MTU and fragmentation.</b> Every network has an <b>MTU</b> (Maximum Transmission Unit) = the largest datagram (header + data) its frames can carry: Ethernet 1500 B, FDDI 4500 B. When a <b>router</b> must send a datagram onto a network whose MTU is smaller than the datagram, it <b>fragments</b> it. Each fragment is a complete IP datagram with its own 20 B header. Fragments are put back together (<b>reassembled</b>) only at the <b>destination host</b>. If one fragment is lost, IP does not recover it (the whole datagram is lost).</p>
+<p><b>Why "multiple of 8"?</b> The Offset field has only 13 bits but must point anywhere in up to 2<sup>16</sup> bytes, so it counts in units of 2<sup>16</sup>/2<sup>13</sup> = 8 bytes. Therefore every fragment except the last must carry a number of data bytes divisible by 8.</p>
+
+<div class="box"><b>Fragmentation method (use every time):</b>
+<ol style="margin:2px 0 2px 20px;padding:0">
+<li>Data to send = Length − header (20 B unless Hlen says otherwise).</li>
+<li>Max data per fragment = MTU − 20, then <b>round DOWN to a multiple of 8</b>.</li>
+<li>Cut the data into pieces of that size; the last piece gets what is left.</li>
+<li>For each fragment: Length = its data + 20; Offset = (data bytes before it) / 8; MF = 1, except the last fragment (MF = original MF, normally 0); Ident = same as the original.</li>
+</ol></div>
+<div class="ex"><div class="t">Jeopardy Q1 — number of fields</div><span class="lbl">Question:</span> How many fields are there in the (default) IP header?<br><span class="lbl">Solution:</span><ol><li>Count the fields row by row in the header drawing: row 1 Version, Hlen, TOS, Length (4); row 2 Ident, Flags, Offset (3); row 3 TTL, Protocol, Checksum (3); rows 4–5 SourceAddr, DestinationAddr (2).</li><li>4 + 3 + 3 + 2 = 12. Options are not used by default.</li><li>Size: 5 rows × 4 bytes = 20 bytes (Hlen = 5).</li></ol><div class="a"><span class="lbl">Answer:</span> 12 fields (20 bytes)</div></div>
+<div class="ex"><div class="t">Jeopardy Q2 — Flags</div><span class="lbl">Question:</span> What does the Flags field (IP header) indicate?<br><span class="lbl">Solution:</span><ol><li>Flags has 3 bits.</li><li>Bit 1 is always 0 (reserved). Bit 2 is DF: if 1, routers may not fragment this datagram (too big → dropped). Bit 3 is MF: 1 means more fragments follow; 0 means this is the last (or the only) piece.</li></ol><div class="a"><span class="lbl">Answer:</span> 0, do not fragment, more fragments</div></div>
+<div class="ex"><div class="t">Jeopardy Q3 — Options</div><span class="lbl">Question:</span> Possible use of IP header options?<br><span class="lbl">Solution:</span><ol><li>Options are optional extra fields after the 20 B header (Hlen becomes larger than 5).</li><li>Source route: the sender puts the list of routers to use. Record route: each router writes its address so the receiver sees the path.</li></ol><div class="a"><span class="lbl">Answer:</span> Source or Record Route</div></div>
+<div class="ex"><div class="t">Jeopardy Q4 — Protocol field</div><span class="lbl">Question:</span> What does the PROTOCOL field in the IP header indicate?<br><span class="lbl">Solution:</span><ol><li>IP carries data for a higher layer. At the destination, IP must hand the data to the right protocol.</li><li>The Protocol field is that demux key: 6 = TCP, 17 = UDP.</li></ol><div class="a"><span class="lbl">Answer:</span> Transport protocol, like UDP or TCP</div></div>
+<div class="ex"><div class="t">Header length (Hlen) question</div><span class="lbl">Question:</span> An IP header has Hlen = 6 and Length = 1500. How long is the header and how much data is carried?<br><span class="lbl">Solution:</span><ol><li>Hlen counts 32-bit words = 4-byte units: 6 × 4 = 24 B (20 B fixed + 4 B options).</li><li>Length is the total in bytes, so data = 1500 − 24 = 1476 B.</li></ol><div class="a"><span class="lbl">Answer:</span> Header 24 B, data 1476 B</div></div>
+<div class="ex"><div class="t">TTL question</div><span class="lbl">Question:</span> A datagram leaves the source with TTL = 64 and passes through 5 routers. What is its TTL when it arrives? When is it dropped?<br><span class="lbl">Solution:</span><ol><li>Each router subtracts 1 from TTL: 64 − 5 = 59.</li><li>A router that brings the TTL down to 0 drops the datagram.</li></ol><div class="a"><span class="lbl">Answer:</span> TTL = 59; dropped if it reaches 0 (after 64 routers)</div></div>
+<div class="ex"><div class="t">Jeopardy Q5 — fragment offset</div><span class="lbl">Question:</span> MTU = 61 B, TL (IP header) = 100 B. Fragment offset of the 2nd fragment?<br><span class="lbl">Solution:</span><ol><li>Data in the datagram = TL − header = 100 − 20 = 80 B.</li><li>Max data per fragment = MTU − 20 = 41 B → round down to a multiple of 8 → 40 B.</li><li>Fragment 1 carries data bytes 0–39 (offset 0, MF = 1, Length 60); fragment 2 carries bytes 40–79 (MF = 0, Length 60).</li><li>Offset of fragment 2 = 40 bytes before it / 8 = 5.</li></ol><div class="a"><span class="lbl">Answer:</span> Fragment offset = 5</div></div>
+<div class="ex"><div class="t">Fragmentation into 3 pieces</div><span class="lbl">Question:</span> A datagram of Length = 4000 B (20 B header) is sent over a network with MTU = 1500 B. Give the length, offset and MF of each fragment.<br><span class="lbl">Solution:</span><ol><li>Data = 4000 − 20 = 3980 B.</li><li>Max data per fragment = 1500 − 20 = 1480 B; 1480 / 8 = 185 → already a multiple of 8.</li><li>3980 = 1480 + 1480 + 1020 → 3 fragments.</li><li>Offsets: 0, 1480 / 8 = 185, 2960 / 8 = 370. Lengths = data + 20. MF = 1 except the last.</li></ol><div class="a"><span class="lbl">Answer:</span> <table><tr><th>Frag</th><th>Data</th><th>Length</th><th>Offset</th><th>MF</th></tr><tr><td>1</td><td>1480</td><td>1500</td><td>0</td><td>1</td></tr><tr><td>2</td><td>1480</td><td>1500</td><td>185</td><td>1</td></tr><tr><td>3</td><td>1020</td><td>1040</td><td>370</td><td>0</td></tr></table></div></div>
+<div class="ex"><div class="t">MTU that is not "header + multiple of 8"</div><span class="lbl">Question:</span> A datagram of Length = 1000 B (20 B header) crosses a network with MTU = 310 B. Give the offsets of the fragments.<br><span class="lbl">Solution:</span><ol><li>Data = 1000 − 20 = 980 B.</li><li>MTU − 20 = 290 → NOT a multiple of 8 → round down to 288 (288 / 8 = 36).</li><li>980 = 288 + 288 + 288 + 116 → 4 fragments.</li><li>Offsets: 0, 288/8 = 36, 576/8 = 72, 864/8 = 108.</li></ol><div class="a"><span class="lbl">Answer:</span> Offsets 0, 36, 72, 108 (MF 1, 1, 1, 0). Common mistake: using 290 → offsets would not be whole numbers.</div></div>
+<div class="ex"><div class="t">Fragmenting a fragment again</div><span class="lbl">Question:</span> A fragment with Offset = 100, MF = 1 and 800 B of data arrives at a network with MTU = 420 B. What are the new fragments?<br><span class="lbl">Solution:</span><ol><li>Max data per new fragment = 420 − 20 = 400 B (multiple of 8 ✓) → 800 = 400 + 400.</li><li>Offsets continue from the original position: first piece 100, second 100 + 400/8 = 150.</li><li>MF: the original had MF = 1 (more data follows it), so the last new piece keeps MF = 1.</li></ol><div class="a"><span class="lbl">Answer:</span> Offsets 100 and 150, both MF = 1, Length 420 each</div></div>
+<div class="ex"><div class="t">DF flag</div><span class="lbl">Question:</span> A 1500 B datagram with DF = 1 must cross a network with MTU = 576 B. What happens?<br><span class="lbl">Solution:</span><ol><li>The datagram is larger than the MTU, so it would have to be fragmented.</li><li>DF = 1 forbids fragmentation.</li></ol><div class="a"><span class="lbl">Answer:</span> The router drops the datagram (it cannot be sent).</div></div>
+<div class="ex"><div class="t">Who fragments, who reassembles</div><span class="lbl">Question:</span> Where are datagrams fragmented and where are they reassembled? How does the receiver know which pieces belong together and in what order?<br><span class="lbl">Solution:</span><ol><li>A router fragments when the next network's MTU is smaller than the datagram.</li><li>Fragments may take different paths, so only the destination host can collect them all.</li><li>Same Ident → same datagram; Offset → position of each piece; MF = 0 → the last piece.</li></ol><div class="a"><span class="lbl">Answer:</span> Routers fragment, the destination host reassembles (using Ident, Offset and MF). IP does not recover lost fragments.</div></div>
 
 <div class="brk"></div>
 <h2>Part II — Practice Exam (multiple choice, show scrap work)</h2>
