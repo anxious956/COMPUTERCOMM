@@ -7,7 +7,7 @@
   @page { size: letter; margin: 0.22in; }
   :root { color-scheme: light; }
   * { box-sizing: border-box; }
-  body { background:#fff; color:#000; font-family:"Liberation Sans", Arial, Helvetica, sans-serif; font-size:8.9pt; line-height:1.16; margin:0; }
+  body { background:#fff; color:#000; font-family:"Liberation Sans", Arial, Helvetica, sans-serif; font-size:8.3pt; line-height:1.16; margin:0; }
   .page + .page { page-break-before:always; }
   h1 { font-size:9pt; margin:0 0 2px; text-align:center; border-bottom:1.2px solid #000; padding-bottom:1px; }
   .cols { column-count:2; column-gap:10px; column-rule:0.5px solid #000; }
@@ -18,7 +18,7 @@
   .box { border:0.9px solid #000; padding:1px 3px; margin:1px 0 2px; break-inside:avoid; }
   .qa { border:0.6px solid #000; margin:1px 0 2px; padding:1px 3px; break-inside:avoid; }
   .qa .q { font-weight:bold; }
-  .qa pre { font-family:"Liberation Mono", "DejaVu Sans Mono", monospace; font-size:8pt; line-height:1.12; margin:0; white-space:pre-wrap; }
+  .qa pre { font-family:"Liberation Mono", "DejaVu Sans Mono", monospace; font-size:7.5pt; line-height:1.12; margin:0; white-space:pre-wrap; }
   .qa .a { font-weight:bold; border-top:0.5px dashed #000; }
 </style>
 </head>
@@ -38,7 +38,6 @@
 <li><b>Mask</b> = 32 − host bits · <b>subnet bits</b> = new − old · # subnets = 2<sup>new−old</sup> · # @s = 2<sup>32−n</sup> · hosts = 2<sup>32−n</sup> − 2.</li>
 <li><b>k-th subnet</b> = ID k−1 (1st = ID 0 = block start) → start + (k−1) × size.</li>
 <li><b>Network</b> = host AND mask (host bits 0) · <b>broadcast</b> = first + size − 1 · <b>hosts</b> = first+1 … last−1.</li>
-<li>Classes: A 0–127 (2<sup>31</sup>) · B 128–191 (2<sup>30</sup>) · C 192–223 (2<sup>29</sup>) · D 224–239 · E 240–255. Private: 10/8 · 172.16–172.31 · 192.168/16.</li>
 </ul>
 <table>
 <tr><th>bits</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
@@ -47,7 +46,16 @@
 </table>
 <div>2<sup>9</sup>=512 · 2<sup>10</sup>=1024 · 2<sup>11</sup>=2048 · 2<sup>12</sup>=4096 · 2<sup>13</sup>=8192 · 2<sup>14</sup>=16384 · 2<sup>16</sup>=65536</div>
 
-<h2>2. ADDRESSES</h2>
+<h2>2. ADDRESSES — CLASSES &amp; PRIVATE</h2>
+<table>
+<tr><th>Class</th><th>1st bits</th><th>1st byte</th><th>net/host bits</th><th># @s (share)</th><th>Private block</th></tr>
+<tr><td><b>A</b></td><td>0</td><td>0–127</td><td>8 / 24 (/8)</td><td>2<sup>31</sup> (½)</td><td>10.0.0.0 – 10.255.255.255 (10/8)</td></tr>
+<tr><td><b>B</b></td><td>10</td><td>128–191</td><td>16 / 16 (/16)</td><td>2<sup>30</sup> (¼)</td><td>172.16.0.0 – 172.31.255.255 (/12)</td></tr>
+<tr><td><b>C</b></td><td>110</td><td>192–223</td><td>24 / 8 (/24)</td><td>2<sup>29</sup> (⅛)</td><td>192.168.0.0 – 192.168.255.255 (/16)</td></tr>
+<tr><td><b>D</b></td><td>1110</td><td>224–239</td><td colspan="3">multicast (group addresses, not hosts)</td></tr>
+<tr><td><b>E</b></td><td>1111</td><td>240–255</td><td colspan="3">reserved / experimental</td></tr>
+</table>
+<div class="box">Class = look only at the <b>first byte</b> (or its first bits). Class tells the default network size: A is huge (2<sup>24</sup> @s per net), B 2<sup>16</sup>, C 256. <b>Private</b> = blocks anyone may reuse inside a site; not routed on the Internet. 172.15.x, 172.32.x, 192.169.x, 11.x are NOT private. 127.x = loopback.</div>
 <div class="qa"><div class="q">HW5 Q1: address range of 145.144.0.0/12?</div><pre>1. /12 = byte 1 (8 bits) + first 4 bits of byte 2
 2. byte 2: 144 = 1001|0000 → keep 1001
 3. smallest 1001 0000 = 144, largest 1001 1111 = 159
@@ -212,15 +220,20 @@ Hlen 6, Length 1500: 6 × 4 = 24 B hdr → data 1476 B</pre></div>
 2. offsets continue: 100, 100 + 400/8 = 150
 3. original MF = 1 → last piece keeps MF = 1</pre><div class="a">→ off 100 &amp; 150, both MF = 1</div></div>
 
-<h2>9. CONCEPTS (slides)</h2>
-<table>
-<tr><td>IP service?</td><td>connectionless, best effort (loss, reorder, duplicates, delay)</td></tr>
-<tr><td>Datagram forwarding?</td><td>full dst @ in every packet, each forwarded independently, may take different paths</td></tr>
-<tr><td>No entry matches?</td><td>send to the default router (0.0.0.0/0)</td></tr>
-<tr><td>Subnets visible outside?</td><td>no, only within the site</td></tr>
-<tr><td>Overlapping prefixes?</td><td>allowed → longest match (171.69.10.5 → 171.69.10/24)</td></tr>
-<tr><td>MTU values</td><td>Ethernet 1500 B, FDDI 4500 B</td></tr>
-</table>
+<h2>9. FACTS FOR VERBAL QUESTIONS</h2>
+<ul>
+<li>IP is <b>connectionless</b> and <b>best effort</b>: packets may be lost, reordered, duplicated or delayed; IP does not fix it.</li>
+<li>Every datagram carries the <b>full destination address</b> and is forwarded independently (may take different paths).</li>
+<li>A router uses the <b>longest matching prefix</b>; no match → <b>default router</b>; no default → dropped.</li>
+<li><b>Routing table:</b> costs + several options (built by routing protocols). <b>Forwarding table:</b> one next hop + interface, no cost (used per packet).</li>
+<li>Directly connected network → delivered on the interface, no next hop. Next hop = the <b>neighbour's</b> address on the shared link.</li>
+<li><b>Subnetting</b> adds a level inside a site; subnets are not visible from outside. <b>CIDR</b> joins contiguous networks into one prefix → smaller tables, less address waste.</li>
+<li>Network address (host bits 0) and broadcast (host bits 1) are never host addresses.</li>
+<li><b>Routers fragment, the destination host reassembles.</b> One lost fragment = whole datagram lost.</li>
+<li>Ident: same in all fragments · Offset: ×8 bytes · MF = 0 on the last · DF = 1 → dropped if too big.</li>
+<li>TTL −1 per router · Checksum covers the header only · Protocol picks TCP (6) / UDP (17) · Hlen in 4-byte words · Options: source / record route.</li>
+<li>MTU: Ethernet 1500 B, FDDI 4500 B.</li>
+</ul>
 </div>
 </div>
 

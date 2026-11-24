@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ECE422 Midterm 2 Mock Exam</title>
+<style>
+  @page { size: letter; margin: 0.55in; }
+  :root { color-scheme: light; }
+  body { background:#fff; color:#000; font-family:Arial, "Liberation Sans", Helvetica, sans-serif; font-size:10.4pt; line-height:1.36; max-width:7.4in; margin:0 auto; padding:16px; }
+  h1 { font-size:13pt; margin:0 0 6px; font-weight:normal; }
+  h2 { font-size:12.5pt; border-bottom:1.5px solid #000; margin:14px 0 8px; text-transform:uppercase; letter-spacing:.5px; }
+  .hdr { margin:4px 0; }
+  .q { margin:13px 0; page-break-inside:avoid; }
+  .opts { margin:5px 0 0 14px; }
+  .space { height:44px; }
+  .ans { margin:9px 0; page-break-inside:avoid; border:1px solid #000; padding:5px 9px; }
+  .ans .t { font-weight:bold; border-bottom:0.8px solid #000; margin-bottom:3px; }
+  .ans ol { margin:2px 0 2px 20px; padding:0; }
+  .ans .tr { border-top:0.8px dashed #000; margin-top:4px; padding-top:2px; font-size:9.6pt; }
+  pre { font-family:"Courier New", "Liberation Mono", monospace; font-size:9.3pt; border:1px solid #000; padding:3px 7px; margin:4px 0; white-space:pre-wrap; }
+  .brk { page-break-before:always; }
+  .box { border:1.5px solid #000; padding:5px 10px; margin:8px 0; }
+</style>
+</head>
+<body>
+
+<h1>ECE422: Partial Exam 2 F26 — MOCK (professor-style choices)</h1>
+<div class="hdr">Last name: ________________ First name: ________________ ID: ____________</div>
+<div class="hdr">Answer the following questions, and make sure you include your scrap work on the paper.</div>
+<div class="box">The choices are close to each other on purpose, like on Midterm 1: every wrong choice is the result of one typical mistake. <b>Solve first, then look for your result.</b> "None of the above" can be the right answer.</div>
+
+<div class="q">1. What is the address range of network 172.80.0.0/12?
+<div class="opts">a) 172.80.0.0 – 172.95.255.255 &nbsp; b) 172.80.0.0 – 172.87.255.255 &nbsp; c) 172.80.0.0 – 172.80.255.255 &nbsp; d) 172.80.0.0 – 172.111.255.255 &nbsp; e) 172.64.0.0 – 172.95.255.255</div><div class="space"></div></div>
+
+<div class="q">2. What is the network address of a network with mask 255.255.224.0 and a host with address 131.14.44.3?
+<div class="opts">a) 131.14.44.0/19 &nbsp; b) 131.14.0.0/19 &nbsp; c) 131.14.40.0/19 &nbsp; d) 131.14.32.0/20 &nbsp; e) 131.14.32.0/19</div><div class="space"></div></div>
+
+<div class="q">3. What is the range of host addresses in 35.110.180.64/27?
+<div class="opts">a) .64 – .95 &nbsp; b) .64 – .94 &nbsp; c) .65 – .95 &nbsp; d) .65 – .94 &nbsp; e) .65 – .126</div><div class="space"></div></div>
+
+<div class="q">4. Which address can NOT be assigned to a host in network 10.8.16.0/20?
+<div class="opts">a) 10.8.31.255 &nbsp; b) 10.8.17.0 &nbsp; c) 10.8.16.255 &nbsp; d) 10.8.31.254 &nbsp; e) 10.8.16.1</div><div class="space"></div></div>
+
+<div class="q">5. How many Class-C addresses are in IPv4?
+<div class="opts">a) 2<sup>8</sup> &nbsp; b) 2<sup>21</sup> &nbsp; c) 2<sup>24</sup> &nbsp; d) 2<sup>29</sup> &nbsp; e) 2<sup>30</sup></div><div class="space"></div></div>
+
+<div class="q">6. What is the total number of host addresses in the whole network if a /22 is subnetted to /26?
+<div class="opts">a) 1024 &nbsp; b) 1022 &nbsp; c) 1008 &nbsp; d) 992 &nbsp; e) 960</div><div class="space"></div></div>
+
+<div class="q">7. You lease 128.17.144.0/22 and divide it into subnets with 64 addresses. What is the address of the 11th subnet (starting from the smallest address number)?
+<div class="opts">a) 128.17.146.64/26 &nbsp; b) 128.17.146.192/26 &nbsp; c) 128.17.146.128/26 &nbsp; d) 128.17.145.128/26 &nbsp; e) none of the above</div><div class="space"></div></div>
+
+<div class="q">8. You lease 200.10.20.64/26 and divide it into 4 subnets of 16 addresses. What addresses can be used by hosts in the 3rd subnet?
+<div class="opts">a) .96 – .111 &nbsp; b) .113 – .126 &nbsp; c) .97 – .111 &nbsp; d) .81 – .94 &nbsp; e) .97 – .110</div><div class="space"></div></div>
+
+<div class="q">9. A network has IP address 172.16.32.0/21. Three sub-blocks are needed: a) 64 addresses, b) 1024 addresses, c) 256 addresses. Use the lower number IP addresses and consecutive addresses. What is the address of the 64-address sub-block?
+<div class="opts">a) 172.16.37.0/26 &nbsp; b) 172.16.36.0/26 &nbsp; c) 172.16.36.64/26 &nbsp; d) 172.16.32.0/26 &nbsp; e) 172.16.37.0/24</div><div class="space"></div></div>
+
+<div class="q">10. In Question 9, how many addresses of the /21 remain unassigned?
+<div class="opts">a) 640 &nbsp; b) 704 &nbsp; c) 768 &nbsp; d) 960 &nbsp; e) 1344</div><div class="space"></div></div>
+
+<div class="q">11. An ISP is granted 60.40.0.0/16. Group 1 has 128 customers with 128 addresses each, group 2 has 64 customers with 256 addresses each, and group 3 has 256 customers with 32 addresses each (assigned in that order). What is the address of the 3rd customer of group 2?
+<div class="opts">a) 60.40.2.0/24 &nbsp; b) 60.40.66.0/25 &nbsp; c) 60.40.67.0/24 &nbsp; d) 60.40.66.0/24 &nbsp; e) 60.40.64.3/24</div><div class="space"></div></div>
+
+<div class="q">12. In Question 11, how many addresses are still available after the three allocations?
+<div class="opts">a) 8,192 &nbsp; b) 16,384 &nbsp; c) 24,576 &nbsp; d) 32,768 &nbsp; e) 40,960</div><div class="space"></div></div>
+
+<div class="q">13. A company is granted 90.5.6.0/25. Headquarters gets 64 addresses and the rest is divided equally between Branch 1 and Branch 2 (in that order). What is the block of Branch 2?
+<div class="opts">a) 90.5.6.64/27 &nbsp; b) 90.5.6.80/27 &nbsp; c) 90.5.6.128/27 &nbsp; d) 90.5.6.96/28 &nbsp; e) 90.5.6.96/27</div><div class="space"></div></div>
+
+<div class="q">14. What is the CIDR address of networks 77.10.44.0/24, 77.10.45.0/24, 77.10.46.0/24 and 77.10.47.0/24?
+<div class="opts">a) 77.10.44.0/22 &nbsp; b) 77.10.44.0/23 &nbsp; c) 77.10.40.0/21 &nbsp; d) 77.10.44.0/21 &nbsp; e) 77.10.47.0/22</div><div class="space"></div></div>
+
+<div class="q">15. CIDR(60.7.137.9, 60.7.142.200, 60.7.139.77)?
+<div class="opts">a) 60.7.136.0/22 &nbsp; b) 60.7.128.0/21 &nbsp; c) 60.7.137.0/21 &nbsp; d) 60.7.128.0/20 &nbsp; e) none of the above</div><div class="space"></div></div>
+
+<div class="q">16. A forwarding table has: 20.16.0.0/12 → A, 20.24.0.0/13 → B, 20.28.0.0/14 → C, 0.0.0.0/0 → D. Where is a packet with destination 20.27.5.5 sent?
+<div class="opts">a) A &nbsp; b) B &nbsp; c) C &nbsp; d) D &nbsp; e) A and B</div><div class="space"></div></div>
+
+<div class="q">17. With the table of Question 16, where is a packet with destination 20.32.1.1 sent?
+<div class="opts">a) A &nbsp; b) B &nbsp; c) C &nbsp; d) D &nbsp; e) it is dropped</div><div class="space"></div></div>
+
+<div class="q">18. Router Rk has interface i1 on 10.10.1.0/24 (Rk = .1, Ra = .2) and interface i2 on 10.10.2.0/24 (Rk = .1, Rb = .2). Network 10.20.0.0/16 is behind Ra. The Internet is behind Rb. Which is the entry for 10.20.0.0/16 in Rk's forwarding table (DST, Mask, Next Hop, Interface)?
+<div class="opts">a) 10.20.0.0, /16, 10.10.1.1, i1 &nbsp; b) 10.20.0.0, /16, 10.10.1.2, i1 &nbsp; c) 10.20.0.0, /16, 10.10.2.2, i2 &nbsp; d) 10.20.0.0, /16, –, i1 &nbsp; e) 10.20.0.0, /16, 10.10.1.2, i2</div><div class="space"></div></div>
+
+<div class="q">19. In Question 18, which is the default entry of Rk?
+<div class="opts">a) 0.0.0.0, /32, 10.10.2.2, i2 &nbsp; b) 0.0.0.0, /0, 10.10.2.1, i2 &nbsp; c) 0.0.0.0, /0, 10.10.1.2, i1 &nbsp; d) 0.0.0.0, /0, 10.10.2.2, i2 &nbsp; e) 0.0.0.0, /0, –, i2</div><div class="space"></div></div>
+
+<div class="q">20. In Question 18, what is the minimum number of entries in Rk's forwarding table (including all destinations)?
+<div class="opts">a) 2 &nbsp; b) 3 &nbsp; c) 4 &nbsp; d) 5 &nbsp; e) 6</div><div class="space"></div></div>
+
+<div class="q">21. What is a difference between routing and forwarding tables?
+<div class="opts">a) The forwarding table keeps the cost of every option, the routing table does not<br>b) The routing table keeps costs and several options; the forwarding table keeps one option and no cost<br>c) The routing table is used for every packet; the forwarding table is built by the routing protocol<br>d) Forwarding tables are only in hosts, routing tables only in routers<br>e) One uses IP addresses, the other uses hardware addresses</div><div class="space"></div></div>
+
+<div class="q">22. An IP header has Hlen = 7 and Length = 820. How many bytes of data does the datagram carry?
+<div class="opts">a) 792 B &nbsp; b) 813 B &nbsp; c) 800 B &nbsp; d) 764 B &nbsp; e) none of the above</div><div class="space"></div></div>
+
+<div class="q">23. MTU = 85 B, TL (IP header) = 220 B. What is the fragment offset of the 3rd fragment?
+<div class="opts">a) 128 &nbsp; b) 130 &nbsp; c) 16 &nbsp; d) 24 &nbsp; e) 2</div><div class="space"></div></div>
+
+<div class="q">24. In Question 23, how many fragments are produced?
+<div class="opts">a) 2 &nbsp; b) 3 &nbsp; c) 4 &nbsp; d) 5 &nbsp; e) none of the above</div><div class="space"></div></div>
+
+<div class="q">25. A datagram with TL = 1500 B (20 B header) is forwarded over a link with MTU = 576 B. What are the total length and the offset of the last fragment?
+<div class="opts">a) 396 B, offset 138 &nbsp; b) 376 B, offset 138 &nbsp; c) 396 B, offset 1104 &nbsp; d) 388 B, offset 139 &nbsp; e) 396 B, offset 69</div><div class="space"></div></div>
+
+<div class="q">26. A router receives a 1200 B datagram with DF = 1 that must go out on a link with MTU = 1000 B. What does the router do?
+<div class="opts">a) Fragments it into two datagrams &nbsp; b) Drops it &nbsp; c) Forwards it unchanged &nbsp; d) Clears DF and fragments it &nbsp; e) Sends it back to the previous router</div><div class="space"></div></div>
+
+<div class="q">27. Which IP header field tells the destination that several fragments belong to the same datagram?
+<div class="opts">a) Offset &nbsp; b) Flags &nbsp; c) Ident &nbsp; d) TTL &nbsp; e) Checksum</div><div class="space"></div></div>
+
+<div class="q">28. What class is IP address 10111110.00000001.00000001.00000001?
+<div class="opts">a) Class A &nbsp; b) Class B &nbsp; c) Class C &nbsp; d) Class D &nbsp; e) Class E</div><div class="space"></div></div>
+
+<div class="q">29. Which of these is a private address?
+<div class="opts">a) 172.15.255.1 &nbsp; b) 11.0.0.1 &nbsp; c) 172.32.0.1 &nbsp; d) 192.169.0.1 &nbsp; e) 172.16.0.1</div><div class="space"></div></div>
+
+<div class="q">30. What is the Class-A private address block?
+<div class="opts">a) 10.0.0.0 to 10.0.255.255 &nbsp; b) 10.0.0.0 to 10.255.255.255 &nbsp; c) 127.0.0.0 to 127.255.255.255 &nbsp; d) 1.0.0.0 to 10.255.255.255 &nbsp; e) 0.0.0.0 to 10.255.255.255</div><div class="space"></div></div>
+
+<div class="q">31. What is the class of address 224.5.6.7 and what is that class used for?
+<div class="opts">a) Class D, multicast &nbsp; b) Class C, hosts &nbsp; c) Class E, reserved &nbsp; d) Class D, private networks &nbsp; e) Class B, hosts</div><div class="space"></div></div>
+
+<div class="q">32. What fraction of all IPv4 addresses are Class A addresses?
+<div class="opts">a) 1/16 &nbsp; b) 1/8 &nbsp; c) 1/4 &nbsp; d) 1/3 &nbsp; e) 1/2</div><div class="space"></div></div>
+
+<div class="q">33. How many bits identify the network and the host in a (classful) Class-B address?
+<div class="opts">a) 8 network, 24 host &nbsp; b) 12 network, 20 host &nbsp; c) 16 network, 16 host &nbsp; d) 24 network, 8 host &nbsp; e) 14 network, 18 host</div><div class="space"></div></div>
+
+<div class="q">34. Which describes the service that IP provides?
+<div class="opts">a) Connection-oriented and reliable &nbsp; b) Connectionless and reliable &nbsp; c) Connection-oriented and best effort &nbsp; d) Connectionless and best effort &nbsp; e) Circuit-switched</div><div class="space"></div></div>
+
+<div class="brk"></div>
+<h2>Solutions</h2>
+
+<div class="ans"><div class="t">1. Answer: a) 172.80.0.0 – 172.95.255.255</div><ol>
+<li>/12 = byte 1 + the first 4 bits of byte 2.</li>
+<li>80 = <b>0101</b> 0000 → keep 0101; the other 4 bits are host bits.</li>
+<li>Smallest 0101 0000 = 80; largest 0101 1111 = 95.</li></ol>
+<div class="tr"><b>Traps:</b> c) treats it as /16. b) treats it as /13 (80–87). d) adds 31 instead of 15. e) is /11 (010x xxxx = 64–95).</div></div>
+
+<div class="ans"><div class="t">2. Answer: e) 131.14.32.0/19</div><ol>
+<li>224 = 1110 0000 → /16 + 3 = /19.</li>
+<li>Byte 3: 44 AND 224 = 0010 1100 AND 1110 0000 = 0010 0000 = 32.</li>
+<li>Byte 4 → 0.</li></ol>
+<div class="tr"><b>Traps:</b> a) only zeroes byte 4. c) ANDs with 248. d) right address, wrong prefix. b) the HW5 answer for host .12.3 (12 AND 224 = 0), not this host.</div></div>
+
+<div class="ans"><div class="t">3. Answer: d) .65 – .94</div><ol>
+<li>/27 → block 32 in byte 4 → .64 … .95.</li>
+<li>.64 = network, .95 = broadcast.</li>
+<li>Hosts = .65 … .94.</li></ol>
+<div class="tr"><b>Traps:</b> a) is the address range, not hosts. c) keeps the broadcast. b) keeps the network address. e) is /26.</div></div>
+
+<div class="ans"><div class="t">4. Answer: a) 10.8.31.255</div><ol>
+<li>/20 → block 16 in byte 3 → 10.8.16.0 … 10.8.31.255 (host part = 12 bits).</li>
+<li>Not assignable: host bits all 0 (10.8.16.0) and all 1 (10.8.31.255).</li>
+<li>10.8.16.255 and 10.8.17.0 look special but their 12 host bits are not all 0 or all 1 → valid hosts.</li></ol>
+<div class="tr"><b>Traps:</b> c) and b) assume a /24 boundary. d) is the last valid host.</div></div>
+
+<div class="ans"><div class="t">5. Answer: d) 2<sup>29</sup></div><ol>
+<li>Class C starts with 110 → 3 bits fixed.</li>
+<li>32 − 3 = 29 free bits → 2<sup>29</sup> addresses (⅛ of the space).</li></ol>
+<div class="tr"><b>Traps:</b> a) addresses in ONE class C network. b) NUMBER of class C networks (2<sup>21</sup>). c) one class A network. e) class B.</div></div>
+
+<div class="ans"><div class="t">6. Answer: d) 992</div><ol>
+<li># subnets = 2<sup>26−22</sup> = 16.</li>
+<li>Hosts per subnet = 2<sup>32−26</sup> − 2 = 62.</li>
+<li>16 × 62 = 992.</li></ol>
+<div class="tr"><b>Traps:</b> a) all addresses. b) subtracts 2 only once. c) subtracts 1 per subnet (16 × 63). e) subtracts 4 per subnet.</div></div>
+
+<div class="ans"><div class="t">7. Answer: c) 128.17.146.128/26</div><ol>
+<li>64 = 2<sup>6</sup> → /26; subnet bits = 26 − 22 = 4.</li>
+<li>11th subnet → ID 10 = 1010.</li>
+<li>Bytes 3.4 = 1001 00<b>10</b>.<b>10</b>00 0000 = 146.128.</li>
+<li>Check: 10 × 64 = 640 = 2·256 + 128 → 144 + 2 = 146, 128.</li></ol>
+<div class="tr"><b>Traps:</b> b) uses ID 11 (forgets k − 1). a) uses ID 9. d) carries only 1 into byte 3.</div></div>
+
+<div class="ans"><div class="t">8. Answer: e) .97 – .110</div><ol>
+<li>16 = 2<sup>4</sup> → /28; subnets start at .64, .80, .96, .112.</li>
+<li>3rd subnet = .96/28 → .96 … .111.</li>
+<li>Hosts = .97 … .110.</li></ol>
+<div class="tr"><b>Traps:</b> a) address range. c) keeps the broadcast. d) is the 2nd subnet. b) is the 4th subnet.</div></div>
+
+<div class="ans"><div class="t">9. Answer: a) 172.16.37.0/26</div><ol>
+<li>/21 = 2<sup>11</sup> = 2048 addresses (32.0 – 39.255); needed 1344 ✓.</li>
+<li>Masks: 1024 → /22, 256 → /24, 64 → /26.</li>
+<li>Largest first: 1024 → 32.0/22 (32.0 – 35.255); 256 → 36.0/24; 64 → 37.0/26 (37.0 – 37.63).</li></ol>
+<div class="tr"><b>Traps:</b> d) assigns in the listed order. b) forgets the 256-block. c) puts the 64-block inside the 256-block. e) right address, wrong mask.</div></div>
+
+<div class="ans"><div class="t">10. Answer: b) 704</div><ol>
+<li>Used: 1024 + 256 + 64 = 1344.</li>
+<li>2048 − 1344 = 704 (from 172.16.37.64).</li></ol>
+<div class="tr"><b>Traps:</b> e) is what was used. c) forgets the 64-block. a) subtracts 64 twice.</div></div>
+
+<div class="ans"><div class="t">11. Answer: d) 60.40.66.0/24</div><ol>
+<li>G1 = 128 × 128 = 16,384 → /18 → 60.40.0.0 – 60.40.63.255.</li>
+<li>G2 = 64 × 256 = 16,384 → /18 → starts at 60.40.64.0; each customer 256 @s = /24.</li>
+<li>3rd customer = 64.0 + (3 − 1) × 256 → 60.40.66.0/24.</li></ol>
+<div class="tr"><b>Traps:</b> c) uses 3 × 256. a) forgets group 1. b) uses group 1's mask. e) adds 3 to the last byte.</div></div>
+
+<div class="ans"><div class="t">12. Answer: c) 24,576</div><ol>
+<li>G3 = 256 × 32 = 8,192.</li>
+<li>Used: 16,384 + 16,384 + 8,192 = 40,960.</li>
+<li>65,536 − 40,960 = 24,576 (from 60.40.160.0).</li></ol>
+<div class="tr"><b>Traps:</b> e) is what was used. d) forgets group 3. a), b) are single group sizes.</div></div>
+
+<div class="ans"><div class="t">13. Answer: e) 90.5.6.96/27</div><ol>
+<li>/25 = 128 addresses (.0 – .127).</li>
+<li>HQ 64 → /26 → .0 – .63.</li>
+<li>Rest 64 → 32 each → /27: Branch 1 .64 – .95, Branch 2 .96 – .127.</li></ol>
+<div class="tr"><b>Traps:</b> a) is Branch 1. d) uses 16 addresses. b) is not a multiple of 32. c) is outside the /25.</div></div>
+
+<div class="ans"><div class="t">14. Answer: a) 77.10.44.0/22</div><ol>
+<li>Byte 3: 44 = 0010 1100, 45 = 0010 1101, 46 = 0010 1110, 47 = 0010 1111.</li>
+<li>Common leading bits: 0010 11 (6) → /16 + 6 = /22.</li>
+<li>Zero the rest: 0010 1100 = 44.</li></ol>
+<div class="tr"><b>Traps:</b> b) covers only 44–45. c) covers 40–47 (too big). d) /21 must start at 40, not 44. e) host bits not zero.</div></div>
+
+<div class="ans"><div class="t">15. Answer: e) none of the above (60.7.136.0/21)</div><ol>
+<li>Byte 3: 137 = 1000 1001, 142 = 1000 1110, 139 = 1000 1011.</li>
+<li>Common leading bits: 1000 1 (5) → /16 + 5 = /21.</li>
+<li>Zero the rest: 1000 1000 = 136 → 60.7.136.0/21.</li></ol>
+<div class="tr"><b>Traps:</b> a) right address, /22 covers only 136–139 (142 is outside). b) right prefix, wrong address (128–135). c) host bits not zero. d) covers them but is not the longest prefix.</div></div>
+
+<div class="ans"><div class="t">16. Answer: b) B</div><ol>
+<li>Byte 2 of the destination: 27 = 0001 1011.</li>
+<li>/12 → first 4 bits 0001 → 16–31 ✓. /13 → first 5 bits 00011 → 24–31 ✓. /14 → first 6 bits 000111 → 28–31 ✗.</li>
+<li>Two matches → longest prefix /13 → B.</li></ol>
+<div class="tr"><b>Traps:</b> a) takes the first match. c) takes the longest prefix without checking that it matches. e) a packet goes to only one next hop.</div></div>
+
+<div class="ans"><div class="t">17. Answer: d) D</div><ol>
+<li>32 = 0010 0000 → first 4 bits 0010 ≠ 0001 → no /12, /13 or /14 match.</li>
+<li>0.0.0.0/0 matches everything → default → D.</li></ol>
+<div class="tr"><b>Traps:</b> e) it is dropped only if there is no default entry. a) 32 is just outside 16–31.</div></div>
+
+<div class="ans"><div class="t">18. Answer: b) 10.20.0.0, /16, 10.10.1.2, i1</div><ol>
+<li>10.20.0.0/16 is behind Ra.</li>
+<li>Next Hop = Ra's address on the network shared with Rk = 10.10.1.2.</li>
+<li>Rk reaches Ra through i1.</li></ol>
+<div class="tr"><b>Traps:</b> a) uses Rk's own address. c) sends it toward Rb. d) "–" is only for directly connected networks. e) right next hop, wrong interface.</div></div>
+
+<div class="ans"><div class="t">19. Answer: d) 0.0.0.0, /0, 10.10.2.2, i2</div><ol>
+<li>The Internet is behind Rb → default goes to Rb.</li>
+<li>Rb's address on the shared network = 10.10.2.2, interface i2.</li>
+<li>Default = 0.0.0.0 with mask /0 (matches every address).</li></ol>
+<div class="tr"><b>Traps:</b> b) Rk's own address. c) points to Ra. a) /32 would match only the address 0.0.0.0. e) a default needs a next-hop router.</div></div>
+
+<div class="ans"><div class="t">20. Answer: c) 4</div><pre>10.10.1.0  /24  –          i1
+10.10.2.0  /24  –          i2
+10.20.0.0  /16  10.10.1.2  i1
+0.0.0.0    /0   10.10.2.2  i2</pre>
+<div class="tr"><b>Traps:</b> b) forgets one directly connected network. a) lists only the remote ones.</div></div>
+
+<div class="ans"><div class="t">21. Answer: b)</div><ol>
+<li>Routing table: built by the routing protocol, keeps a cost and several options per destination.</li>
+<li>Forwarding table: used for every packet, keeps only the chosen next hop and interface.</li></ol>
+<div class="tr"><b>Traps:</b> a) and c) swap the two tables. Professor's wording: "Rting: cost, options, Fwding: no cost, one option".</div></div>
+
+<div class="ans"><div class="t">22. Answer: a) 792 B</div><ol>
+<li>Hlen counts 32-bit words → 7 × 4 = 28 B of header.</li>
+<li>Data = Length − header = 820 − 28 = 792 B.</li></ol>
+<div class="tr"><b>Traps:</b> c) assumes a 20 B header. b) subtracts 7. d) uses 7 × 8.</div></div>
+
+<div class="ans"><div class="t">23. Answer: c) 16</div><ol>
+<li>Data = 220 − 20 = 200 B.</li>
+<li>Per fragment: 85 − 20 = 65 → round down to a multiple of 8 → 64 B.</li>
+<li>Fragments carry 64, 64, 64, 8 B.</li>
+<li>3rd fragment: 128 B before it → 128 / 8 = 16.</li></ol>
+<div class="tr"><b>Traps:</b> a) offset in bytes. b) uses 65 without rounding. d) is the 4th fragment. e) counts fragments instead of bytes.</div></div>
+
+<div class="ans"><div class="t">24. Answer: c) 4</div><ol>
+<li>200 B of data in pieces of 64: 64 + 64 + 64 = 192, 8 left → a 4th fragment.</li></ol>
+<div class="tr"><b>Traps:</b> b) 220 / 85 ≈ 2.6 → 3 (forgets every fragment needs its own header and the multiple-of-8 rule).</div></div>
+
+<div class="ans"><div class="t">25. Answer: a) 396 B, offset 138</div><ol>
+<li>Data = 1500 − 20 = 1480 B.</li>
+<li>Per fragment: 576 − 20 = 556 → round down → 552 B (552 / 8 = 69).</li>
+<li>552 + 552 + 376 → offsets 0, 69, 138.</li>
+<li>Last: TL = 376 + 20 = 396 B, offset 138, MF = 0.</li></ol>
+<div class="tr"><b>Traps:</b> b) forgets the header. c) offset in bytes. d) uses 556 without rounding. e) is the 2nd fragment's offset.</div></div>
+
+<div class="ans"><div class="t">26. Answer: b) Drops it</div><ol>
+<li>1200 B &gt; MTU 1000 B → it would need fragmentation.</li>
+<li>DF = 1 (Do not Fragment) forbids it → the router cannot send it → dropped.</li></ol></div>
+
+<div class="ans"><div class="t">27. Answer: c) Ident</div><ol>
+<li>All fragments of one datagram carry the same Ident.</li>
+<li>Offset gives the position of each piece; MF (Flags) = 0 marks the last one.</li></ol></div>
+
+<div class="ans"><div class="t">28. Answer: b) Class B</div><ol>
+<li>Look at the first bits of byte 1: <b>10</b>111110.</li>
+<li>0… = A, 10… = B, 110… = C, 1110… = D, 1111… = E.</li>
+<li>Check in decimal: 10111110 = 190 → inside 128–191 → class B.</li></ol>
+<div class="tr"><b>Traps:</b> c) reads "101" as "110". a) only if the first bit were 0.</div></div>
+
+<div class="ans"><div class="t">29. Answer: e) 172.16.0.1</div><ol>
+<li>Private blocks: 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.</li>
+<li>For 172.x, the second byte must be 16 … 31: 16 ✓.</li></ol>
+<div class="tr"><b>Traps:</b> a) 15 is just below the block. c) 32 is just above it. d) 192.169 is not 192.168. b) 11.x is not 10.x.</div></div>
+
+<div class="ans"><div class="t">30. Answer: b) 10.0.0.0 to 10.255.255.255</div><ol>
+<li>The class-A private block is one whole class A network: 10.0.0.0/8.</li>
+<li>/8 → bytes 2, 3 and 4 are all host bits → 0.0.0 … 255.255.255.</li></ol>
+<div class="tr"><b>Traps:</b> a) treats it as /16. c) 127.x is loopback, not private.</div></div>
+
+<div class="ans"><div class="t">31. Answer: a) Class D, multicast</div><ol>
+<li>224 = <b>1110</b> 0000 → first bits 1110 → class D (224–239).</li>
+<li>Class D addresses are multicast (group) addresses, not host addresses.</li></ol>
+<div class="tr"><b>Traps:</b> b) class C ends at 223. c) class E starts at 240.</div></div>
+
+<div class="ans"><div class="t">32. Answer: e) 1/2</div><ol>
+<li>Class A = first bit 0 → 31 free bits → 2<sup>31</sup> addresses.</li>
+<li>2<sup>31</sup> / 2<sup>32</sup> = 1/2. (B = 1/4, C = 1/8.)</li></ol>
+<div class="tr"><b>Traps:</b> c) is class B. b) is class C.</div></div>
+
+<div class="ans"><div class="t">33. Answer: c) 16 network, 16 host</div><ol>
+<li>Classful: A = 8 network + 24 host (/8), B = 16 + 16 (/16), C = 24 + 8 (/24).</li></ol>
+<div class="tr"><b>Traps:</b> b) is the prefix of the class-B PRIVATE block 172.16.0.0/12, not of a class B network. e) 14 is the number of free network bits (2<sup>14</sup> class B networks), not the prefix.</div></div>
+
+<div class="ans"><div class="t">34. Answer: d) Connectionless and best effort</div><ol>
+<li>Connectionless: no setup; every datagram carries the full destination address and is forwarded on its own.</li>
+<li>Best effort (unreliable): packets can be lost, arrive out of order, be duplicated or be delayed; IP does not repair this.</li></ol></div>
+
+</body>
+</html>

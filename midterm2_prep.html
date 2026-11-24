@@ -61,6 +61,26 @@
 <li><b>Classes</b> (first byte): A 0–127 (0…), B 128–191 (10…), C 192–223 (110…), D 224–239 multicast, E 240–255. Of 2<sup>32</sup> addresses: A = ½ (2<sup>31</sup>), B = ¼ (2<sup>30</sup>), C = ⅛ (2<sup>29</sup>).</li>
 <li><b>Private blocks:</b> 10.0.0.0/8 (A) · 172.16.0.0 – 172.31.255.255 = 172.16.0.0/12 (B) · 192.168.0.0/16 (C).</li>
 </ul>
+<p><b>Address classes and private addresses.</b> In the original (classful) scheme, the <b>first bits of the first byte</b> decide the class, and the class decides how many bits are network and how many are host. To find the class, look only at the first byte.</p>
+<table>
+<tr><th>Class</th><th>First bits</th><th>First byte</th><th>Network / host bits</th><th>Addresses (share of 2<sup>32</sup>)</th><th>Private block</th></tr>
+<tr><td>A</td><td>0</td><td>0 – 127</td><td>8 / 24 (/8)</td><td>2<sup>31</sup> (½)</td><td>10.0.0.0 – 10.255.255.255 (10.0.0.0/8)</td></tr>
+<tr><td>B</td><td>10</td><td>128 – 191</td><td>16 / 16 (/16)</td><td>2<sup>30</sup> (¼)</td><td>172.16.0.0 – 172.31.255.255 (172.16.0.0/12)</td></tr>
+<tr><td>C</td><td>110</td><td>192 – 223</td><td>24 / 8 (/24)</td><td>2<sup>29</sup> (⅛)</td><td>192.168.0.0 – 192.168.255.255 (192.168.0.0/16)</td></tr>
+<tr><td>D</td><td>1110</td><td>224 – 239</td><td colspan="3">multicast (group addresses, not assigned to hosts)</td></tr>
+<tr><td>E</td><td>1111</td><td>240 – 255</td><td colspan="3">reserved / experimental</td></tr>
+</table>
+<ul>
+<li><b>Why the counts:</b> class B fixes 2 bits (10) → 32 − 2 = 30 free bits → 2<sup>30</sup> addresses. Class A fixes 1 bit → 2<sup>31</sup>; class C fixes 3 → 2<sup>29</sup>.</li>
+<li><b>Size of one network:</b> class A 2<sup>24</sup> addresses, class B 2<sup>16</sup> = 65,536, class C 2<sup>8</sup> = 256. This rigid sizing wastes addresses, which is why CIDR replaced it.</li>
+<li><b>Private addresses</b> are blocks that any organization may reuse inside its own site; they are not routed on the public Internet. There is one block per class (table above).</li>
+<li><b>Near misses that are NOT private:</b> 172.15.x.x and 172.32.x.x (the second byte must be 16–31), 192.169.x.x, 11.x.x.x. 127.x.x.x is loopback.</li>
+</ul>
+<div class="ex"><div class="t">Jeopardy Q17–Q19 — classes and private blocks</div><span class="lbl">Question:</span> What is the Class-B private @ block? What class is 11010010.10010001.00000000.00000000? How many Class-B @s are in IPv4?<br><span class="lbl">Solution:</span><ol>
+<li>Private blocks are fixed (table): the class-B one is 172.16.0.0 to 172.31.255.255.</li>
+<li>First bits of 11010010 are <b>110</b> → class C (in decimal 210, inside 192–223).</li>
+<li>Class B = addresses starting with 10 → 30 free bits → 2<sup>30</sup>.</li></ol>
+<div class="a"><span class="lbl">Answer:</span> 172.16.0.0 to 172.31.255.255 · "This is a Class-C IP @" · 2^30 @s</div></div>
 <div class="ex"><div class="t">HW5 Q1 — address range</div><span class="lbl">Question:</span> What is the address range of network 145.144.0.0/12?<br><span class="lbl">Solution:</span><ol><li>/12 = all 8 bits of byte 1 + the first 4 bits of byte 2 are the network part.</li><li>Byte 2 in binary: 144 = <b>1001</b> 0000. Keep 1001, the last 4 bits are host bits.</li><li>Smallest: host bits all 0 → 1001 0000 = 144. Largest: host bits all 1 → 1001 1111 = 159. Bytes 3 and 4 go from 0 to 255.</li></ol><div class="a"><span class="lbl">Answer:</span> 145.144.0.0 to 145.159.255.255</div></div><div class="ex"><div class="t">HW5 Q2 — network address from a host and a mask</div><span class="lbl">Question:</span> What is the network address and the address range of a network with mask 255.255.224.0 and a host with address 131.14.12.3?<br><span class="lbl">Solution:</span><ol><li>Mask byte 3: 224 = 1110 0000 → 3 ones → prefix = 16 + 3 = <b>/19</b>.</li><li>Network = host AND mask. Byte 3: 12 AND 224 = 0000 1100 AND 1110 0000 = 0000 0000 = 0. Byte 4 → 0.</li><li>Block size in byte 3 = 2<sup>24−19</sup> = 32 → last address: byte 3 = 0 + 31 = 31, byte 4 = 255.</li></ol><div class="a"><span class="lbl">Answer:</span> Network 131.14.0.0/19, range 131.14.0.0 to 131.14.31.255</div></div>
 
 <h3>2. Subnetting</h3>
