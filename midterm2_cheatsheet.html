@@ -27,6 +27,11 @@
 
 <div class="box"><b>Exam traps (M1):</b> convert units first · add the whole carry · re-check the circled letter vs scrap work · compute before reading options ("none" is real) · offset in 8-byte units · hosts = addresses − 2.</div>
 
+<div class="box"><b>Quick rules:</b>
+<b>Which byte?</b> /1–8 byte 1 · /9–16 byte 2 · /17–24 byte 3 · /25–32 byte 4 — write in binary only the bytes from where the old mask ends to where the new mask ends (CIDR: the first byte where the addresses differ). Bytes on the left are copied; values don't matter.<br>
+<b>Mask</b> = 32 − host bits (32 @s = 2<sup>5</sup> → /27). <b>Subnet bits</b> = new − old mask; # subnets = 2<sup>new−old</sup>.<br>
+<b>1st subnet = ID 0</b> = start of the block; <b>k-th</b> = ID k−1 → start + (k−1) × size (20th → 19 × 32 = 608 = 2·256 + 96).<br>
+<b>Network</b> = first (host bits 0), <b>broadcast</b> = last = first + size − 1; <b>hosts</b> = first+1 … last−1. "Address range" includes both ends; "host addresses" does not.</div>
 <h3>Powers of 2 / mask bytes</h3>
 <table>
 <tr><th>bits in byte</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
