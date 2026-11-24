@@ -173,7 +173,8 @@ Prefix = 16 + 6 = 22. Common bits then zeros: 0010 0000 = 32.</pre>
 <li>Every other network: ask "which neighbour router is it behind?" Next Hop is <b>that neighbour's address on the link we share</b>. Interface is my port toward that neighbour.</li>
 <li>If the Internet (or everything that is left) is behind one neighbour, write one <b>default</b> row: 0.0.0.0 /0.</li>
 <li>Order the rows from the longest mask to the shortest.</li>
-</ol></div>
+</ol>
+<b>Check every row:</b> next hop is never my own address · "–" only for networks plugged into me · interface = my port toward that neighbour · default mask is /0 (not /32) · number of rows = my networks + far networks (or one default).</div>
 <div class="ex"><div class="q">Example (Prof practice, router Rx):</div>
 <pre>Left:   11.3.32.0/24 and 11.3.128.0/24 hang on R1
 Link 1: R1 ─[11.3.64.0/24]─ Rx   R1 = .2, Rx = .1 on i1
@@ -207,19 +208,20 @@ R2 (ports i3, i4). R1 is .128.2, R3 is .160.5:
 <p><b>HW6 Q2 points:</b> a single host is written as /32. Rows sorted /32, /28, /24, /0. A link whose mask is not given cannot be written ("we need more information").</p>
 
 <h2>H. WHICH ROW DOES A PACKET USE?</h2>
-<div class="how"><b class="h">How:</b>
+<div class="how"><b class="h">How (range method, no binary):</b>
 <ol>
-<li>For each row, check whether the destination is inside that network (same first n bits).</li>
-<li>If several rows match, use the one with the <b>longest mask</b>.</li>
-<li>If none match, use the default row. No default: the packet is dropped.</li>
+<li>Turn every row into a range: block size from table A; range = start to start + block − 1 (in the byte where the mask ends).</li>
+<li>Mark the rows whose range contains the destination.</li>
+<li>Several marked: use the <b>longest mask</b>. None marked: use the default row (0.0.0.0/0). No default: dropped.</li>
 </ol></div>
-<div class="ex"><div class="q">Example: rows 15.80.0.0/12 and 15.88.0.0/13. Packets to 15.84.1.1 and 15.90.1.1?</div>
-<pre>/12 fixes 4 bits of byte 2: 80 = 0101 0000, covers 80 to 95
-/13 fixes 5 bits of byte 2: 88 = 0101 1000, covers 88 to 95
-15.84.1.1: 84 is in 80–95 only, so it uses the /12 row
-15.90.1.1: 90 is in both, so it uses the longer one, /13</pre></div>
+<div class="ex"><div class="q">Example: 20.16.0.0/12 → A, 20.24.0.0/13 → B, 20.28.0.0/14 → C, 0.0.0.0/0 → D</div>
+<pre>/12: 4 mask bits in byte 2, block 16:  20.16 to 20.31  (A)
+/13: 5 mask bits in byte 2, block 8:   20.24 to 20.31  (B)
+/14: 6 mask bits in byte 2, block 4:   20.28 to 20.31  (C)
+To 20.27.5.5: in A yes, in B yes, in C no. Longest is /13: B
+To 20.32.1.1: in none of them. Default row: D
+To 20.29.0.1: in A, B and C. Longest is /14: C</pre></div>
 <p>Jeopardy: a.b.c.0/24 against a.b.c.d/26: the /26 wins (longest prefix). Routing table: cost and several options. Forwarding table: no cost, one option.</p>
-
 <h2>I. IP HEADER</h2>
 <p>Default header: <b>12 fields, 20 bytes</b>.</p>
 <table>
