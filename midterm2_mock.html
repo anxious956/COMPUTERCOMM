@@ -131,6 +131,12 @@
 <div class="q">34. Which describes the service that IP provides?
 <div class="opts">a) Connection-oriented and reliable &nbsp; b) Connectionless and reliable &nbsp; c) Connection-oriented and best effort &nbsp; d) Connectionless and best effort &nbsp; e) Circuit-switched</div><div class="space"></div></div>
 
+<div class="q">35. Network 10.20.48.0/22 is divided into /27 subnets. How many subnets are created, and how many host addresses does each subnet have?
+<div class="opts">a) 30 subnets, 30 hosts &nbsp; b) 32 subnets, 32 hosts &nbsp; c) 30 subnets, 32 hosts &nbsp; d) 32 subnets, 30 hosts &nbsp; e) 16 subnets, 62 hosts</div><div class="space"></div></div>
+
+<div class="q">36. A LAN needs 60 hosts and another sub-block must allocate 64 addresses. Which masks are needed?
+<div class="opts">a) /26 and /26 &nbsp; b) /26 and /25 &nbsp; c) /25 and /26 &nbsp; d) /27 and /26 &nbsp; e) /26 and /27</div><div class="space"></div></div>
+
 <div class="brk"></div>
 <h2>Solutions</h2>
 
@@ -321,6 +327,17 @@
 <div class="ans"><div class="t">34. Answer: d) Connectionless and best effort</div><ol>
 <li>Connectionless: no setup; every datagram carries the full destination address and is forwarded on its own.</li>
 <li>Best effort (unreliable): packets can be lost, arrive out of order, be duplicated or be delayed; IP does not repair this.</li></ol></div>
+
+<div class="ans"><div class="t">35. Answer: d) 32 subnets, 30 hosts</div><ol>
+<li>Number of subnets = 2<sup>27−22</sup> = 2<sup>5</sup> = 32. Nothing is subtracted: every subnet can be used.</li>
+<li>Addresses per subnet = 2<sup>32−27</sup> = 32.</li>
+<li>Hosts per subnet = 32 − 2 = 30, because the first address (network) and the last (broadcast) of each subnet are not hosts.</li></ol>
+<div class="tr"><b>Traps:</b> a) subtracts 2 from the subnets too. b) forgets to subtract 2 from the hosts. c) subtracts on the wrong side. e) is for /26 subnets.</div></div>
+
+<div class="ans"><div class="t">36. Answer: a) /26 and /26</div><ol>
+<li>60 <b>hosts</b>: add 2 first → 62 addresses → round up to 64 = 2<sup>6</sup> → /26.</li>
+<li>64 <b>addresses</b>: already addresses, nothing to add → 64 = 2<sup>6</sup> → /26.</li></ol>
+<div class="tr"><b>Traps:</b> b) adds 2 to the 64 addresses as well (66 → 128 → /25). c) rounds the hosts block up to 128 by mistake. d) /27 has only 32 addresses, too small for 60 hosts. e) /27 is too small for 64 addresses. The rule: add 2 only when the question says hosts.</div></div>
 
 </body>
 </html>
